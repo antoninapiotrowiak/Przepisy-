@@ -8,7 +8,7 @@
         body { font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; padding: 0 20px; background-color: #f9f9f9; color: #333; }
         .card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         input, textarea, select { width: 100%; padding: 8px; margin: 6px 0 12px 0; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
-        button { background-color: #ff6b6b; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        button { width: 100%; background-color: #ff6b6b; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-bottom: 8px; }
         button:hover { background-color: #ff5252; }
         .recipe-item { border-left: 4px solid #ff6b6b; padding-left: 10px; margin-bottom: 15px; background: #fff; padding: 10px; border-radius: 4px; }
         .hidden { display: none; }
@@ -22,30 +22,33 @@
     <!-- Status logowania -->
     <div id="auth-status">Sprawdzanie stanu logowania...</div>
 
-    <!-- Sekcja Logowania / Rejestracji (widoczna gdy NIE ma użytkownika) -->
+    <!-- Sekcja Logowania / Rejestracji -->
     <div id="auth-section" class="card">
         <h3>Konto użytkownika</h3>
         <input type="email" id="email" placeholder="Twój e-mail">
         <input type="password" id="password" placeholder="Hasło (min. 6 znaków)">
-        <button id="btn-login">Zaloguj się</button>
+        
+        <button id="btn-login">Zaloguj się e-mailem</button>
         <button id="btn-register" style="background-color: #4dabf7;">Zarejestruj się</button>
+        <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
+        <button id="btn-google" style="background-color: #4285F4;">Zaloguj przez Google</button>
     </div>
 
-    <!-- Sekcja Wyloguj (widoczna po zalogowaniu) -->
+    <!-- Sekcja Wyloguj -->
     <div id="logout-section" class="card hidden">
         <button id="btn-logout" style="background-color: #868e96;">Wyloguj się</button>
     </div>
 
-    <!-- Sekcja Dodawania Przepisu (widoczna tylko po zalogowaniu) -->
+    <!-- Sekcja Dodawania Przepisu -->
     <div id="recipe-form-section" class="card hidden">
         <h3>Dodaj nowy przepis</h3>
-        <input type="text" id="recipe-title" placeholder="Nazwa przepisu (np. Domowe ciasto czekoladowe)">
-        <textarea id="recipe-ingredients" rows="4" placeholder="Składniki (każdy w nowej linii)..."></textarea>
+        <input type="text" id="recipe-title" placeholder="Nazwa przepisu (np. Ciasto czekoladowe)">
+        <textarea id="recipe-ingredients" rows="4" placeholder="Składniki..."></textarea>
         <textarea id="recipe-steps" rows="4" placeholder="Krok po kroku..."></textarea>
         
-        <label for="recipe-visibility">Widoczność przepisu:</label>
+        <label for="recipe-visibility">Widoczność:</label>
         <select id="recipe-visibility">
-            <option value="public">Publiczny (widoczny dla wszystkich)</option>
+            <option value="public">Publiczny (dla wszystkich)</option>
             <option value="private">Prywatny (tylko dla mnie)</option>
         </select>
         
@@ -64,16 +67,16 @@
             getAuth, 
             createUserWithEmailAndPassword, 
             signInWithEmailAndPassword, 
+            signInWithPopup,
+            GoogleAuthProvider,
             signOut, 
             onAuthStateChanged 
         } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
         import { 
             getFirestore, 
             collection, 
-            addCollection, /* safety fallback */
             addDoc, 
             query, 
-            where, 
             onSnapshot, 
             serverTimestamp 
         } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
@@ -92,6 +95,7 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const googleProvider = new GoogleAuthProvider();
 
         // Elementy DOM
         const authStatus = document.getElementById("auth-status");
@@ -103,36 +107,47 @@
         const emailInput = document.getElementById("email");
         const passwordInput = document.getElementById("password");
 
-        // Obsługa stanu autoryzacji (czy użytkownik jest zalogowany?)
+        // Nasłuchiwanie stanu konta
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                authStatus.textContent = `Zalogowany jako: ${user.email}`;
+                authStatus.textContent = `Zalogowany jako: ${user.email || user.displayName}`;
                 authSection.classList.add("hidden");
                 logoutSection.classList.remove("hidden");
                 recipeFormSection.classList.remove("hidden");
             } else {
-                authStatus.textContent = "Nie jesteś zalogowany. Zaloguj się, aby dodawać przepisy.";
+                authStatus.textContent = "Nie jesteś zalogowany.";
                 authSection.classList.remove("hidden");
                 logoutSection.classList.add("hidden");
                 recipeFormSection.classList.add("hidden");
             }
         });
 
-        // Rejestracja
-        document.getElementById("btn-register").addEventListener("click", () => {
-            const email = emailInput.value;
-            const password = passwordInput.value;
-            createUserWithEmailAndPassword(auth, email, password)
-                .then(() => alert("Konto zostało utworzone!"))
-                .catch((error) => alert("Błąd rejestracji: " + error.message));
+        // Rejestracja e-mail
+        document.getElementById("btn-register").addEventListener("click", async () => {
+            try {
+                await createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
+                alert("Konto zostało utworzone pomyślnie!");
+            } catch (error) {
+                alert("Błąd rejestracji: " + error.message);
+            }
         });
 
-        // Logowanie
-        document.getElementById("btn-login").addEventListener("click", () => {
-            const email = emailInput.value;
-            const password = passwordInput.value;
-            signInWithEmailAndPassword(auth, email, password)
-                .catch((error) => alert("Błąd logowania: " + error.message));
+        // Logowanie e-mail
+        document.getElementById("btn-login").addEventListener("click", async () => {
+            try {
+                await signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
+            } catch (error) {
+                alert("Błąd logowania: " + error.message);
+            }
+        });
+
+        // Logowanie przez Google (skoro je włączyłaś!)
+        document.getElementById("btn-google").addEventListener("click", async () => {
+            try {
+                await signInWithPopup(auth, googleProvider);
+            } catch (error) {
+                alert("Błąd logowania Google: " + error.message);
+            }
         });
 
         // Wylogowanie
@@ -140,7 +155,7 @@
             signOut(auth);
         });
 
-        // Dodawanie przepisu do Firestore
+        // Dodawanie przepisu
         document.getElementById("btn-add-recipe").addEventListener("click", async () => {
             const title = document.getElementById("recipe-title").value;
             const ingredients = document.getElementById("recipe-ingredients").value;
@@ -149,36 +164,32 @@
             const user = auth.currentUser;
 
             if (!title || !ingredients) {
-                alert("Wypełnij przynajmniej nazwę i składniki, Gwiazdo!");
+                alert("Wypełnij przynajmniej nazwę i składniki!");
                 return;
             }
 
             try {
                 await addDoc(collection(db, "recipes"), {
-                    title: title,
-                    ingredients: ingredients,
-                    steps: steps,
+                    title,
+                    ingredients,
+                    steps,
                     isPublic: visibility === "public",
                     userId: user.uid,
-                    userEmail: user.email,
+                    userEmail: user.email || user.displayName,
                     createdAt: serverTimestamp()
                 });
 
-                // Czyszczenie formularza
                 document.getElementById("recipe-title").value = "";
                 document.getElementById("recipe-ingredients").value = "";
                 document.getElementById("recipe-steps").value = "";
-                alert("Przepis został pomyślnie dodany do bazy!");
+                alert("Przepis dodany do bazy!");
             } catch (error) {
-                alert("Błąd podczas dodawania przepisu: " + error.message);
+                alert("Błąd zapisu przepisu: " + error.message);
             }
         });
 
-        // Pobieranie i wyświetlanie przepisów w czasie rzeczywistym
-        // Na razie pobieramy wszystkie publiczne oraz te należące do zalogowanego użytkownika
-        // (Uwaga: w uproszczeniu pobieramy ogólną kolekcję, a filtrujemy na ekranie lub pobieramy publiczne)
-        const q = query(collection(db, "recipes"));
-        onSnapshot(q, (snapshot) => {
+        // Wyświetlanie przepisów
+        onSnapshot(query(collection(db, "recipes")), (snapshot) => {
             let html = "";
             const currentUser = auth.currentUser;
 
@@ -191,7 +202,6 @@
                 const recipe = docSnap.data();
                 const isOwner = currentUser && recipe.userId === currentUser.uid;
 
-                // Wyświetl, jeśli przepis jest publiczny LUB należy do zalogowanego użytkownika
                 if (recipe.isPublic || isOwner) {
                     const badge = recipe.isPublic ? "🌐 Publiczny" : "🔒 Prywatny";
                     html += `
@@ -208,15 +218,9 @@
             recipesContainer.innerHTML = html || "<p>Brak przepisów do wyświetlenia.</p>";
         });
 
-        // Pomocnicza funkcja zabezpieczająca przed XSS
         function escapeHtml(text) {
             if (!text) return "";
-            return text
-                .replace(/&/g, "&amp;")
-                .replace(/</g, "&lt;")
-                .replace(/>/g, "&gt;")
-                .replace(/"/g, "&quot;")
-                .replace(/'/g, "&#039;");
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
     </script>
 </body>
