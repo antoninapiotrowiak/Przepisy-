@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moja Książka z Przepisami</title>
+</head>
+<body>
+
+    <h1>Witaj w aplikacji z przepisami!</h1>
+
+    <!-- Tutaj w przyszłości dodamy formularze logowania i dodawania przepisów -->
+
+    <script type="module">
+        // Importujemy moduły Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+        // Twoja konfiguracja projektu z Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyACAYq6d_bOfUV8s_wlX-yTdTKhU9YVwnE",
+            authDomain: "przepisy-1666b.firebaseapp.com",
+            projectId: "przepisy-1666b",
+            storageBucket: "przepisy-1666b.firebasestorage.app",
+            messagingSenderId: "1080998982984",
+            appId: "1:1080998982984:web:1d8eab4db37ab520a6af7d",
+            measurementId: "G-484BSEC9FE"
+        };
+
+        // Inicjalizacja Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        console.log("Firebase połączył się pomyślnie, Gwiazdo!");
+    </script>
+</body>
+</html>
