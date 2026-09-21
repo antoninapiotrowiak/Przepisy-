@@ -13,6 +13,13 @@
         .recipe-item { border-left: 4px solid #ff6b6b; padding-left: 10px; margin-bottom: 15px; background: #fff; padding: 10px; border-radius: 4px; }
         .hidden { display: none; }
         #auth-status { font-weight: bold; color: #555; margin-bottom: 15px; }
+        /* Styl zakładek */
+.tabs { display: flex; gap: 5px; margin-bottom: 20px; flex-wrap: wrap; }
+.tab-btn { flex: 1; padding: 10px; background: #e9ecef; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: #495057; width: auto; }
+.tab-btn.active { background: #ff6b6b; color: white; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
     </style>
 </head>
 <body>
@@ -38,6 +45,56 @@
     <div id="logout-section" class="card hidden">
         <button id="btn-logout" style="background-color: #868e96;">Wyloguj się</button>
     </div>
+    <!-- Pasek zakładek (widoczny po zalogowaniu) -->
+    <div id="app-tabs" class="tabs hidden">
+        <button class="tab-btn active" onclick="switchTab('catalog')">🌐 Katalog publiczny</button>
+        <button class="tab-btn" onclick="switchTab('my-recipes')">📖 Moje przepisy</button>
+        <button class="tab-btn" onclick="switchTab('add-recipe')">➕ Dodaj przepis</button>
+        <button class="tab-btn" onclick="switchTab('profile')">👤 Profil</button>
+    </div>
+
+    <!-- ZAKŁADKA 1: Katalog publiczny -->
+    <div id="section-catalog" class="tab-content">
+        <div class="card">
+            <h3>Wszystkie przepisy społeczności</h3>
+            <div id="catalog-container">Ładowanie przepisów...</div>
+        </div>
+    </div>
+
+    <!-- ZAKŁADKA 2: Moje przepisy -->
+    <div id="section-my-recipes" class="tab-content">
+        <div class="card">
+            <h3>Moje przepisy (prywatne i publiczne)</h3>
+            <div id="my-recipes-container">Ładowanie Twoich przepisów...</div>
+        </div>
+    </div>
+
+    <!-- ZAKŁADKA 3: Dodawanie przepisu -->
+    <div id="section-add-recipe" class="tab-content">
+        <div class="card">
+            <h3>Dodaj nowy przepis</h3>
+            <input type="text" id="recipe-title" placeholder="Nazwa przepisu">
+            <textarea id="recipe-ingredients" rows="4" placeholder="Składniki..."></textarea>
+            <textarea id="recipe-steps" rows="4" placeholder="Krok po kroku..."></textarea>
+            
+            <label for="recipe-visibility">Widoczność:</label>
+            <select id="recipe-visibility">
+                <option value="public">Publiczny (widoczny w katalogu)</option>
+                <option value="private">Prywatny (tylko dla mnie)</option>
+            </select>
+            
+            <button id="btn-add-recipe">Opublikuj przepis</button>
+        </div>
+    </div>
+
+    <!-- ZAKŁADKA 4: Profil -->
+    <div id="section-profile" class="tab-content">
+        <div class="card">
+            <h3>Twój profil</h3>
+            <p><strong>E-mail:</strong> <span id="profile-email">-</span></p>
+            <p><strong>ID użytkownika:</strong> <span id="profile-uid" style="font-size: 12px; color: #666;">-</span></p>
+        </div>
+    </div>
 
     <!-- Sekcja Dodawania Przepisu -->
     <div id="recipe-form-section" class="card hidden">
@@ -62,6 +119,33 @@
     </div>
 
     <script type="module">
+            // Funkcja przełączania zakładek (globalna, dostępna dla onclick w HTML)
+        window.switchTab = function(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+            if (tabName === 'catalog') {
+                document.getElementById('section-catalog').classList.add('active');
+                event.currentTarget.classList.add('active');
+            } else if (tabName === 'my-recipes') {
+                document.getElementById('section-my-recipes').classList.add('active');
+                event.currentTarget.classList.add('active');
+            } else if (tabName === 'add-recipe') {
+                document.getElementById('section-add-recipe').classList.add('active');
+                event.currentTarget.classList.add('active');
+            } else if (tabName === 'profile') {
+                document.getElementById('section-profile').classList.add('active');
+                event.currentTarget.classList.add('active');
+            }
+        };
+
+        // W funkcji onAuthStateChanged(auth, (user) => { ... }) dodaj ukrywanie/pokazywanie zakładek:
+        // (Wklej to wewnątrz bloku "if (user) {")
+        
+
+        // A w bloku "else" (gdy wylogowany):
+        
+
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
         import { 
             getAuth, 
@@ -110,11 +194,19 @@
         // Nasłuchiwanie stanu konta
         onAuthStateChanged(auth, (user) => {
             if (user) {
+                
                 authStatus.textContent = `Zalogowany jako: ${user.email || user.displayName}`;
                 authSection.classList.add("hidden");
                 logoutSection.classList.remove("hidden");
                 recipeFormSection.classList.remove("hidden");
+                document.getElementById("app-tabs").classList.remove("hidden");
+        document.getElementById("profile-email").textContent = user.email || user.displayName;
+        document.getElementById("profile-uid").textContent = user.uid;
+        // Domyślnie włącz zakładkę katalogu po zalogowaniu
+        document.getElementById("section-catalog").classList.add("active");
             } else {
+                document.getElementById("app-tabs").classList.add("hidden");
+        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
                 authStatus.textContent = "Nie jesteś zalogowany.";
                 authSection.classList.remove("hidden");
                 logoutSection.classList.add("hidden");
