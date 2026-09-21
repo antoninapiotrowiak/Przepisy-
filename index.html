@@ -70,13 +70,39 @@
         </div>
     </div>
 
-    <!-- ZAKŁADKA 3: Dodawanie przepisu -->
+      <!-- ZAKŁADKA 3: Dodawanie przepisu -->
     <div id="section-add-recipe" class="tab-content">
         <div class="card">
             <h3>Dodaj nowy przepis</h3>
-            <input type="text" id="recipe-title" placeholder="Nazwa przepisu (np. Ciasto)">
-            <textarea id="recipe-ingredients" rows="4" placeholder="Składniki..."></textarea>
-            <textarea id="recipe-steps" rows="4" placeholder="Krok po kroku..."></textarea>
+            
+            <!-- Krok 1: Nazwa -->
+            <input type="text" id="recipe-title" placeholder="Nazwa przepisu (np. Owsianka czekoladowa)">
+            
+            <!-- Krok 2: Dynamiczne dodawanie składników i makro -->
+            <div style="background: #f1f3f5; padding: 12px; border-radius: 6px; margin-bottom: 15px;">
+                <h4 style="margin-top: 0; margin-bottom: 8px;">Składniki i makro (na 100g produktu)</h4>
+                <input type="text" id="ingredient-name" placeholder="Nazwa składnika (np. Płatki owsiane)">
+                <div style="display: flex; gap: 8px;">
+                    <input type="number" id="ing-kcal" placeholder="Kcal / 100g">
+                    <input type="number" id="ing-protein" placeholder="Białko / 100g">
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <input type="number" id="ing-fat" placeholder="Tłuszcz / 100g">
+                    <input type="number" id="ing-carbs" placeholder="Węgle / 100g">
+                </div>
+                <input type="number" id="ing-weight" placeholder="Waga użyta w przepisie (w gramach, np. 50)">
+                
+                <button type="button" id="btn-add-ingredient" style="background-color: #4dabf7; margin-top: 5px;">➕ Dodaj składnik do listy</button>
+            </div>
+
+            <!-- Lista dodanych składników i podsumowanie makro -->
+            <div id="ingredients-summary-container" style="margin-bottom: 15px; font-size: 14px;">
+                <p><em>Brak dodanych składników.</em></p>
+            </div>
+
+            <!-- Krok 3: Przygotowanie i czas -->
+            <textarea id="recipe-steps" rows="4" placeholder="Krok po kroku (opis przygotowania)..."></textarea>
+            <input type="text" id="recipe-time" placeholder="Czas przygotowania (np. 15 minut)">
             
             <label for="recipe-visibility">Widoczność:</label>
             <select id="recipe-visibility">
@@ -84,9 +110,10 @@
                 <option value="private">Prywatny (tylko dla mnie)</option>
             </select>
             
-            <button id="btn-add-recipe">Opublikuj przepis</button>
+            <button id="btn-add-recipe" style="background-color: #51cf66;">Opublikuj cały przepis</button>
         </div>
     </div>
+
 
     <!-- ZAKŁADKA 4: Profil -->
     <div id="section-profile" class="tab-content">
