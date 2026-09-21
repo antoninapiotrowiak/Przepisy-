@@ -4,20 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Moja Książka z Przepisami</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; padding: 0 20px; background-color: #f9f9f9; color: #333; }
+        .card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        input, textarea, select { width: 100%; padding: 8px; margin: 6px 0 12px 0; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+        button { background-color: #ff6b6b; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        button:hover { background-color: #ff5252; }
+        .recipe-item { border-left: 4px solid #ff6b6b; padding-left: 10px; margin-bottom: 15px; background: #fff; padding: 10px; border-radius: 4px; }
+        .hidden { display: none; }
+        #auth-status { font-weight: bold; color: #555; margin-bottom: 15px; }
+    </style>
 </head>
 <body>
 
-    <h1>Witaj w aplikacji z przepisami!</h1>
+    <h1>Książka Przepisów 🍳</h1>
+    
+    <!-- Status logowania -->
+    <div id="auth-status">Sprawdzanie stanu logowania...</div>
 
-    <!-- Tutaj w przyszłości dodamy formularze logowania i dodawania przepisów -->
+    <!-- Sekcja Logowania / Rejestracji (widoczna gdy NIE ma użytkownika) -->
+    <div id="auth-section" class="card">
+        <h3>Konto użytkownika</h3>
+        <input type="email" id="email" placeholder="Twój e-mail">
+        <input type="password" id="password" placeholder="Hasło (min. 6 znaków)">
+        <button id="btn-login">Zaloguj się</button>
+        <button id="btn-register" style="background-color: #4dabf7;">Zarejestruj się</button>
+    </div>
+
+    <!-- Sekcja Wyloguj (widoczna po zalogowaniu) -->
+    <div id="logout-section" class="card hidden">
+        <button id="btn-logout" style="background-color: #868e96;">Wyloguj się</button>
+    </div>
+
+    <!-- Sekcja Dodawania Przepisu (widoczna tylko po zalogowaniu) -->
+    <div id="recipe-form-section" class="card hidden">
+        <h3>Dodaj nowy przepis</h3>
+        <input type="text" id="recipe-title" placeholder="Nazwa przepisu (np. Domowe ciasto czekoladowe)">
+        <textarea id="recipe-ingredients" rows="4" placeholder="Składniki (każdy w nowej linii)..."></textarea>
+        <textarea id="recipe-steps" rows="4" placeholder="Krok po kroku..."></textarea>
+        
+        <label for="recipe-visibility">Widoczność przepisu:</label>
+        <select id="recipe-visibility">
+            <option value="public">Publiczny (widoczny dla wszystkich)</option>
+            <option value="private">Prywatny (tylko dla mnie)</option>
+        </select>
+        
+        <button id="btn-add-recipe">Opublikuj przepis</button>
+    </div>
+
+    <!-- Sekcja Wyświetlania Przepisów -->
+    <div class="card">
+        <h3>Lista przepisów</h3>
+        <div id="recipes-container">Ładowanie przepisów...</div>
+    </div>
 
     <script type="module">
-        // Importujemy moduły Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-        import { getAuth } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-        import { getFirestore } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword, 
+            signOut, 
+            onAuthStateChanged 
+        } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            collection, 
+            addCollection, /* safety fallback */
+            addDoc, 
+            query, 
+            where, 
+            onSnapshot, 
+            serverTimestamp 
+        } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
-        // Twoja konfiguracja projektu z Firebase
+        // Twoja konfiguracja Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyACAYq6d_bOfUV8s_wlX-yTdTKhU9YVwnE",
             authDomain: "przepisy-1666b.firebaseapp.com",
@@ -28,12 +89,135 @@
             measurementId: "G-484BSEC9FE"
         };
 
-        // Inicjalizacja Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        console.log("Firebase połączył się pomyślnie, Gwiazdo!");
+        // Elementy DOM
+        const authStatus = document.getElementById("auth-status");
+        const authSection = document.getElementById("auth-section");
+        const logoutSection = document.getElementById("logout-section");
+        const recipeFormSection = document.getElementById("recipe-form-section");
+        const recipesContainer = document.getElementById("recipes-container");
+
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+
+        // Obsługa stanu autoryzacji (czy użytkownik jest zalogowany?)
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                authStatus.textContent = `Zalogowany jako: ${user.email}`;
+                authSection.classList.add("hidden");
+                logoutSection.classList.remove("hidden");
+                recipeFormSection.classList.remove("hidden");
+            } else {
+                authStatus.textContent = "Nie jesteś zalogowany. Zaloguj się, aby dodawać przepisy.";
+                authSection.classList.remove("hidden");
+                logoutSection.classList.add("hidden");
+                recipeFormSection.classList.add("hidden");
+            }
+        });
+
+        // Rejestracja
+        document.getElementById("btn-register").addEventListener("click", () => {
+            const email = emailInput.value;
+            const password = passwordInput.value;
+            createUserWithEmailAndPassword(auth, email, password)
+                .then(() => alert("Konto zostało utworzone!"))
+                .catch((error) => alert("Błąd rejestracji: " + error.message));
+        });
+
+        // Logowanie
+        document.getElementById("btn-login").addEventListener("click", () => {
+            const email = emailInput.value;
+            const password = passwordInput.value;
+            signInWithEmailAndPassword(auth, email, password)
+                .catch((error) => alert("Błąd logowania: " + error.message));
+        });
+
+        // Wylogowanie
+        document.getElementById("btn-logout").addEventListener("click", () => {
+            signOut(auth);
+        });
+
+        // Dodawanie przepisu do Firestore
+        document.getElementById("btn-add-recipe").addEventListener("click", async () => {
+            const title = document.getElementById("recipe-title").value;
+            const ingredients = document.getElementById("recipe-ingredients").value;
+            const steps = document.getElementById("recipe-steps").value;
+            const visibility = document.getElementById("recipe-visibility").value;
+            const user = auth.currentUser;
+
+            if (!title || !ingredients) {
+                alert("Wypełnij przynajmniej nazwę i składniki, Gwiazdo!");
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "recipes"), {
+                    title: title,
+                    ingredients: ingredients,
+                    steps: steps,
+                    isPublic: visibility === "public",
+                    userId: user.uid,
+                    userEmail: user.email,
+                    createdAt: serverTimestamp()
+                });
+
+                // Czyszczenie formularza
+                document.getElementById("recipe-title").value = "";
+                document.getElementById("recipe-ingredients").value = "";
+                document.getElementById("recipe-steps").value = "";
+                alert("Przepis został pomyślnie dodany do bazy!");
+            } catch (error) {
+                alert("Błąd podczas dodawania przepisu: " + error.message);
+            }
+        });
+
+        // Pobieranie i wyświetlanie przepisów w czasie rzeczywistym
+        // Na razie pobieramy wszystkie publiczne oraz te należące do zalogowanego użytkownika
+        // (Uwaga: w uproszczeniu pobieramy ogólną kolekcję, a filtrujemy na ekranie lub pobieramy publiczne)
+        const q = query(collection(db, "recipes"));
+        onSnapshot(q, (snapshot) => {
+            let html = "";
+            const currentUser = auth.currentUser;
+
+            if (snapshot.empty) {
+                recipesContainer.innerHTML = "<p>Brak przepisów w bazie.</p>";
+                return;
+            }
+
+            snapshot.forEach((docSnap) => {
+                const recipe = docSnap.data();
+                const isOwner = currentUser && recipe.userId === currentUser.uid;
+
+                // Wyświetl, jeśli przepis jest publiczny LUB należy do zalogowanego użytkownika
+                if (recipe.isPublic || isOwner) {
+                    const badge = recipe.isPublic ? "🌐 Publiczny" : "🔒 Prywatny";
+                    html += `
+                        <div class="recipe-item">
+                            <h4>${escapeHtml(recipe.title)} <small>(${badge})</small></h4>
+                            <p><strong>Składniki:</strong><br>${escapeHtml(recipe.ingredients).replace(/\n/g, '<br>')}</p>
+                            <p><strong>Przygotowanie:</strong><br>${escapeHtml(recipe.steps).replace(/\n/g, '<br>')}</p>
+                            <small style="color: #888;">Autor: ${recipe.userEmail || 'Nieznany'}</small>
+                        </div>
+                    `;
+                }
+            });
+
+            recipesContainer.innerHTML = html || "<p>Brak przepisów do wyświetlenia.</p>";
+        });
+
+        // Pomocnicza funkcja zabezpieczająca przed XSS
+        function escapeHtml(text) {
+            if (!text) return "";
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
     </script>
 </body>
 </html>
