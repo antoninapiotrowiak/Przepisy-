@@ -10,16 +10,16 @@
         input, textarea, select { width: 100%; padding: 8px; margin: 6px 0 12px 0; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
         button { width: 100%; background-color: #ff6b6b; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-bottom: 8px; }
         button:hover { background-color: #ff5252; }
-        .recipe-item { border-left: 4px solid #ff6b6b; padding-left: 10px; margin-bottom: 15px; background: #fff; padding: 10px; border-radius: 4px; }
+        .recipe-item { border-left: 4px solid #ff6b6b; padding-left: 10px; margin-bottom: 15px; background: #fff; padding: 10px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .hidden { display: none; }
         #auth-status { font-weight: bold; color: #555; margin-bottom: 15px; }
-        /* Styl zakładek */
-.tabs { display: flex; gap: 5px; margin-bottom: 20px; flex-wrap: wrap; }
-.tab-btn { flex: 1; padding: 10px; background: #e9ecef; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: #495057; width: auto; }
-.tab-btn.active { background: #ff6b6b; color: white; }
-.tab-content { display: none; }
-.tab-content.active { display: block; }
 
+        /* Style zakładek */
+        .tabs { display: flex; gap: 5px; margin-bottom: 20px; flex-wrap: wrap; }
+        .tab-btn { flex: 1; padding: 10px; background: #e9ecef; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; color: #495057; width: auto; margin-bottom: 0; }
+        .tab-btn.active { background: #ff6b6b; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
     </style>
 </head>
 <body>
@@ -45,16 +45,17 @@
     <div id="logout-section" class="card hidden">
         <button id="btn-logout" style="background-color: #868e96;">Wyloguj się</button>
     </div>
+
     <!-- Pasek zakładek (widoczny po zalogowaniu) -->
     <div id="app-tabs" class="tabs hidden">
-        <button class="tab-btn active" onclick="switchTab('catalog')">🌐 Katalog publiczny</button>
-        <button class="tab-btn" onclick="switchTab('my-recipes')">📖 Moje przepisy</button>
-        <button class="tab-btn" onclick="switchTab('add-recipe')">➕ Dodaj przepis</button>
+        <button class="tab-btn active" onclick="switchTab('catalog')">🌐 Katalog</button>
+        <button class="tab-btn" onclick="switchTab('my-recipes')">📖 Moje</button>
+        <button class="tab-btn" onclick="switchTab('add-recipe')">➕ Dodaj</button>
         <button class="tab-btn" onclick="switchTab('profile')">👤 Profil</button>
     </div>
 
-    <!-- ZAKŁADKA 1: Katalog publiczny -->
-    <div id="section-catalog" class="tab-content">
+    <!-- ZAKŁADKA 1: Katalog publiczny (widoczna dla każdego) -->
+    <div id="section-catalog" class="tab-content active">
         <div class="card">
             <h3>Wszystkie przepisy społeczności</h3>
             <div id="catalog-container">Ładowanie przepisów...</div>
@@ -73,7 +74,7 @@
     <div id="section-add-recipe" class="tab-content">
         <div class="card">
             <h3>Dodaj nowy przepis</h3>
-            <input type="text" id="recipe-title" placeholder="Nazwa przepisu">
+            <input type="text" id="recipe-title" placeholder="Nazwa przepisu (np. Ciasto)">
             <textarea id="recipe-ingredients" rows="4" placeholder="Składniki..."></textarea>
             <textarea id="recipe-steps" rows="4" placeholder="Krok po kroku..."></textarea>
             
@@ -96,56 +97,7 @@
         </div>
     </div>
 
-    <!-- Sekcja Dodawania Przepisu -->
-    <div id="recipe-form-section" class="card hidden">
-        <h3>Dodaj nowy przepis</h3>
-        <input type="text" id="recipe-title" placeholder="Nazwa przepisu (np. Ciasto czekoladowe)">
-        <textarea id="recipe-ingredients" rows="4" placeholder="Składniki..."></textarea>
-        <textarea id="recipe-steps" rows="4" placeholder="Krok po kroku..."></textarea>
-        
-        <label for="recipe-visibility">Widoczność:</label>
-        <select id="recipe-visibility">
-            <option value="public">Publiczny (dla wszystkich)</option>
-            <option value="private">Prywatny (tylko dla mnie)</option>
-        </select>
-        
-        <button id="btn-add-recipe">Opublikuj przepis</button>
-    </div>
-
-    <!-- Sekcja Wyświetlania Przepisów -->
-    <div class="card">
-        <h3>Lista przepisów</h3>
-        <div id="recipes-container">Ładowanie przepisów...</div>
-    </div>
-
     <script type="module">
-            // Funkcja przełączania zakładek (globalna, dostępna dla onclick w HTML)
-        window.switchTab = function(tabName) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-
-            if (tabName === 'catalog') {
-                document.getElementById('section-catalog').classList.add('active');
-                event.currentTarget.classList.add('active');
-            } else if (tabName === 'my-recipes') {
-                document.getElementById('section-my-recipes').classList.add('active');
-                event.currentTarget.classList.add('active');
-            } else if (tabName === 'add-recipe') {
-                document.getElementById('section-add-recipe').classList.add('active');
-                event.currentTarget.classList.add('active');
-            } else if (tabName === 'profile') {
-                document.getElementById('section-profile').classList.add('active');
-                event.currentTarget.classList.add('active');
-            }
-        };
-
-        // W funkcji onAuthStateChanged(auth, (user) => { ... }) dodaj ukrywanie/pokazywanie zakładek:
-        // (Wklej to wewnątrz bloku "if (user) {")
-        
-
-        // A w bloku "else" (gdy wylogowany):
-        
-
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
         import { 
             getAuth, 
@@ -161,6 +113,7 @@
             collection, 
             addDoc, 
             query, 
+            where,
             onSnapshot, 
             serverTimestamp 
         } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
@@ -185,33 +138,75 @@
         const authStatus = document.getElementById("auth-status");
         const authSection = document.getElementById("auth-section");
         const logoutSection = document.getElementById("logout-section");
-        const recipeFormSection = document.getElementById("recipe-form-section");
-        const recipesContainer = document.getElementById("recipes-container");
+        const appTabs = document.getElementById("app-tabs");
 
         const emailInput = document.getElementById("email");
         const passwordInput = document.getElementById("password");
 
-        // Nasłuchiwanie stanu konta
+        // Funkcja przełączania zakładek (globalna)
+        window.switchTab = function(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+            if (tabName === 'catalog') {
+                document.getElementById('section-catalog').classList.add('active');
+            } else if (tabName === 'my-recipes') {
+                document.getElementById('section-my-recipes').classList.add('active');
+            } else if (tabName === 'add-recipe') {
+                document.getElementById('section-add-recipe').classList.add('active');
+            } else if (tabName === 'profile') {
+                document.getElementById('section-profile').classList.add('active');
+            }
+            event.currentTarget.classList.add('active');
+        };
+
+        // Nasłuchiwanie stanu konta użytkownika
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                
                 authStatus.textContent = `Zalogowany jako: ${user.email || user.displayName}`;
                 authSection.classList.add("hidden");
                 logoutSection.classList.remove("hidden");
-                recipeFormSection.classList.remove("hidden");
-                document.getElementById("app-tabs").classList.remove("hidden");
-        document.getElementById("profile-email").textContent = user.email || user.displayName;
-        document.getElementById("profile-uid").textContent = user.uid;
-        // Domyślnie włącz zakładkę katalogu po zalogowaniu
-        document.getElementById("section-catalog").classList.add("active");
+                appTabs.classList.remove("hidden");
+
+                // Uzupełnienie danych w profilu
+                document.getElementById("profile-email").textContent = user.email || user.displayName;
+                document.getElementById("profile-uid").textContent = user.uid;
+
+                // Pobieranie przepisów aktualnego użytkownika do zakładki "Moje"
+                const myQuery = query(collection(db, "recipes"), where("userId", "==", user.uid));
+                onSnapshot(myQuery, (snapshot) => {
+                    let html = "";
+                    if (snapshot.empty) {
+                        document.getElementById("my-recipes-container").innerHTML = "<p>Nie dodano jeszcze żadnych przepisów.</p>";
+                        return;
+                    }
+                    snapshot.forEach((docSnap) => {
+                        html += renderRecipeCard(docSnap.data());
+                    });
+                    document.getElementById("my-recipes-container").innerHTML = html;
+                });
+
             } else {
-                document.getElementById("app-tabs").classList.add("hidden");
-        document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-                authStatus.textContent = "Nie jesteś zalogowany.";
+                authStatus.textContent = "Nie jesteś zalogowany. Przeglądasz tylko katalog publiczny.";
                 authSection.classList.remove("hidden");
                 logoutSection.classList.add("hidden");
-                recipeFormSection.classList.add("hidden");
+                appTabs.classList.add("hidden");
+                document.getElementById("my-recipes-container").innerHTML = "<p>Musisz się zalogować, aby zobaczyć swoje przepisy.</p>";
             }
+        });
+
+        // 1. Pobieranie TYLKO publicznych przepisów do Katalogu (widoczne dla każdego)
+        const publicQuery = query(collection(db, "recipes"), where("isPublic", "==", true));
+        onSnapshot(publicQuery, (snapshot) => {
+            let html = "";
+            if (snapshot.empty) {
+                document.getElementById("catalog-container").innerHTML = "<p>Brak publicznych przepisów w katalogu.</p>";
+                return;
+            }
+            snapshot.forEach((docSnap) => {
+                html += renderRecipeCard(docSnap.data());
+            });
+            document.getElementById("catalog-container").innerHTML = html;
         });
 
         // Rejestracja e-mail
@@ -233,7 +228,7 @@
             }
         });
 
-        // Logowanie przez Google (skoro je włączyłaś!)
+        // Logowanie przez Google
         document.getElementById("btn-google").addEventListener("click", async () => {
             try {
                 await signInWithPopup(auth, googleProvider);
@@ -245,6 +240,7 @@
         // Wylogowanie
         document.getElementById("btn-logout").addEventListener("click", () => {
             signOut(auth);
+            switchTab('catalog'); // Wróć do katalogu po wylogowaniu
         });
 
         // Dodawanie przepisu
@@ -274,41 +270,25 @@
                 document.getElementById("recipe-title").value = "";
                 document.getElementById("recipe-ingredients").value = "";
                 document.getElementById("recipe-steps").value = "";
-                alert("Przepis dodany do bazy!");
+                alert("Przepis dodany pomyślnie do bazy!");
+                switchTab('catalog'); // Przełącz na katalog po dodaniu
             } catch (error) {
                 alert("Błąd zapisu przepisu: " + error.message);
             }
         });
 
-        // Wyświetlanie przepisów
-        onSnapshot(query(collection(db, "recipes")), (snapshot) => {
-            let html = "";
-            const currentUser = auth.currentUser;
-
-            if (snapshot.empty) {
-                recipesContainer.innerHTML = "<p>Brak przepisów w bazie.</p>";
-                return;
-            }
-
-            snapshot.forEach((docSnap) => {
-                const recipe = docSnap.data();
-                const isOwner = currentUser && recipe.userId === currentUser.uid;
-
-                if (recipe.isPublic || isOwner) {
-                    const badge = recipe.isPublic ? "🌐 Publiczny" : "🔒 Prywatny";
-                    html += `
-                        <div class="recipe-item">
-                            <h4>${escapeHtml(recipe.title)} <small>(${badge})</small></h4>
-                            <p><strong>Składniki:</strong><br>${escapeHtml(recipe.ingredients).replace(/\n/g, '<br>')}</p>
-                            <p><strong>Przygotowanie:</strong><br>${escapeHtml(recipe.steps).replace(/\n/g, '<br>')}</p>
-                            <small style="color: #888;">Autor: ${recipe.userEmail || 'Nieznany'}</small>
-                        </div>
-                    `;
-                }
-            });
-
-            recipesContainer.innerHTML = html || "<p>Brak przepisów do wyświetlenia.</p>";
-        });
+        // Pomocnicza funkcja generująca kafelek przepisu
+        function renderRecipeCard(recipe) {
+            const badge = recipe.isPublic ? "🌐 Publiczny" : "🔒 Prywatny";
+            return `
+                <div class="recipe-item">
+                    <h4>${escapeHtml(recipe.title)} <small>(${badge})</small></h4>
+                    <p><strong>Składniki:</strong><br>${escapeHtml(recipe.ingredients).replace(/\n/g, '<br>')}</p>
+                    <p><strong>Przygotowanie:</strong><br>${escapeHtml(recipe.steps).replace(/\n/g, '<br>')}</p>
+                    <small style="color: #888;">Autor: ${recipe.userEmail || 'Nieznany'}</small>
+                </div>
+            `;
+        }
 
         function escapeHtml(text) {
             if (!text) return "";
