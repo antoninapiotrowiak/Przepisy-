@@ -35,6 +35,12 @@
         <input type="email" id="email" placeholder="Twój e-mail">
         <input type="password" id="password" placeholder="Hasło (min. 6 znaków)">
         
+        <!-- Checkbox Zapamiętaj mnie -->
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px; font-size: 14px;">
+            <input type="checkbox" id="remember-me" style="width: auto; margin: 0;">
+            <label for="remember-me" style="cursor: pointer;">Zapamiętaj mnie na tym urządzeniu</label>
+        </div>
+
         <button id="btn-login">Zaloguj się e-mailem</button>
         <button id="btn-register" style="background-color: #4dabf7;">Zarejestruj się</button>
         <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
@@ -123,6 +129,9 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
         import { 
             getAuth, 
+            setPersistence,
+            browserLocalPersistence,
+            browserSessionPersistence,
             createUserWithEmailAndPassword, 
             signInWithEmailAndPassword, 
             signInWithPopup,
@@ -161,6 +170,7 @@
         const appTabs = document.getElementById("app-tabs");
         const emailInput = document.getElementById("email");
         const passwordInput = document.getElementById("password");
+        const rememberMeCheckbox = document.getElementById("remember-me");
 
         let currentRecipeIngredients = [];
 
@@ -179,6 +189,12 @@
             }
             event.currentTarget.classList.add('active');
         };
+
+        // Pomocnicza funkcja ustawiająca trwałość sesji w zależności od checkboxa
+        async function applyPersistence() {
+            const persistenceType = rememberMeCheckbox.checked ? browserLocalPersistence : browserSessionPersistence;
+            await setPersistence(auth, persistenceType);
+        }
 
         document.getElementById("btn-add-ingredient").addEventListener("click", () => {
             const name = document.getElementById("ingredient-name").value.trim();
@@ -379,19 +395,25 @@
 
         document.getElementById("btn-register").addEventListener("click", async () => {
             try {
+                await applyPersistence();
                 await createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
                 alert("Konto utworzone!");
             } catch (error) { alert("Błąd: " + error.message); }
         });
 
         document.getElementById("btn-login").addEventListener("click", async () => {
-            try { await signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value); }
-            catch (error) { alert("Błąd: " + error.message); }
+            try {
+                await applyPersistence();
+                await signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
+            } catch (error) { alert("Błąd: " + error.message); }
         });
 
         document.getElementById("btn-google").addEventListener("click", async () => {
-            try { await signInWithPopup(auth, googleProvider); }
-            catch (error) { alert("Błąd: " + error.message); }
+            try {
+                // Google zawsze zapamiętuje sesję trwale
+                await setPersistence(auth, browserLocalPersistence);
+                await signInWithPopup(auth, googleProvider);
+            } catch (error) { alert("Błąd: " + error.message); }
         });
 
         document.getElementById("btn-logout").addEventListener("click", () => {
