@@ -200,13 +200,24 @@
         </div>
     </div>
 
-    <!-- ZAKŁADKA 3: Dodawanie przepisu (z makro) -->
+    <!-- ZAKŁADKA 3: Dodawanie przepisu (z makro i foremkami) -->
     <div id="section-add-recipe" class="tab-content">
         <div class="card">
             <h3 style="margin-top:0; color: #db2777;">Stwórz nowy przepis 🧁</h3>
             
             <input type="text" id="recipe-title" placeholder="Nazwa przepisu (np. Waniliowa owsianka)">
             
+            <label for="recipe-pan" style="font-size: 14px; font-weight: 600; color: #4a5568;">Wybierz foremkę / naczynie bazowe:</label>
+            <select id="recipe-pan">
+                <option value="Tortownica okrągła 22 cm">Tortownica okrągła (22 cm)</option>
+                <option value="Tortownica okrągła 24 cm">Tortownica okrągła (24 cm)</option>
+                <option value="Blacha prostokątna 20x30 cm">Blacha prostokątna (20x30 cm)</option>
+                <option value="Blacha prostokątna 25x35 cm">Blacha prostokątna (25x35 cm)</option>
+                <option value="Keksówka 30 cm">Keksówka (30 cm)</option>
+                <option value="Foremka do muffinek (12 szt.)">Foremka do muffinek (12 szt.)</option>
+                <option value="Inne / Air Fryer / Miska">Inne / Air Fryer / Miska</option>
+            </select>
+
             <div style="background: #fdf2f8; padding: 16px; border-radius: 16px; margin-bottom: 15px; border: 1px solid #fbcfe8;">
                 <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Składniki i makro (na 100g)</h4>
                 <input type="text" id="ingredient-name" placeholder="Nazwa składnika (np. Płatki owsiane)">
@@ -228,7 +239,7 @@
             </div>
 
             <textarea id="recipe-steps" rows="4" placeholder="Krok po kroku (opis przygotowania)..."></textarea>
-            <input type="text" id="recipe-time" placeholder="Czas przygotowania (np. 15 minut)">
+            <input type="text" id="recipe-time" placeholder="Czas przygotowania / pieczenia (np. 25 minut)">
             
             <label for="recipe-visibility" style="font-size: 14px; font-weight: 600; color: #4a5568;">Widoczność:</label>
             <select id="recipe-visibility">
@@ -383,6 +394,7 @@
 
         document.getElementById("btn-add-recipe").addEventListener("click", async () => {
             const title = document.getElementById("recipe-title").value.trim();
+            const panSize = document.getElementById("recipe-pan").value;
             const steps = document.getElementById("recipe-steps").value.trim();
             const time = document.getElementById("recipe-time").value.trim();
             const visibility = document.getElementById("recipe-visibility").value;
@@ -408,6 +420,7 @@
             try {
                 await addDoc(collection(db, "recipes"), {
                     title,
+                    panSize,
                     ingredients: currentRecipeIngredients,
                     totalMacros: {
                         kcal: totals.kcal,
@@ -436,8 +449,34 @@
             }
         });
 
-        function renderRecipeCard(recipe) {
+        // Globalny słownik aktywnych timerów na stronie
+        window.activeTimers = {};
+
+        window.startTimer = function(uniqueId, minutes) {
+            let secondsLeft = minutes * 60;
+            const displayEl = document.getElementById(`timer-display-${uniqueId}`);
+            
+            if (window.activeTimers[uniqueId]) {
+                clearInterval(window.activeTimers[uniqueId]);
+            }
+
+            window.activeTimers[uniqueId] = setInterval(() => {
+                if (secondsLeft <= 0) {
+                    clearInterval(window.activeTimers[uniqueId]);
+                    displayEl.textContent = "⏰ Czas minął!";
+                    alert("Czas pieczenia / przygotowania minął! 🔔");
+                    return;
+                }
+                secondsLeft--;
+                const m = Math.floor(secondsLeft / 60);
+                const s = secondsLeft % 60;
+                displayEl.textContent = `⏳ Pozostało: ${m}:${s < 10 ? '0' : ''}${s}`;
+            }, 1000);
+        };
+
+        function renderRecipeCard(recipe, docId = Math.random().toString(36).substring(7)) {
             const badge = recipe.isPublic ? "🌐 Publiczny" : "🔒 Prywatny";
+            const panHtml = recipe.panSize ? `<p style="color: #db2777; font-size: 13px; margin: 4px 0;">🍰 <strong>Foremka / Naczynie:</strong> ${escapeHtml(recipe.panSize)}</p>` : "";
             
             let ingredientsHtml = "";
             if (Array.isArray(recipe.ingredients)) {
@@ -458,11 +497,25 @@
                 </div>`;
             }
 
-            const timeHtml = recipe.time ? `<p style="color: #64748b; font-size: 14px;">⏱️ <strong>Czas przygotowania:</strong> ${escapeHtml(recipe.time)}</p>` : "";
+            let timeMinutes = 15; // Domyślny czas
+            if (recipe.time) {
+                const match = recipe.time.match(/\d+/);
+                if (match) timeMinutes = parseInt(match[0]);
+            }
+
+            const timeHtml = recipe.time ? `
+                <div style="display: flex; align-items: center; justify-content: space-between; background: #f8fafc; padding: 8px 12px; border-radius: 10px; margin-bottom: 12px;">
+                    <span style="color: #64748b; font-size: 14px;">⏱️ <strong>Czas:</strong> ${escapeHtml(recipe.time)}</span>
+                    <div>
+                        <button onclick="startTimer('${docId}', ${timeMinutes})" style="width: auto; padding: 6px 12px; font-size: 12px; margin-bottom: 0;">Start Stoper</button>
+                        <span id="timer-display-${docId}" style="margin-left: 8px; font-size: 13px; font-weight: 600; color: #3b82f6;"></span>
+                    </div>
+                </div>` : "";
 
             return `
                 <div class="recipe-item">
                     <h4 style="margin-top: 0; color: #1e293b; font-size: 18px;">${escapeHtml(recipe.title)} <small style="font-size: 12px; color: #94a3b8; font-weight: normal;">(${badge})</small></h4>
+                    ${panHtml}
                     ${timeHtml}
                     ${macrosHtml}
                     <p style="font-weight: 600; color: #334155; margin-bottom: 4px;">Składniki:</p>
@@ -491,7 +544,7 @@
                         return;
                     }
                     snapshot.forEach((docSnap) => {
-                        html += renderRecipeCard(docSnap.data());
+                        html += renderRecipeCard(docSnap.data(), docSnap.id);
                     });
                     document.getElementById("my-recipes-container").innerHTML = html;
                 });
@@ -512,7 +565,7 @@
                 return;
             }
             snapshot.forEach((docSnap) => {
-                html += renderRecipeCard(docSnap.data());
+                html += renderRecipeCard(docSnap.data(), docSnap.id);
             });
             document.getElementById("catalog-container").innerHTML = html;
         });
