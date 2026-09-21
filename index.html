@@ -10,7 +10,7 @@
         input, textarea, select { width: 100%; padding: 8px; margin: 6px 0 12px 0; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
         button { width: 100%; background-color: #ff6b6b; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-bottom: 8px; }
         button:hover { background-color: #ff5252; }
-        .recipe-item { border-left: 4px solid #ff6b6b; padding-left: 10px; margin-bottom: 15px; background: #fff; padding: 10px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .recipe-item { border-left: 4px solid #ff6b6b; padding: 10px; margin-bottom: 15px; background: #fff; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .hidden { display: none; }
         #auth-status { font-weight: bold; color: #555; margin-bottom: 15px; }
 
@@ -46,7 +46,7 @@
         <button id="btn-logout" style="background-color: #868e96;">Wyloguj się</button>
     </div>
 
-    <!-- Pasek zakładek (widoczny po zalogowaniu) -->
+    <!-- Pasek zakładek -->
     <div id="app-tabs" class="tabs hidden">
         <button class="tab-btn active" onclick="switchTab('catalog')">🌐 Katalog</button>
         <button class="tab-btn" onclick="switchTab('my-recipes')">📖 Moje</button>
@@ -54,7 +54,7 @@
         <button class="tab-btn" onclick="switchTab('profile')">👤 Profil</button>
     </div>
 
-    <!-- ZAKŁADKA 1: Katalog publiczny (widoczna dla każdego) -->
+    <!-- ZAKŁADKA 1: Katalog publiczny -->
     <div id="section-catalog" class="tab-content active">
         <div class="card">
             <h3>Wszystkie przepisy społeczności</h3>
@@ -70,15 +70,13 @@
         </div>
     </div>
 
-      <!-- ZAKŁADKA 3: Dodawanie przepisu -->
+    <!-- ZAKŁADKA 3: Dodawanie przepisu (z makro) -->
     <div id="section-add-recipe" class="tab-content">
         <div class="card">
             <h3>Dodaj nowy przepis</h3>
             
-            <!-- Krok 1: Nazwa -->
-            <input type="text" id="recipe-title" placeholder="Nazwa przepisu (np. Owsianka czekoladowa)">
+            <input type="text" id="recipe-title" placeholder="Nazwa przepisu (np. Owsianka)">
             
-            <!-- Krok 2: Dynamiczne dodawanie składników i makro -->
             <div style="background: #f1f3f5; padding: 12px; border-radius: 6px; margin-bottom: 15px;">
                 <h4 style="margin-top: 0; margin-bottom: 8px;">Składniki i makro (na 100g produktu)</h4>
                 <input type="text" id="ingredient-name" placeholder="Nazwa składnika (np. Płatki owsiane)">
@@ -95,12 +93,10 @@
                 <button type="button" id="btn-add-ingredient" style="background-color: #4dabf7; margin-top: 5px;">➕ Dodaj składnik do listy</button>
             </div>
 
-            <!-- Lista dodanych składników i podsumowanie makro -->
             <div id="ingredients-summary-container" style="margin-bottom: 15px; font-size: 14px;">
                 <p><em>Brak dodanych składników.</em></p>
             </div>
 
-            <!-- Krok 3: Przygotowanie i czas -->
             <textarea id="recipe-steps" rows="4" placeholder="Krok po kroku (opis przygotowania)..."></textarea>
             <input type="text" id="recipe-time" placeholder="Czas przygotowania (np. 15 minut)">
             
@@ -110,10 +106,9 @@
                 <option value="private">Prywatny (tylko dla mnie)</option>
             </select>
             
-            <button id="btn-add-recipe" style="background-color: #51cf66;">Opublikuj cały przepis</button>
+            <button id="btn-add-recipe" style="background-color: #51cf66; margin-top: 10px;">Opublikuj cały przepis</button>
         </div>
     </div>
-
 
     <!-- ZAKŁADKA 4: Profil -->
     <div id="section-profile" class="tab-content">
@@ -145,7 +140,6 @@
             serverTimestamp 
         } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
-        // Twoja konfiguracja Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyACAYq6d_bOfUV8s_wlX-yTdTKhU9YVwnE",
             authDomain: "przepisy-1666b.firebaseapp.com",
@@ -161,16 +155,15 @@
         const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
 
-        // Elementy DOM
         const authStatus = document.getElementById("auth-status");
         const authSection = document.getElementById("auth-section");
         const logoutSection = document.getElementById("logout-section");
         const appTabs = document.getElementById("app-tabs");
-
         const emailInput = document.getElementById("email");
         const passwordInput = document.getElementById("password");
 
-        // Funkcja przełączania zakładek (globalna)
+        let currentRecipeIngredients = [];
+
         window.switchTab = function(tabName) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -187,19 +180,169 @@
             event.currentTarget.classList.add('active');
         };
 
-        // Nasłuchiwanie stanu konta użytkownika
+        document.getElementById("btn-add-ingredient").addEventListener("click", () => {
+            const name = document.getElementById("ingredient-name").value.trim();
+            const kcal100 = parseFloat(document.getElementById("ing-kcal").value) || 0;
+            const protein100 = parseFloat(document.getElementById("ing-protein").value) || 0;
+            const fat100 = parseFloat(document.getElementById("ing-fat").value) || 0;
+            const carbs100 = parseFloat(document.getElementById("ing-carbs").value) || 0;
+            const weight = parseFloat(document.getElementById("ing-weight").value) || 0;
+
+            if (!name || weight <= 0) {
+                alert("Podaj nazwę składnika oraz wagę użytą w przepisie!");
+                return;
+            }
+
+            const factor = weight / 100;
+            const ingredientData = {
+                name,
+                weight,
+                kcal: Math.round(kcal100 * factor),
+                protein: parseFloat((protein100 * factor).toFixed(1)),
+                fat: parseFloat((fat100 * factor).toFixed(1)),
+                carbs: parseFloat((carbs100 * factor).toFixed(1))
+            };
+
+            currentRecipeIngredients.push(ingredientData);
+            updateIngredientsUI();
+
+            document.getElementById("ingredient-name").value = "";
+            document.getElementById("ing-kcal").value = "";
+            document.getElementById("ing-protein").value = "";
+            document.getElementById("ing-fat").value = "";
+            document.getElementById("ing-carbs").value = "";
+            document.getElementById("ing-weight").value = "";
+        });
+
+        function updateIngredientsUI() {
+            const container = document.getElementById("ingredients-summary-container");
+            if (currentRecipeIngredients.length === 0) {
+                container.innerHTML = "<p><em>Brak dodanych składników.</em></p>";
+                return;
+            }
+
+            let html = "<strong>Dodane składniki:</strong><ul>";
+            let totalKcal = 0, totalP = 0, totalF = 0, totalC = 0;
+
+            currentRecipeIngredients.forEach((item, index) => {
+                html += `<li>${escapeHtml(item.name)} (${item.weight}g) — ${item.kcal} kcal | B: ${item.protein}g | T: ${item.fat}g | W: ${item.carbs}g 
+                         <button type="button" onclick="removeIngredient(${index})" style="width: auto; padding: 2px 6px; font-size: 11px; background: #fa5252; margin-left: 5px;">Usuń</button></li>`;
+                totalKcal += item.kcal;
+                totalP += item.protein;
+                totalF += item.fat;
+                totalC += item.carbs;
+            });
+
+            html += `</ul><div style="background: #e7f5ff; padding: 8px; border-radius: 4px;"><strong>Łącznie w daniu:</strong> ${totalKcal} kcal | B: ${totalP.toFixed(1)}g | T: ${totalF.toFixed(1)}g | W: ${totalC.toFixed(1)}g</div>`;
+            container.innerHTML = html;
+        }
+
+        window.removeIngredient = function(index) {
+            currentRecipeIngredients.splice(index, 1);
+            updateIngredientsUI();
+        };
+
+        document.getElementById("btn-add-recipe").addEventListener("click", async () => {
+            const title = document.getElementById("recipe-title").value.trim();
+            const steps = document.getElementById("recipe-steps").value.trim();
+            const time = document.getElementById("recipe-time").value.trim();
+            const visibility = document.getElementById("recipe-visibility").value;
+            const user = auth.currentUser;
+
+            if (!title) {
+                alert("Podaj nazwę przepisu!");
+                return;
+            }
+            if (currentRecipeIngredients.length === 0) {
+                alert("Dodaj przynajmniej jeden składnik!");
+                return;
+            }
+
+            const totals = currentRecipeIngredients.reduce((acc, item) => {
+                acc.kcal += item.kcal;
+                acc.protein += item.protein;
+                acc.fat += item.fat;
+                acc.carbs += item.carbs;
+                return acc;
+            }, { kcal: 0, protein: 0, fat: 0, carbs: 0 });
+
+            try {
+                await addDoc(collection(db, "recipes"), {
+                    title,
+                    ingredients: currentRecipeIngredients,
+                    totalMacros: {
+                        kcal: totals.kcal,
+                        protein: parseFloat(totals.protein.toFixed(1)),
+                        fat: parseFloat(totals.fat.toFixed(1)),
+                        carbs: parseFloat(totals.carbs.toFixed(1))
+                    },
+                    steps,
+                    time,
+                    isPublic: visibility === "public",
+                    userId: user.uid,
+                    userEmail: user.email || user.displayName,
+                    createdAt: serverTimestamp()
+                });
+
+                document.getElementById("recipe-title").value = "";
+                document.getElementById("recipe-steps").value = "";
+                document.getElementById("recipe-time").value = "";
+                currentRecipeIngredients = [];
+                updateIngredientsUI();
+
+                alert("Przepis dodany pomyślnie!");
+                switchTab('catalog');
+            } catch (error) {
+                alert("Błąd zapisu: " + error.message);
+            }
+        });
+
+        function renderRecipeCard(recipe) {
+            const badge = recipe.isPublic ? "🌐 Publiczny" : "🔒 Prywatny";
+            
+            let ingredientsHtml = "";
+            if (Array.isArray(recipe.ingredients)) {
+                ingredientsHtml = "<ul>";
+                recipe.ingredients.forEach(ing => {
+                    ingredientsHtml += `<li>${escapeHtml(ing.name)} (${ing.weight}g) — ${ing.kcal} kcal (B: ${ing.protein}g, T: ${ing.fat}g, W: ${ing.carbs}g)</li>`;
+                });
+                ingredientsHtml += "</ul>";
+            } else {
+                ingredientsHtml = `<p>${escapeHtml(recipe.ingredients).replace(/\n/g, '<br>')}</p>`;
+            }
+
+            let macrosHtml = "";
+            if (recipe.totalMacros) {
+                macrosHtml = `<div style="background: #f8f9fa; padding: 6px; border-radius: 4px; margin-bottom: 8px; font-size: 13px;">
+                    <strong>Makro całego dania:</strong> ${recipe.totalMacros.kcal} kcal | 
+                    B: ${recipe.totalMacros.protein}g | T: ${recipe.totalMacros.fat}g | W: ${recipe.totalMacros.carbs}g
+                </div>`;
+            }
+
+            const timeHtml = recipe.time ? `<p>⏱️ <strong>Czas przygotowania:</strong> ${escapeHtml(recipe.time)}</p>` : "";
+
+            return `
+                <div class="recipe-item">
+                    <h4>${escapeHtml(recipe.title)} <small>(${badge})</small></h4>
+                    ${timeHtml}
+                    ${macrosHtml}
+                    <p><strong>Składniki:</strong></p>
+                    ${ingredientsHtml}
+                    <p><strong>Przygotowanie:</strong><br>${escapeHtml(recipe.steps).replace(/\n/g, '<br>')}</p>
+                    <small style="color: #888;">Autor: ${recipe.userEmail || 'Nieznany'}</small>
+                </div>
+            `;
+        }
+
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 authStatus.textContent = `Zalogowany jako: ${user.email || user.displayName}`;
                 authSection.classList.add("hidden");
                 logoutSection.classList.remove("hidden");
                 appTabs.classList.remove("hidden");
-
-                // Uzupełnienie danych w profilu
                 document.getElementById("profile-email").textContent = user.email || user.displayName;
                 document.getElementById("profile-uid").textContent = user.uid;
 
-                // Pobieranie przepisów aktualnego użytkownika do zakładki "Moje"
                 const myQuery = query(collection(db, "recipes"), where("userId", "==", user.uid));
                 onSnapshot(myQuery, (snapshot) => {
                     let html = "";
@@ -212,22 +355,20 @@
                     });
                     document.getElementById("my-recipes-container").innerHTML = html;
                 });
-
             } else {
-                authStatus.textContent = "Nie jesteś zalogowany. Przeglądasz tylko katalog publiczny.";
+                authStatus.textContent = "Nie jesteś zalogowany.";
                 authSection.classList.remove("hidden");
                 logoutSection.classList.add("hidden");
                 appTabs.classList.add("hidden");
-                document.getElementById("my-recipes-container").innerHTML = "<p>Musisz się zalogować, aby zobaczyć swoje przepisy.</p>";
+                document.getElementById("my-recipes-container").innerHTML = "<p>Musisz się zalogować.</p>";
             }
         });
 
-        // 1. Pobieranie TYLKO publicznych przepisów do Katalogu (widoczne dla każdego)
         const publicQuery = query(collection(db, "recipes"), where("isPublic", "==", true));
         onSnapshot(publicQuery, (snapshot) => {
             let html = "";
             if (snapshot.empty) {
-                document.getElementById("catalog-container").innerHTML = "<p>Brak publicznych przepisów w katalogu.</p>";
+                document.getElementById("catalog-container").innerHTML = "<p>Brak publicznych przepisów.</p>";
                 return;
             }
             snapshot.forEach((docSnap) => {
@@ -236,86 +377,27 @@
             document.getElementById("catalog-container").innerHTML = html;
         });
 
-        // Rejestracja e-mail
         document.getElementById("btn-register").addEventListener("click", async () => {
             try {
                 await createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
-                alert("Konto zostało utworzone pomyślnie!");
-            } catch (error) {
-                alert("Błąd rejestracji: " + error.message);
-            }
+                alert("Konto utworzone!");
+            } catch (error) { alert("Błąd: " + error.message); }
         });
 
-        // Logowanie e-mail
         document.getElementById("btn-login").addEventListener("click", async () => {
-            try {
-                await signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
-            } catch (error) {
-                alert("Błąd logowania: " + error.message);
-            }
+            try { await signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value); }
+            catch (error) { alert("Błąd: " + error.message); }
         });
 
-        // Logowanie przez Google
         document.getElementById("btn-google").addEventListener("click", async () => {
-            try {
-                await signInWithPopup(auth, googleProvider);
-            } catch (error) {
-                alert("Błąd logowania Google: " + error.message);
-            }
+            try { await signInWithPopup(auth, googleProvider); }
+            catch (error) { alert("Błąd: " + error.message); }
         });
 
-        // Wylogowanie
         document.getElementById("btn-logout").addEventListener("click", () => {
             signOut(auth);
-            switchTab('catalog'); // Wróć do katalogu po wylogowaniu
+            switchTab('catalog');
         });
-
-        // Dodawanie przepisu
-        document.getElementById("btn-add-recipe").addEventListener("click", async () => {
-            const title = document.getElementById("recipe-title").value;
-            const ingredients = document.getElementById("recipe-ingredients").value;
-            const steps = document.getElementById("recipe-steps").value;
-            const visibility = document.getElementById("recipe-visibility").value;
-            const user = auth.currentUser;
-
-            if (!title || !ingredients) {
-                alert("Wypełnij przynajmniej nazwę i składniki!");
-                return;
-            }
-
-            try {
-                await addDoc(collection(db, "recipes"), {
-                    title,
-                    ingredients,
-                    steps,
-                    isPublic: visibility === "public",
-                    userId: user.uid,
-                    userEmail: user.email || user.displayName,
-                    createdAt: serverTimestamp()
-                });
-
-                document.getElementById("recipe-title").value = "";
-                document.getElementById("recipe-ingredients").value = "";
-                document.getElementById("recipe-steps").value = "";
-                alert("Przepis dodany pomyślnie do bazy!");
-                switchTab('catalog'); // Przełącz na katalog po dodaniu
-            } catch (error) {
-                alert("Błąd zapisu przepisu: " + error.message);
-            }
-        });
-
-        // Pomocnicza funkcja generująca kafelek przepisu
-        function renderRecipeCard(recipe) {
-            const badge = recipe.isPublic ? "🌐 Publiczny" : "🔒 Prywatny";
-            return `
-                <div class="recipe-item">
-                    <h4>${escapeHtml(recipe.title)} <small>(${badge})</small></h4>
-                    <p><strong>Składniki:</strong><br>${escapeHtml(recipe.ingredients).replace(/\n/g, '<br>')}</p>
-                    <p><strong>Przygotowanie:</strong><br>${escapeHtml(recipe.steps).replace(/\n/g, '<br>')}</p>
-                    <small style="color: #888;">Autor: ${recipe.userEmail || 'Nieznany'}</small>
-                </div>
-            `;
-        }
 
         function escapeHtml(text) {
             if (!text) return "";
