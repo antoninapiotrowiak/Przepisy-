@@ -152,17 +152,17 @@
 
 /* Efekt szklanego przycisku i kart w stylu iOS */
 .glass-card, .glass-button {
-  background: rgba(255, 255, 255, 0.65);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  background: rgba(255, 255, 255, 0.30) !important; /* Bardziej przezroczyste szkło */
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.12) !important;
   transition: all 0.3s ease;
 }
 
 /* Interakcja po najechaniu / kliknięciu */
 .glass-button:hover {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.50) !important;
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(219, 39, 119, 0.15);
 }
@@ -180,7 +180,6 @@
 .animate-fade-in {
   animation: fadeIn 0.4s ease-out forwards;
 }
-        
     </style>
     <link rel="manifest" href="/manifest.json">
 
