@@ -108,7 +108,7 @@
             font-weight: 600; 
             color: #4a5568; 
             margin-bottom: 15px; 
-            text-align: center;
+            text-align: left;
             background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(10px);
             padding: 12px;
@@ -182,8 +182,7 @@
             display: block;
         }
 
-      
-        /* Pływający szklany pasek nawigacji iOS */
+        /* Pływający szklany pasek nawigacji iOS (5 zakładek) */
         .floating-glass-nav {
             position: fixed !important;
             bottom: 20px !important;
@@ -192,7 +191,7 @@
             width: 92% !important;
             max-width: 480px !important;
             background: rgba(255, 255, 255, 0.5) !important;
-            backdrop-filter: blur(20px) !important; /* Lekkie zmniejszenie rozmycia tła pomaga wydajności */
+            backdrop-filter: blur(20px) !important;
             -webkit-backdrop-filter: blur(20px) !important;
             border: 1px solid rgba(255, 255, 255, 0.8) !important;
             box-shadow: 0 15px 35px rgba(31, 38, 135, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
@@ -211,9 +210,8 @@
             position: absolute;
             top: 6px;
             bottom: 6px;
-            width: 20%;
-            background: rgba(255, 255, 255, 0.85); /* Uproszczenie gradientu na rzecz wydajności */
-            /* Usunięto wewnętrzny backdrop-filter z bąbelka, bo potrafi mocno dławić mobilne GPU */
+            width: 20%; /* 5 przycisków -> 20% szerokości każdy */
+            background: rgba(255, 255, 255, 0.85);
             border-radius: 9999px;
             box-shadow: 0 4px 15px rgba(236, 72, 153, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.9);
@@ -228,7 +226,7 @@
             position: relative;
             z-index: 2;
             flex: 1; 
-            padding: 10px 4px; 
+            padding: 10px 2px; 
             background: transparent; 
             border: none; 
             border-radius: 9999px; 
@@ -239,7 +237,7 @@
             white-space: nowrap;
             margin-bottom: 0;
             box-shadow: none;
-            font-size: 12px;
+            font-size: 11px;
             transition: color 0.2s ease, transform 0.2s ease;
         }
 
@@ -265,6 +263,13 @@
 </head>
 <body>
 
+    <!-- Mały, dyskretny kwadracik profilu w prawym górnym rogu -->
+    <div style="position: absolute; top: 20px; right: 20px; z-index: 100;">
+        <div id="profile-trigger" onclick="switchTab('profile')" style="width: 34px; height: 34px; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: var(--primary-pink); cursor: pointer; box-shadow: 0 4px 12px rgba(236, 72, 153, 0.1); transition: transform 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            👤
+        </div>
+    </div>
+
     <h1>🌸 Moja Książka Przepisów 🌸</h1>
     
     <div id="auth-status">Sprawdzanie stanu logowania...</div>
@@ -286,11 +291,7 @@
         <button id="btn-google" style="background: #ffffff; color: #3b82f6; border: 2px solid #3b82f6; box-shadow: none;">Zaloguj przez Google</button>
     </div>
 
-    <div id="logout-section" class="card hidden" style="padding: 15px;">
-        <button id="btn-logout" style="background: #94a3b8; margin-bottom: 0;">Wyloguj się</button>
-    </div>
-
-    <!-- Pasek zakładek z efektem Liquid Glass -->
+    <!-- Pasek zakładek z efektem Liquid Glass (5 przycisków) -->
     <div id="app-tabs" class="tabs hidden floating-glass-nav" onmouseleave="resetBubble()">
         <div id="liquid-bubble" class="liquid-bubble"></div>
         <button class="tab-btn active" onclick="switchTab('catalog')" onmouseenter="moveBubble(0)" ontouchstart="moveBubble(0)">🌐 Katalog</button>
@@ -396,14 +397,18 @@
         </div>
     </div>
 
-    <!-- ZAKŁADKA 5: Profil -->
+    <!-- ZAKŁADKA 5: Profil (z przyciskiem wylogowania) -->
     <div id="section-profile" class="tab-content">
         <div class="card">
             <h3 style="margin-top:0; color: #db2777;">Twój profil 👤</h3>
             <p><strong>E-mail:</strong> <span id="profile-email">-</span></p>
             <p><strong>ID użytkownika:</strong> <span id="profile-uid" style="font-size: 12px; color: #666;">-</span></p>
-            <hr style="margin: 15px 0; border: 0; border-top: 1px solid rgba(255,255,255,0.6);">
-            <p style="font-size: 13px; color: #64748b;">Wszystkie funkcje sztucznej inteligencji są połączone z bezpiecznym serwerem i działają w pełni automatycznie! ✨</p>
+            
+            <hr style="margin: 20px 0; border: 0; border-top: 1px solid rgba(0,0,0,0.05);">
+            
+            <button id="btn-logout" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); box-shadow: 0 6px 20px rgba(239, 68, 68, 0.2); margin-bottom: 0;">
+                Wyloguj się
+            </button>
         </div>
     </div>
 
@@ -448,7 +453,6 @@
 
         const authStatus = document.getElementById("auth-status");
         const authSection = document.getElementById("auth-section");
-        const logoutSection = document.getElementById("logout-section");
         const appTabs = document.getElementById("app-tabs");
         const emailInput = document.getElementById("email");
         const passwordInput = document.getElementById("password");
@@ -497,7 +501,10 @@
                 targetIndex = 4;
             }
             
-            event.currentTarget.classList.add('active');
+            const targetBtn = document.querySelector(`.tab-btn[onclick*="${tabName}"]`);
+            if (targetBtn) {
+                targetBtn.classList.add('active');
+            }
             moveBubble(targetIndex);
         };
 
@@ -821,7 +828,6 @@
             if (user) {
                 authStatus.textContent = `Zalogowany jako: ${user.email || user.displayName}`;
                 authSection.classList.add("hidden");
-                logoutSection.classList.remove("hidden");
                 appTabs.classList.remove("hidden");
                 document.getElementById("profile-email").textContent = user.email || user.displayName;
                 document.getElementById("profile-uid").textContent = user.uid;
@@ -847,7 +853,6 @@
             } else {
                 authStatus.textContent = "Nie jesteś zalogowany.";
                 authSection.classList.remove("hidden");
-                logoutSection.classList.add("hidden");
                 appTabs.classList.add("hidden");
                 document.getElementById("my-recipes-container").innerHTML = `
                     <div class="empty-state">
