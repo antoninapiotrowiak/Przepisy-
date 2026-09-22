@@ -108,7 +108,7 @@
             font-weight: 600; 
             color: #4a5568; 
             margin-bottom: 15px; 
-            text-align: center;
+            text-align: left;
             background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(10px);
             padding: 12px;
@@ -182,8 +182,7 @@
             display: block;
         }
 
-      
-        /* Pływający szklany pasek nawigacji iOS */
+        /* Pływający szklany pasek nawigacji iOS - zoptymalizowany pod kątem płynności */
         .floating-glass-nav {
             position: fixed !important;
             bottom: 20px !important;
@@ -192,7 +191,7 @@
             width: 92% !important;
             max-width: 480px !important;
             background: rgba(255, 255, 255, 0.5) !important;
-            backdrop-filter: blur(20px) !important; /* Lekkie zmniejszenie rozmycia tła pomaga wydajności */
+            backdrop-filter: blur(20px) !important;
             -webkit-backdrop-filter: blur(20px) !important;
             border: 1px solid rgba(255, 255, 255, 0.8) !important;
             box-shadow: 0 15px 35px rgba(31, 38, 135, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
@@ -211,9 +210,8 @@
             position: absolute;
             top: 6px;
             bottom: 6px;
-            width: 20%;
-            background: rgba(255, 255, 255, 0.85); /* Uproszczenie gradientu na rzecz wydajności */
-            /* Usunięto wewnętrzny backdrop-filter z bąbelka, bo potrafi mocno dławić mobilne GPU */
+            width: 20%; /* 5 przycisków -> 20% szerokości każdy */
+            background: rgba(255, 255, 255, 0.85);
             border-radius: 9999px;
             box-shadow: 0 4px 15px rgba(236, 72, 153, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.9);
@@ -228,7 +226,7 @@
             position: relative;
             z-index: 2;
             flex: 1; 
-            padding: 10px 4px; 
+            padding: 10px 2px; 
             background: transparent; 
             border: none; 
             border-radius: 9999px; 
@@ -239,7 +237,7 @@
             white-space: nowrap;
             margin-bottom: 0;
             box-shadow: none;
-            font-size: 12px;
+            font-size: 11px;
             transition: color 0.2s ease, transform 0.2s ease;
         }
 
@@ -265,638 +263,107 @@
 </head>
 <body>
 
-    <h1>🌸 Moja Książka Przepisów 🌸</h1>
-    
-    <div id="auth-status">Sprawdzanie stanu logowania...</div>
+    <!-- Mały, dyskretny kwadracik profilu w prawym górnym rogu -->
+    <div style="position: absolute; top: 20px; right: 20px; z-index: 100;">
+        <div id="profile-trigger" onclick="switchTab('profile', document.querySelector('.tab-btn[data-tab=\'profile\']'))" style="width: 34px; height: 34px; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: var(--primary-pink); cursor: pointer; box-shadow: 0 4px 12px rgba(236, 72, 153, 0.1); transition: transform 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            👤
+        </div>
+    </div>
 
-    <!-- Sekcja Logowania / Rejestracji -->
-    <div id="auth-section" class="card">
-        <h3 style="margin-top:0; color: #db2777;">Witaj ponownie! ✨</h3>
-        <input type="email" id="email" placeholder="Twój e-mail">
-        <input type="password" id="password" placeholder="Hasło (min. 6 znaków)">
+    <h1>Książka z Przepisami</h1>
+
+    <!-- Główna zawartość zakładek (Przykładowa struktura kontenerów) -->
+    <div id="recipes" class="tab-content active card">
+        <h2>Twoje Przepisy</h2>
+        <p style="color: #64748b; font-size: 14px;">Tutaj pojawią się Twoje zapisane pyszności.</p>
+    </div>
+
+    <div id="add" class="tab-content card">
+        <h2>Dodaj Przepis</h2>
+        <input type="text" placeholder="Nazwa przepisu...">
+        <textarea placeholder="Opis / przygotowanie..."></textarea>
+        <button>Zapisz przepis</button>
+    </div>
+
+    <div id="calculator" class="tab-content card">
+        <h2>Kalkulator Kalorii</h2>
+        <p style="color: #64748b; font-size: 14px;">Oblicz makroskładniki swoich dań.</p>
+    </div>
+
+    <div id="ai" class="tab-content card">
+        <h2>Asystent AI</h2>
+        <p style="color: #64748b; font-size: 14px;">Zapytaj o modyfikacje przepisów.</p>
+    </div>
+
+    <!-- Nowa zakładka Profil ze schowanym przyciskiem wylogowania -->
+    <div id="profile" class="tab-content card">
+        <h2 style="color: var(--primary-pink); font-size: 20px; margin-bottom: 15px;">Twój Profil</h2>
+        <div id="auth-status" style="margin-bottom: 20px; text-align: left;">
+            <!-- Tutaj dynamicznie ląduje status zalogowanego użytkownika -->
+            Zalogowany jako: Gość
+        </div>
         
-        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px; font-size: 14px; color: #4a5568;">
-            <input type="checkbox" id="remember-me" style="width: auto; margin: 0; accent-color: #ec4899;">
-            <label for="remember-me" style="cursor: pointer;">Zapamiętaj mnie na tym urządzeniu</label>
-        </div>
-
-        <button id="btn-login">Zaloguj się e-mailem</button>
-        <button id="btn-register" style="background: linear-gradient(135deg, #60a5fa 100%, #3b82f6 0%);">Zarejestruj się</button>
-        <hr style="margin: 15px 0; border: 0; border-top: 1px solid rgba(255,255,255,0.6);">
-        <button id="btn-google" style="background: #ffffff; color: #3b82f6; border: 2px solid #3b82f6; box-shadow: none;">Zaloguj przez Google</button>
-    </div>
-
-    <div id="logout-section" class="card hidden" style="padding: 15px;">
-        <button id="btn-logout" style="background: #94a3b8; margin-bottom: 0;">Wyloguj się</button>
-    </div>
-
-    <!-- Pasek zakładek z efektem Liquid Glass -->
-    <div id="app-tabs" class="tabs hidden floating-glass-nav" onmouseleave="resetBubble()">
-        <div id="liquid-bubble" class="liquid-bubble"></div>
-        <button class="tab-btn active" onclick="switchTab('catalog')" onmouseenter="moveBubble(0)" ontouchstart="moveBubble(0)">🌐 Katalog</button>
-        <button class="tab-btn" onclick="switchTab('my-recipes')" onmouseenter="moveBubble(1)" ontouchstart="moveBubble(1)">📖 Moje</button>
-        <button class="tab-btn" onclick="switchTab('add-recipe')" onmouseenter="moveBubble(2)" ontouchstart="moveBubble(2)">➕ Dodaj</button>
-        <button class="tab-btn" onclick="switchTab('ai-helper')" onmouseenter="moveBubble(3)" ontouchstart="moveBubble(3)">🤖 AI</button>
-        <button class="tab-btn" onclick="switchTab('profile')" onmouseenter="moveBubble(4)" ontouchstart="moveBubble(4)">👤 Profil</button>
-    </div>
-
-    <!-- ZAKŁADKA 1: Katalog publiczny z filtrami -->
-    <div id="section-catalog" class="tab-content active">
-        <div class="card">
-            <h3 style="margin-top:0; color: #db2777;">Przepisy społeczności 🧁</h3>
-            
-            <!-- Pigułki filtrowania -->
-            <div class="filter-chips">
-                <div class="chip active" onclick="setCatalogFilter('all', this)">Wszystkie</div>
-                <div class="chip" onclick="setCatalogFilter('quick', this)">Szybkie (do 20 min)</div>
-                <div class="chip" onclick="setCatalogFilter('fit', this)">Lekkie (do 350 kcal)</div>
-            </div>
-
-            <div id="catalog-container">Ładowanie przepisów...</div>
+        <div style="border-top: 1px solid rgba(0,0,0,0.05); padding-top: 20px;">
+            <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">Zarządzaj swoim kontem i sesją.</p>
+            <button id="logout-btn" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); box-shadow: 0 6px 20px rgba(239, 68, 68, 0.2);">
+                Wyloguj się
+            </button>
         </div>
     </div>
 
-    <!-- ZAKŁADKA 2: Moje przepisy -->
-    <div id="section-my-recipes" class="tab-content">
-        <div class="card">
-            <h3 style="margin-top:0; color: #db2777;">Twoja kolekcja 📖</h3>
-            <div id="my-recipes-container">Ładowanie Twoich przepisów...</div>
-        </div>
-    </div>
+    <!-- Pływający pasek nawigacyjny z 5 przyciskami i bąbelkiem -->
+    <nav class="floating-glass-nav">
+        <div class="liquid-bubble" id="liquidBubble"></div>
+        <button class="tab-btn active" data-tab="recipes" onclick="switchTab('recipes', this)">Przepisy</button>
+        <button class="tab-btn" data-tab="add" onclick="switchTab('add', this)">Dodaj</button>
+        <button class="tab-btn" data-tab="calculator" onclick="switchTab('calculator', this)">Kalkulator</button>
+        <button class="tab-btn" data-tab="ai" onclick="switchTab('ai', this)">AI</button>
+        <button class="tab-btn" data-tab="profile" onclick="switchTab('profile', this)">Profil</button>
+    </nav>
 
-    <!-- ZAKŁADKA 3: Dodawanie przepisu -->
-    <div id="section-add-recipe" class="tab-content">
-        <div class="card" style="padding: 24px;">
-            <h3 style="margin-top:0; color: #db2777; font-weight: 700;">Stwórz nowy przepis 🍰</h3>
+    <script>
+        // Logika płynnego przesuwania bąbelka i przełączania zakładek
+        function switchTab(tabId, buttonElement) {
+            // Ukryj wszystkie zawartości
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
             
-            <input type="text" id="recipe-title" placeholder="Nazwa przepisu (np. Waniliowa owsianka)">
+            // Pokaż wybraną zakładkę
+            const targetTab = document.getElementById(tabId);
+            if (targetTab) {
+                targetTab.classList.add('active');
+            }
+
+            // Odznacz wszystkie przyciski w pasku
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Zaznacz kliknięty przycisk (lub ten wywołany z ikonki w rogu)
+            if (buttonElement) {
+                buttonElement.classList.add('active');
+            }
+
+            // Przesuń płynnie szklany bąbelek na odpowiednią pozycję (indeks 0-4)
+            const buttons = Array.from(document.querySelectorAll('.tab-btn'));
+            const activeIndex = buttons.findIndex(btn => btn.getAttribute('data-tab') === tabId);
             
-            <label for="recipe-pan" style="font-size: 14px; font-weight: 600; color: #4a5568; display: block; margin-bottom: 6px;">Wybierz foremkę / naczynie bazowe:</label>
-            <select id="recipe-pan">
-                <option value="Tortownica okrągła 22 cm">Tortownica okrągła (22 cm)</option>
-                <option value="Tortownica okrągła 24 cm">Tortownica okrągła (24 cm)</option>
-                <option value="Blacha prostokątna 20x30 cm">Blacha prostokątna (20x30 cm)</option>
-                <option value="Blacha prostokątna 25x35 cm">Blacha prostokątna (25x35 cm)</option>
-                <option value="Keksówka 30 cm">Keksówka (30 cm)</option>
-                <option value="Foremka do muffinek (12 szt.)">Foremka do muffinek (12 szt.)</option>
-                <option value="Inne">Inne</option>
-            </select>
-
-            <div style="background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); padding: 16px; border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.6);">
-                <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Składniki i makro (na 100g)</h4>
-
-                <input type="text" id="ingredient-name" placeholder="Nazwa składnika (np. Płatki owsiane)">
-                <div style="display: flex; gap: 8px;">
-                    <input type="number" id="ing-kcal" placeholder="Kcal / 100g">
-                    <input type="number" id="ing-protein" placeholder="Białko / 100g">
-                </div>
-                <div style="display: flex; gap: 8px;">
-                    <input type="number" id="ing-fat" placeholder="Tłuszcz / 100g">
-                    <input type="number" id="ing-carbs" placeholder="Węgle / 100g">
-                </div>
-                <input type="number" id="ing-weight" placeholder="Waga użyta w przepisie (w gramach, np. 50)">
-                
-                <button type="button" id="btn-add-ingredient" style="background: linear-gradient(135deg, #f472b6 0%, #38bdf8 100%); margin-top: 5px;">➕ Dodaj składnik</button>
-            </div>
-
-            <div id="ingredients-summary-container" style="margin-bottom: 15px; font-size: 14px;">
-                <p style="color: #64748b;"><em>Brak dodanych składników.</em></p>
-            </div>
-
-            <textarea id="recipe-steps" rows="4" placeholder="Krok po kroku (opis przygotowania)..."></textarea>
-            <input type="text" id="recipe-time" placeholder="Czas przygotowania / pieczenia (np. 25 minut)">
-            
-            <label for="recipe-visibility" style="font-size: 14px; font-weight: 600; color: #4a5568; display: block; margin-bottom: 6px;">Widoczność:</label>
-            <select id="recipe-visibility">
-                <option value="public">Publiczny (widoczny w katalogu)</option>
-                <option value="private">Prywatny (tylko dla mnie)</option>
-            </select>
-            
-            <button id="btn-add-recipe" style="margin-top: 15px;">Opublikuj cały przepis ✨</button>
-        </div>
-    </div>
-
-    <!-- ZAKŁADKA 4: AI Studio -->
-    <div id="section-ai-helper" class="tab-content">
-        <div class="card">
-            <h3 style="margin-top:0; color: #db2777;">🤖 Inteligentny Asystent Kulinarny AI</h3>
-            <p style="font-size: 14px; color: #64748b;">Wpisz, co masz w lodówce albo zadaj dowolne pytanie o gotowanie, a Gemini od razu Ci pomoże!</p>
-            
-            <textarea id="ai-fridge-input" rows="3" placeholder="Co masz w lodówce? (np. mam serek wiejski, jajka i banany)"></textarea>
-            <button type="button" onclick="generateRecipeFromFridge()">✨ Wygeneruj przepis z lodówki</button>
-            
-            <div id="ai-generator-result" style="margin-top: 15px; padding: 14px; background: rgba(255,255,255,0.9); border-radius: 14px; border: 1px solid #fbcfe8; white-space: pre-wrap; display: none; font-size: 14px; line-height: 1.5;"></div>
-        </div>
-
-        <div class="card">
-            <h3 style="margin-top:0; color: #db2777;">💬 Czat z Szefem Kuchni</h3>
-            <input type="text" id="ai-general-query" placeholder="Zadaj pytanie (np. Czym zastąpić mąkę pszenną?)">
-            <button type="button" onclick="askGeneralAI()">Wyślij pytanie do AI</button>
-            <div id="ai-general-result" style="margin-top: 15px; padding: 14px; background: rgba(255,255,255,0.9); border-radius: 14px; border: 1px solid #e0f2fe; white-space: pre-wrap; display: none; font-size: 14px; line-height: 1.5;"></div>
-        </div>
-    </div>
-
-    <!-- ZAKŁADKA 5: Profil -->
-    <div id="section-profile" class="tab-content">
-        <div class="card">
-            <h3 style="margin-top:0; color: #db2777;">Twój profil 👤</h3>
-            <p><strong>E-mail:</strong> <span id="profile-email">-</span></p>
-            <p><strong>ID użytkownika:</strong> <span id="profile-uid" style="font-size: 12px; color: #666;">-</span></p>
-            <hr style="margin: 15px 0; border: 0; border-top: 1px solid rgba(255,255,255,0.6);">
-            <p style="font-size: 13px; color: #64748b;">Wszystkie funkcje sztucznej inteligencji są połączone z bezpiecznym serwerem i działają w pełni automatycznie! ✨</p>
-        </div>
-    </div>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-        import { 
-            getAuth, 
-            setPersistence,
-            browserLocalPersistence,
-            browserSessionPersistence,
-            createUserWithEmailAndPassword, 
-            signInWithEmailAndPassword, 
-            signInWithPopup,
-            GoogleAuthProvider,
-            signOut, 
-            onAuthStateChanged 
-        } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-        import { 
-            getFirestore, 
-            collection, 
-            addDoc, 
-            query, 
-            where,
-            onSnapshot, 
-            serverTimestamp 
-        } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyACAYq6d_bOfUV8s_wlX-yTdTKhU9YVwnE",
-            authDomain: "przepisy-1666b.firebaseapp.com",
-            projectId: "przepisy-1666b",
-            storageBucket: "przepisy-1666b.firebasestorage.app",
-            messagingSenderId: "1080998982984",
-            appId: "1:1080998982984:web:1d8eab4db37ab520a6af7d",
-            measurementId: "G-484BSEC9FE"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const googleProvider = new GoogleAuthProvider();
-
-        const authStatus = document.getElementById("auth-status");
-        const authSection = document.getElementById("auth-section");
-        const logoutSection = document.getElementById("logout-section");
-        const appTabs = document.getElementById("app-tabs");
-        const emailInput = document.getElementById("email");
-        const passwordInput = document.getElementById("password");
-        const rememberMeCheckbox = document.getElementById("remember-me");
-
-        let currentRecipeIngredients = [];
-        let currentCatalogFilter = 'all';
-        let rawPublicRecipes = [];
-
-        window.moveBubble = function(index) {
-            const bubble = document.getElementById("liquid-bubble");
-            if (bubble) {
-                bubble.style.left = `calc(${index * 20}% + 4px)`;
+            if (activeIndex !== -1) {
+                const bubble = document.getElementById('liquidBubble');
+                // Każdy przycisk zajmuje 20% szerokości paska
+                bubble.style.left = `calc(${activeIndex * 20}% + 4px)`;
                 bubble.style.width = `calc(20% - 8px)`;
             }
-        };
+        }
 
-        window.resetBubble = function() {
+        // Inicjalizacja pozycji bąbelka przy starcie
+        window.addEventListener('DOMContentLoaded', () => {
             const activeBtn = document.querySelector('.tab-btn.active');
             if (activeBtn) {
-                const buttons = Array.from(document.querySelectorAll('.tab-btn'));
-                const index = buttons.indexOf(activeBtn);
-                if (index !== -1) moveBubble(index);
-            }
-        };
-
-        window.switchTab = function(tabName) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-
-            let targetIndex = 0;
-            if (tabName === 'catalog') {
-                document.getElementById('section-catalog').classList.add('active');
-                targetIndex = 0;
-            } else if (tabName === 'my-recipes') {
-                document.getElementById('section-my-recipes').classList.add('active');
-                targetIndex = 1;
-            } else if (tabName === 'add-recipe') {
-                document.getElementById('section-add-recipe').classList.add('active');
-                targetIndex = 2;
-            } else if (tabName === 'ai-helper') {
-                document.getElementById('section-ai-helper').classList.add('active');
-                targetIndex = 3;
-            } else if (tabName === 'profile') {
-                document.getElementById('section-profile').classList.add('active');
-                targetIndex = 4;
-            }
-            
-            event.currentTarget.classList.add('active');
-            moveBubble(targetIndex);
-        };
-
-        async function applyPersistence() {
-            const persistenceType = rememberMeCheckbox.checked ? browserLocalPersistence : browserSessionPersistence;
-            await setPersistence(auth, persistenceType);
-        }
-
-        document.getElementById("btn-add-ingredient").addEventListener("click", () => {
-            const name = document.getElementById("ingredient-name").value.trim();
-            const kcal100 = parseFloat(document.getElementById("ing-kcal").value) || 0;
-            const protein100 = parseFloat(document.getElementById("ing-protein").value) || 0;
-            const fat100 = parseFloat(document.getElementById("ing-fat").value) || 0;
-            const carbs100 = parseFloat(document.getElementById("ing-carbs").value) || 0;
-            const weight = parseFloat(document.getElementById("ing-weight").value) || 0;
-
-            if (!name || weight <= 0) {
-                alert("Podaj nazwę składnika oraz wagę użytą w przepisie!");
-                return;
-            }
-
-            const factor = weight / 100;
-            const ingredientData = {
-                name,
-                weight,
-                kcal: Math.round(kcal100 * factor),
-                protein: parseFloat((protein100 * factor).toFixed(1)),
-                fat: parseFloat((fat100 * factor).toFixed(1)),
-                carbs: parseFloat((carbs100 * factor).toFixed(1))
-            };
-
-            currentRecipeIngredients.push(ingredientData);
-            updateIngredientsUI();
-
-            document.getElementById("ingredient-name").value = "";
-            document.getElementById("ing-kcal").value = "";
-            document.getElementById("ing-protein").value = "";
-            document.getElementById("ing-fat").value = "";
-            document.getElementById("ing-carbs").value = "";
-            document.getElementById("ing-weight").value = "";
-        });
-
-        function updateIngredientsUI() {
-            const container = document.getElementById("ingredients-summary-container");
-            if (currentRecipeIngredients.length === 0) {
-                container.innerHTML = "<p style='color: #64748b;'><em>Brak dodanych składników.</em></p>";
-                return;
-            }
-
-            let html = "<strong style='color: #475569;'>Dodane składniki:</strong><ul style='padding-left: 20px; margin: 8px 0;'>";
-            let totalKcal = 0, totalP = 0, totalF = 0, totalC = 0;
-
-            currentRecipeIngredients.forEach((item, index) => {
-                html += `<li style="margin-bottom: 4px;">${escapeHtml(item.name)} (${item.weight}g) — ${item.kcal} kcal | B: ${item.protein}g | T: ${item.fat}g | W: ${item.carbs}g 
-                         <button type="button" onclick="removeIngredient(${index})" style="width: auto; padding: 2px 6px; font-size: 11px; background: #ef4444; margin-left: 5px; border-radius: 6px; box-shadow: none;">Usuń</button></li>`;
-                totalKcal += item.kcal;
-                totalP += item.protein;
-                totalF += item.fat;
-                totalC += item.carbs;
-            });
-
-            html += `</ul><div style="background: rgba(224, 242, 254, 0.8); padding: 10px; border-radius: 12px; color: #0369a1; font-weight: 500; margin-top: 10px;"><strong>Łącznie w daniu:</strong> ${totalKcal} kcal | B: ${totalP.toFixed(1)}g | T: ${totalF.toFixed(1)}g | W: ${totalC.toFixed(1)}g</div>`;
-            container.innerHTML = html;
-        }
-
-        window.removeIngredient = function(index) {
-            currentRecipeIngredients.splice(index, 1);
-            updateIngredientsUI();
-        };
-
-        async function callGeminiProxy(promptText) {
-            try {
-                const response = await fetch('/api/gemini', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: promptText })
-                });
-                const data = await response.json();
-                if (response.ok) {
-                    return data.text || "Brak odpowiedzi od AI.";
-                } else {
-                    return "Błąd serwera: " + (data.error || "Nieznany błąd.");
-                }
-            } catch (err) {
-                console.error(err);
-                return "Błąd połączenia z serwerem.";
-            }
-        }
-
-        window.generateRecipeFromFridge = async function() {
-            const fridge = document.getElementById("ai-fridge-input").value.trim();
-            const resBox = document.getElementById("ai-generator-result");
-            if (!fridge) {
-                alert("Wpisz co masz w lodówce!");
-                return;
-            }
-
-            resBox.style.display = 'block';
-            resBox.innerHTML = "⏳ Gemini wymyśla pyszny przepis...";
-
-            const prompt = `Jesteś szefem kuchni. Użytkownik ma w lodówce: "${fridge}". Ułóż z tego fajny, konkretny przepis kulinarny (podaj nazwę, składniki z gramaturą, makro na całość i krok po kroku). Odpowiedz po polsku.`;
-            const resultText = await callGeminiProxy(prompt);
-            resBox.innerHTML = marked.parse(resultText);
-        };
-
-        window.askGeneralAI = async function() {
-            const queryText = document.getElementById("ai-general-query").value.trim();
-            const resBox = document.getElementById("ai-general-result");
-            if (!queryText) return;
-
-            resBox.style.display = 'block';
-            resBox.innerHTML = "⏳ Szef kuchni myśli...";
-
-            const prompt = `Jesteś pomocnym asystentem kulinarnym. Odpowiedz zwięźle i praktycznie na pytanie użytkownika: "${queryText}"`;
-            const resultText = await callGeminiProxy(prompt);
-            resBox.innerHTML = marked.parse(resultText);
-        };
-
-        window.askRecipeAI = async function(docId) {
-            const inputField = document.getElementById(`recipe-ai-input-${docId}`);
-            const outputBox = document.getElementById(`recipe-ai-output-${docId}`);
-            const question = inputField.value.trim();
-            if (!question) return;
-
-            outputBox.style.display = 'block';
-            outputBox.textContent = "⏳ Analizuję przepis...";
-
-            const prompt = `Jesteś asystentem w książce kucharskiej. Pytanie użytkownika do przepisu: "${question}". Odpowiedz krótko i rzeczowo po polsku.`;
-            const resultText = await callGeminiProxy(prompt);
-            outputBox.innerHTML = marked.parse(resultText);
-        };
-
-        document.getElementById("btn-add-recipe").addEventListener("click", async () => {
-            const title = document.getElementById("recipe-title").value.trim();
-            const panSize = document.getElementById("recipe-pan").value;
-            const steps = document.getElementById("recipe-steps").value.trim();
-            const time = document.getElementById("recipe-time").value.trim();
-            const visibility = document.getElementById("recipe-visibility").value;
-            const user = auth.currentUser;
-
-            if (!title) {
-                alert("Podaj nazwę przepisu!");
-                return;
-            }
-            if (currentRecipeIngredients.length === 0) {
-                alert("Dodaj przynajmniej jeden składnik!");
-                return;
-            }
-
-            const totals = currentRecipeIngredients.reduce((acc, item) => {
-                acc.kcal += item.kcal;
-                acc.protein += item.protein;
-                acc.fat += item.fat;
-                acc.carbs += item.carbs;
-                return acc;
-            }, { kcal: 0, protein: 0, fat: 0, carbs: 0 });
-
-            try {
-                await addDoc(collection(db, "recipes"), {
-                    title,
-                    panSize,
-                    ingredients: currentRecipeIngredients,
-                    totalMacros: {
-                        kcal: totals.kcal,
-                        protein: parseFloat(totals.protein.toFixed(1)),
-                        fat: parseFloat(totals.fat.toFixed(1)),
-                        carbs: parseFloat(totals.carbs.toFixed(1))
-                    },
-                    steps,
-                    time,
-                    isPublic: visibility === "public",
-                    userId: user.uid,
-                    userEmail: user.email || user.displayName,
-                    createdAt: serverTimestamp()
-                });
-
-                document.getElementById("recipe-title").value = "";
-                document.getElementById("recipe-steps").value = "";
-                document.getElementById("recipe-time").value = "";
-                currentRecipeIngredients = [];
-                updateIngredientsUI();
-
-                alert("Przepis dodany pomyślnie!");
-                switchTab('catalog');
-            } catch (error) {
-                alert("Błąd zapisu: " + error.message);
+                switchTab(activeBtn.getAttribute('data-tab'), activeBtn);
             }
         });
-
-        window.activeTimers = {};
-        window.startTimer = function(uniqueId, minutes) {
-            let secondsLeft = minutes * 60;
-            const displayEl = document.getElementById(`timer-display-${uniqueId}`);
-            if (window.activeTimers[uniqueId]) clearInterval(window.activeTimers[uniqueId]);
-
-            window.activeTimers[uniqueId] = setInterval(() => {
-                if (secondsLeft <= 0) {
-                    clearInterval(window.activeTimers[uniqueId]);
-                    displayEl.textContent = "⏰ Czas minął!";
-                    alert("Czas minął! 🔔");
-                    return;
-                }
-                secondsLeft--;
-                const m = Math.floor(secondsLeft / 60);
-                const s = secondsLeft % 60;
-                displayEl.textContent = `⏳ Pozostało: ${m}:${s < 10 ? '0' : ''}${s}`;
-            }, 1000);
-        };
-
-        window.setCatalogFilter = function(filterType, el) {
-            currentCatalogFilter = filterType;
-            document.querySelectorAll('.filter-chips .chip').forEach(c => c.classList.remove('active'));
-            el.classList.add('active');
-            renderCatalog();
-        };
-
-        function renderRecipeCard(recipe, docId = Math.random().toString(36).substring(7)) {
-            const badge = recipe.isPublic ? "🌐 Publiczny" : "🔒 Prywatny";
-            const panHtml = recipe.panSize ? `<p style="color: #db2777; font-size: 13px; margin: 4px 0;">🍰 <strong>Foremka:</strong> ${escapeHtml(recipe.panSize)}</p>` : "";
-            
-            let ingredientsHtml = "<ul style='padding-left: 20px; color: #4a5568;'>";
-            if (Array.isArray(recipe.ingredients)) {
-                recipe.ingredients.forEach(ing => {
-                    ingredientsHtml += `<li>${escapeHtml(ing.name)} (${ing.weight}g) — ${ing.kcal} kcal (B: ${ing.protein}g, T: ${ing.fat}g, W: ${ing.carbs}g)</li>`;
-                });
-            }
-            ingredientsHtml += "</ul>";
-
-            let macrosHtml = "";
-            if (recipe.totalMacros) {
-                macrosHtml = `
-                    <div class="macro-badge-container">
-                        <span class="macro-badge badge-kcal">🔥 ${recipe.totalMacros.kcal} kcal</span>
-                        <span class="macro-badge badge-protein">💪 B: ${recipe.totalMacros.protein}g</span>
-                        <span class="macro-badge badge-fat">🥑 T: ${recipe.totalMacros.fat}g</span>
-                        <span class="macro-badge badge-carbs">🌾 W: ${recipe.totalMacros.carbs}g</span>
-                    </div>
-                `;
-            }
-
-            let timeMinutes = 15;
-            if (recipe.time) {
-                const match = recipe.time.match(/\d+/);
-                if (match) timeMinutes = parseInt(match[0]);
-            }
-
-            const timeHtml = recipe.time ? `
-                <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(248, 250, 252, 0.7); padding: 8px 12px; border-radius: 12px; margin-bottom: 12px;">
-                    <span style="color: #64748b; font-size: 14px;">⏱️ <strong>Czas:</strong> ${escapeHtml(recipe.time)}</span>
-                    <div>
-                        <button onclick="startTimer('${docId}', ${timeMinutes})" style="width: auto; padding: 6px 12px; font-size: 12px; margin-bottom: 0;">Start Stoper</button>
-                        <span id="timer-display-${docId}" style="margin-left: 8px; font-size: 13px; font-weight: 600; color: #3b82f6;"></span>
-                    </div>
-                </div>` : "";
-
-            return `
-                <div class="recipe-item">
-                    <h4 style="margin-top: 0; color: #1e293b; font-size: 18px;">${escapeHtml(recipe.title)} <small style="font-size: 12px; color: #94a3b8; font-weight: normal;">(${badge})</small></h4>
-                    ${panHtml}
-                    ${timeHtml}
-                    ${macrosHtml}
-                    <p style="font-weight: 600; color: #334155; margin-bottom: 4px;">Składniki:</p>
-                    ${ingredientsHtml}
-                    <p style="font-weight: 600; color: #334155; margin-bottom: 4px; margin-top: 12px;">Przygotowanie:</p>
-                    <p style="color: #4a5568; line-height: 1.5; margin-top: 0;">${escapeHtml(recipe.steps).replace(/\n/g, '<br>')}</p>
-                    
-                    <div style="margin-top: 15px; background: rgba(250, 245, 255, 0.7); padding: 10px; border-radius: 12px; border: 1px solid #f3e8ff;">
-                        <input type="text" id="recipe-ai-input-${docId}" placeholder="Zapytaj AI o ten przepis..." style="margin: 0 0 6px 0; font-size: 13px;">
-                        <button type="button" onclick="askRecipeAI('${docId}')" style="width: auto; padding: 6px 12px; font-size: 12px; margin-bottom: 0; background: #ec4899;">🤖 Zapytaj AI o przepis</button>
-                        <div id="recipe-ai-output-${docId}" style="margin-top: 8px; font-size: 13px; color: #4a5568; white-space: pre-wrap; display: none; background: #fff; padding: 8px; border-radius: 8px;"></div>
-                    </div>
-
-                    <small style="color: #94a3b8; display: block; margin-top: 10px;">Autor: ${recipe.userEmail || 'Nieznany'}</small>
-                </div>
-            `;
-        }
-
-        function renderCatalog() {
-            const container = document.getElementById("catalog-container");
-            if (!rawPublicRecipes || rawPublicRecipes.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <span class="icon">☕</span>
-                        <p style="font-weight: 600; margin: 0;">Brak przepisów w katalogu</p>
-                        <p style="font-size: 13px; color: #94a3b8; margin: 4px 0 0 0;">Bądź pierwszą osobą, która coś doda!</p>
-                    </div>`;
-                return;
-            }
-
-            let filtered = rawPublicRecipes.filter(item => {
-                const data = item.data;
-                if (currentCatalogFilter === 'quick') {
-                    if (!data.time) return false;
-                    const match = data.time.match(/\d+/);
-                    return match && parseInt(match[0]) <= 20;
-                }
-                if (currentCatalogFilter === 'fit') {
-                    return data.totalMacros && data.totalMacros.kcal <= 350;
-                }
-                return true;
-            });
-
-            if (filtered.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <span class="icon">🔍</span>
-                        <p style="font-weight: 600; margin: 0;">Brak przepisów spełniających kryteria</p>
-                        <p style="font-size: 13px; color: #94a3b8; margin: 4px 0 0 0;">Spróbuj zmienić filtr powyżej.</p>
-                    </div>`;
-                return;
-            }
-
-            let html = "";
-            filtered.forEach(item => {
-                html += renderRecipeCard(item.data, item.id);
-            });
-            container.innerHTML = html;
-        }
-
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                authStatus.textContent = `Zalogowany jako: ${user.email || user.displayName}`;
-                authSection.classList.add("hidden");
-                logoutSection.classList.remove("hidden");
-                appTabs.classList.remove("hidden");
-                document.getElementById("profile-email").textContent = user.email || user.displayName;
-                document.getElementById("profile-uid").textContent = user.uid;
-                moveBubble(0);
-
-                const myQuery = query(collection(db, "recipes"), where("userId", "==", user.uid));
-                onSnapshot(myQuery, (snapshot) => {
-                    let html = "";
-                    if (snapshot.empty) {
-                        document.getElementById("my-recipes-container").innerHTML = `
-                            <div class="empty-state">
-                                <span class="icon">📖</span>
-                                <p style="font-weight: 600; margin: 0;">Nie masz jeszcze swoich przepisów</p>
-                                <p style="font-size: 13px; color: #94a3b8; margin: 4px 0 0 0;">Przejdź do zakładki „Dodaj”, aby stworzyć pierwszy!</p>
-                            </div>`;
-                        return;
-                    }
-                    snapshot.forEach((docSnap) => {
-                        html += renderRecipeCard(docSnap.data(), docSnap.id);
-                    });
-                    document.getElementById("my-recipes-container").innerHTML = html;
-                });
-            } else {
-                authStatus.textContent = "Nie jesteś zalogowany.";
-                authSection.classList.remove("hidden");
-                logoutSection.classList.add("hidden");
-                appTabs.classList.add("hidden");
-                document.getElementById("my-recipes-container").innerHTML = `
-                    <div class="empty-state">
-                        <span class="icon">🔒</span>
-                        <p style="font-weight: 600; margin: 0;">Musisz się zalogować</p>
-                    </div>`;
-            }
-        });
-
-        const publicQuery = query(collection(db, "recipes"), where("isPublic", "==", true));
-        onSnapshot(publicQuery, (snapshot) => {
-            rawPublicRecipes = [];
-            snapshot.forEach((docSnap) => {
-                rawPublicRecipes.push({ id: docSnap.id, data: docSnap.data() });
-            });
-            renderCatalog();
-        });
-
-        document.getElementById("btn-register").addEventListener("click", async () => {
-            try {
-                await applyPersistence();
-                await createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
-                alert("Konto utworzone!");
-            } catch (error) { alert("Błąd: " + error.message); }
-        });
-
-        document.getElementById("btn-login").addEventListener("click", async () => {
-            try {
-                await applyPersistence();
-                await signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
-            } catch (error) { alert("Błąd: " + error.message); }
-        });
-
-        document.getElementById("btn-google").addEventListener("click", async () => {
-            try {
-                await setPersistence(auth, browserLocalPersistence);
-                await signInWithPopup(auth, googleProvider);
-            } catch (error) { alert("Błąd: " + error.message); }
-        });
-
-        document.getElementById("btn-logout").addEventListener("click", () => {
-            signOut(auth);
-            switchTab('catalog');
-        });
-
-        function escapeHtml(text) {
-            if (!text) return "";
-            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        }
     </script>
 </body>
 </html>
