@@ -189,6 +189,29 @@
 .animate-fade-in {
   animation: fadeIn 0.4s ease-out forwards;
 }
+
+        /* Pływający szklany pasek nawigacyjny w stylu iOS */
+.floating-glass-nav {
+  position: fixed !important;
+  bottom: 20px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 90% !important;
+  max-width: 500px !important;
+  background: rgba(255, 255, 255, 0.35) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  box-shadow: 0 10px 30px rgba(31, 38, 135, 0.15) !important;
+  border-radius: 9999px !important;
+  display: flex !important;
+  justify-content: space-around !important;
+  align-items: center !important;
+  padding: 10px 15px !important;
+  z-index: 1000 !important;
+}
+
+        
     </style>
     <link rel="manifest" href="/manifest.json">
 
@@ -223,13 +246,13 @@
     </div>
 
     <!-- Pasek zakładek -->
-    <div id="app-tabs" class="tabs hidden">
-        <button class="tab-btn active" onclick="switchTab('catalog')">🌐 Katalog</button>
-        <button class="tab-btn" onclick="switchTab('my-recipes')">📖 Moje</button>
-        <button class="tab-btn" onclick="switchTab('add-recipe')">➕ Dodaj</button>
-        <button class="tab-btn" onclick="switchTab('ai-helper')">🤖 AI Studio</button>
-        <button class="tab-btn" onclick="switchTab('profile')">👤 Profil</button>
-    </div>
+<div id="app-tabs" class="tabs hidden floating-glass-nav">
+    <button class="tab-btn active" onclick="switchTab('catalog')">🌐 Katalog</button>
+    <button class="tab-btn" onclick="switchTab('my-recipes')">📖 Moje</button>
+    <button class="tab-btn" onclick="switchTab('add-recipe')">➕ Dodaj</button>
+    <button class="tab-btn" onclick="switchTab('ai-helper')">🤖 AI Studio</button>
+    <button class="tab-btn" onclick="switchTab('profile')">👤 Profil</button>
+</div>
 
     <!-- ZAKŁADKA 1: Katalog publiczny -->
     <div id="section-catalog" class="tab-content active">
