@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moja Książka z Przepisami ✨ z AI</title>
+    <title>Książka z Przepisami</title>
     <style>
         :root {
             --primary-pink: #ec4899;
@@ -181,7 +181,6 @@
         <button class="tab-btn" onclick="switchTab('my-recipes')">📖 Moje</button>
         <button class="tab-btn" onclick="switchTab('add-recipe')">➕ Dodaj</button>
         <button class="tab-btn" onclick="switchTab('ai-helper')">🤖 AI Studio</button>
-        <button class="tab-btn" onclick="switchTab('ai-cloudflare')">☁️ Asystent Cloudflare</button>
         <button class="tab-btn" onclick="switchTab('profile')">👤 Profil</button>
     </div>
 
@@ -253,7 +252,7 @@
         </div>
     </div>
 
-    <!-- ZAKŁADKA 4: AI Studio (Generator z lodówki & Czat) -->
+    <!-- ZAKŁADKA 4: AI Studio (Zasilane przez Cloudflare /api/gemini) -->
     <div id="section-ai-helper" class="tab-content">
         <div class="card">
             <h3 style="margin-top:0; color: #db2777;">🤖 Inteligentny Asystent Kulinarny AI</h3>
@@ -262,42 +261,25 @@
             <textarea id="ai-fridge-input" rows="3" placeholder="Co masz w lodówce? (np. mam twaróg, jogurt naturalny, jajka i banany)"></textarea>
             <button type="button" onclick="generateRecipeFromFridge()">✨ Wygeneruj przepis z lodówki</button>
             
-            <div id="ai-generator-result" style="margin-top: 15px; padding: 14px; background: #fff; border-radius: 14px; border: 1px solid #fbcfe8; display: none; font-size: 14px; line-height: 1.5;"></div>
+            <div id="ai-generator-result" style="margin-top: 15px; padding: 14px; background: #fff; border-radius: 14px; border: 1px solid #fbcfe8; white-space: pre-wrap; display: none; font-size: 14px; line-height: 1.5;"></div>
         </div>
 
         <div class="card">
             <h3 style="margin-top:0; color: #db2777;">💬 Czat z Szefem Kuchni</h3>
             <input type="text" id="ai-general-query" placeholder="Zadaj pytanie (np. Czym zastąpić mąkę pszenną w cieście?)">
             <button type="button" onclick="askGeneralAI()">Wyślij pytanie do AI</button>
-            <div id="ai-general-result" style="margin-top: 15px; padding: 14px; background: #fff; border-radius: 14px; border: 1px solid #e0f2fe; display: none; font-size: 14px; line-height: 1.5;"></div>
+            <div id="ai-general-result" style="margin-top: 15px; padding: 14px; background: #fff; border-radius: 14px; border: 1px solid #e0f2fe; white-space: pre-wrap; display: none; font-size: 14px; line-height: 1.5;"></div>
         </div>
     </div>
 
-    <!-- ZAKŁADKA 5: Asystent Cloudflare (Back-end AI proxy) -->
-    <div id="section-ai-cloudflare" class="tab-content">
-        <div class="card">
-            <h3 style="margin-top:0; color: #db2777;">☁️ Asystent Cloudflare (/api/gemini)</h3>
-            <p style="font-size: 14px; color: #64748b;">To okienko korzysta bezpośrednio z bezpiecznego klucza ukrytego na serwerze Cloudflare Pages!</p>
-            
-            <input type="text" id="cf-ai-prompt" placeholder="Np. Co szybkiego zrobię z jajek i awokado?">
-            <button type="button" onclick="askCloudflareAI()">Zapytaj przez Cloudflare 🚀</button>
-            
-            <div id="cf-ai-output" style="margin-top: 15px; padding: 14px; background: #fff; border-radius: 14px; border: 1px solid #fbcfe8; white-space: pre-wrap; display: none; font-size: 14px; line-height: 1.5;"></div>
-        </div>
-    </div>
-
-    <!-- ZAKŁADKA 6: Profil -->
+    <!-- ZAKŁADKA 5: Profil -->
     <div id="section-profile" class="tab-content">
         <div class="card">
-            <h3 style="margin-top:0; color: #db2777;">Twój profil i klucz AI</h3>
+            <h3 style="margin-top:0; color: #db2777;">Twój profil</h3>
             <p><strong>E-mail:</strong> <span id="profile-email">-</span></p>
             <p><strong>ID użytkownika:</strong> <span id="profile-uid" style="font-size: 12px; color: #666;">-</span></p>
-            
             <hr style="margin: 15px 0; border: 0; border-top: 1px solid #f3e8ff;">
-            <label for="user-gemini-key" style="font-size: 14px; font-weight: 600; color: #4a5568;">🔑 Twój Gemini API Key (dla AI Studio):</label>
-            <input type="password" id="user-gemini-key" placeholder="Wklej klucz z AI Studio (np. AIzaSy...)">
-            <button type="button" onclick="saveApiKey()" style="background: #3b82f6;">Zapisz klucz w przeglądarce</button>
-            <small style="color: #64748b; display: block; margin-top: 5px;">Klucz zapisuje się w pamięci Twojej przeglądarki.</small>
+            <p style="font-size: 13px; color: #64748b;">Wszystkie funkcje sztucznej inteligencji są połączone z bezpiecznym serwerem Cloudflare i działają w pełni automatycznie! ✨</p>
         </div>
     </div>
 
@@ -324,7 +306,6 @@
             onSnapshot, 
             serverTimestamp 
         } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
-        import { GoogleGenAI } from "https://esm.run/@google/genai";
 
         const firebaseConfig = {
             apiKey: "AIzaSyACAYq6d_bOfUV8s_wlX-yTdTKhU9YVwnE",
@@ -351,22 +332,6 @@
 
         let currentRecipeIngredients = [];
 
-        function getAiClient() {
-            const savedKey = localStorage.getItem("gemini_api_key");
-            if (!savedKey) return null;
-            return new GoogleGenAI({ apiKey: savedKey });
-        }
-
-        window.saveApiKey = function() {
-            const key = document.getElementById("user-gemini-key").value.trim();
-            if (!key) {
-                alert("Wpisz poprawny klucz API!");
-                return;
-            }
-            localStorage.setItem("gemini_api_key", key);
-            alert("Klucz API został zapisany w Twojej przeglądarce! 🎉");
-        };
-
         window.switchTab = function(tabName) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
@@ -379,8 +344,6 @@
                 document.getElementById('section-add-recipe').classList.add('active');
             } else if (tabName === 'ai-helper') {
                 document.getElementById('section-ai-helper').classList.add('active');
-            } else if (tabName === 'ai-cloudflare') {
-                document.getElementById('section-ai-cloudflare').classList.add('active');
             } else if (tabName === 'profile') {
                 document.getElementById('section-profile').classList.add('active');
             }
@@ -454,13 +417,28 @@
             updateIngredientsUI();
         };
 
-        window.generateRecipeFromFridge = async function() {
-            const ai = getAiClient();
-            if (!ai) {
-                alert("Najpierw wpisz klucz API w profilu!");
-                switchTab('profile');
-                return;
+        // Główna funkcja pomocnicza wysyłająca zapytanie do backendu Cloudflare (/api/gemini)
+        async function callGeminiProxy(promptText) {
+            try {
+                const response = await fetch('/api/gemini', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ prompt: promptText })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    return data.text || "Brak odpowiedzi od AI.";
+                } else {
+                    return "Błąd serwera: " + (data.error || "Nieznany błąd.");
+                }
+            } catch (err) {
+                console.error(err);
+                return "Błąd połączenia z serwerem Cloudflare.";
             }
+        }
+
+        // 1. Generator z lodówki zasilany przez Cloudflare
+        window.generateRecipeFromFridge = async function() {
             const fridge = document.getElementById("ai-fridge-input").value.trim();
             const resBox = document.getElementById("ai-generator-result");
             if (!fridge) {
@@ -469,26 +447,15 @@
             }
 
             resBox.style.display = 'block';
-            resBox.innerHTML = "⏳ Gemini wymyśla pyszny przepis...";
+            resBox.innerHTML = "⏳ Gemini wymyśla pyszny przepis przez Cloudflare...";
 
-            try {
-                const response = await ai.models.generateContent({
-                    model: 'gemini-2.5-flash',
-                    contents: `Jesteś szefem kuchni. Użytkownik ma w lodówce: "${fridge}". Ułóż z tego fajny, konkretny przepis kulinarny (podaj nazwę, składniki z gramaturą, makro na całość i krok po kroku). Odpowiedz po polsku w estetycznym formacie HTML (użyj tagów <b>, <br>, <ul> itp.).`
-                });
-                resBox.innerHTML = response.text;
-            } catch (err) {
-                resBox.innerHTML = "❌ Błąd AI: " + err.message;
-            }
+            const prompt = `Jesteś szefem kuchni. Użytkownik ma w lodówce: "${fridge}". Ułóż z tego fajny, konkretny przepis kulinarny (podaj nazwę, składniki z gramaturą, makro na całość i krok po kroku). Odpowiedz po polsku.`;
+            const resultText = await callGeminiProxy(prompt);
+            resBox.innerHTML = resultText;
         };
 
+        // 2. Ogólny czat zasilany przez Cloudflare
         window.askGeneralAI = async function() {
-            const ai = getAiClient();
-            if (!ai) {
-                alert("Najpierw wpisz klucz API w profilu!");
-                switchTab('profile');
-                return;
-            }
             const queryText = document.getElementById("ai-general-query").value.trim();
             const resBox = document.getElementById("ai-general-result");
             if (!queryText) return;
@@ -496,60 +463,13 @@
             resBox.style.display = 'block';
             resBox.innerHTML = "⏳ Szef kuchni myśli...";
 
-            try {
-                const response = await ai.models.generateContent({
-                    model: 'gemini-2.5-flash',
-                    contents: `Jesteś pomocnym asystentem kulinarnym. Odpowiedz zwięźle i praktycznie na pytanie użytkownika: "${queryText}"`
-                });
-                resBox.innerHTML = response.text;
-            } catch (err) {
-                resBox.innerHTML = "❌ Błąd AI: " + err.message;
-            }
+            const prompt = `Jesteś pomocnym asystentem kulinarnym. Odpowiedz zwięźle i praktycznie na pytanie użytkownika: "${queryText}"`;
+            const resultText = await callGeminiProxy(prompt);
+            resBox.innerHTML = resultText;
         };
 
-        // Funkcja komunikacji z Cloudflare Pages Function (/api/gemini)
-        window.askCloudflareAI = async function() {
-            const promptInput = document.getElementById('cf-ai-prompt');
-            const outputDiv = document.getElementById('cf-ai-output');
-            const userText = promptInput.value.trim();
-
-            if (!userText) {
-                outputDiv.style.display = 'block';
-                outputDiv.innerText = "Wpisz najpierw jakieś pytanie, Młoda! 😉";
-                return;
-            }
-
-            outputDiv.style.display = 'block';
-            outputDiv.innerText = "Cloudflare & Gemini myślą nad odpowiedzią... ⏳";
-
-            try {
-                const response = await fetch('/api/gemini', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ prompt: userText })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    outputDiv.innerText = data.text || "Brak odpowiedzi od AI.";
-                } else {
-                    outputDiv.innerText = "Błąd: " + (data.error || "Coś poszło nie tak.");
-                }
-            } catch (err) {
-                console.error(err);
-                outputDiv.innerText = "Błąd połączenia z serwerem Cloudflare.";
-            }
-        };
-
+        // 3. Czat pod konkretnym przepisem zasilany przez Cloudflare
         window.askRecipeAI = async function(docId) {
-            const ai = getAiClient();
-            if (!ai) {
-                alert("Wpisz klucz API w zakładce Profil!");
-                return;
-            }
             const inputField = document.getElementById(`recipe-ai-input-${docId}`);
             const outputBox = document.getElementById(`recipe-ai-output-${docId}`);
             const question = inputField.value.trim();
@@ -558,15 +478,9 @@
             outputBox.style.display = 'block';
             outputBox.textContent = "⏳ Analizuję przepis...";
 
-            try {
-                const response = await ai.models.generateContent({
-                    model: 'gemini-2.5-flash',
-                    contents: `Jesteś asystentem w książce kucharskiej. Pytanie użytkownika do przepisu: "${question}". Odpowiedz krótko i rzeczowo po polsku.`
-                });
-                outputBox.textContent = response.text;
-            } catch (err) {
-                outputBox.textContent = "❌ Błąd: " + err.message;
-            }
+            const prompt = `Jesteś asystentem w książce kucharskiej. Pytanie użytkownika do przepisu: "${question}". Odpowiedz krótko i rzeczowo po polsku.`;
+            const resultText = await callGeminiProxy(prompt);
+            outputBox.textContent = resultText;
         };
 
         document.getElementById("btn-add-recipe").addEventListener("click", async () => {
@@ -694,7 +608,7 @@
                     <div style="margin-top: 15px; background: #faf5ff; padding: 10px; border-radius: 12px; border: 1px solid #f3e8ff;">
                         <input type="text" id="recipe-ai-input-${docId}" placeholder="Zapytaj AI o ten przepis (np. Jak to zrobić w wersji fit?)" style="margin: 0 0 6px 0; font-size: 13px;">
                         <button type="button" onclick="askRecipeAI('${docId}')" style="width: auto; padding: 6px 12px; font-size: 12px; margin-bottom: 0; background: #ec4899;">🤖 Zapytaj AI o przepis</button>
-                        <div id="recipe-ai-output-${docId}" style="margin-top: 8px; font-size: 13px; color: #4a5568; display: none; background: #fff; padding: 8px; border-radius: 8px;"></div>
+                        <div id="recipe-ai-output-${docId}" style="margin-top: 8px; font-size: 13px; color: #4a5568; white-space: pre-wrap; display: none; background: #fff; padding: 8px; border-radius: 8px;"></div>
                     </div>
 
                     <small style="color: #94a3b8; display: block; margin-top: 10px;">Autor: ${recipe.userEmail || 'Nieznany'}</small>
@@ -710,9 +624,6 @@
                 appTabs.classList.remove("hidden");
                 document.getElementById("profile-email").textContent = user.email || user.displayName;
                 document.getElementById("profile-uid").textContent = user.uid;
-
-                const savedKey = localStorage.getItem("gemini_api_key");
-                if (savedKey) document.getElementById("user-gemini-key").value = savedKey;
 
                 const myQuery = query(collection(db, "recipes"), where("userId", "==", user.uid));
                 onSnapshot(myQuery, (snapshot) => {
