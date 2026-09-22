@@ -701,7 +701,6 @@
             outputBox.innerHTML = marked.parse(resultText);
         };
 
-        // Pomocnicza funkcja do wyciągania liczby gramów z linii tekstu (np. "Płatki owsiane - 50g" -> 50)
         function extractWeightFromText(text) {
             const match = text.match(/(\d+)\s*g\b/i);
             return match ? parseInt(match[1]) : 0;
@@ -732,7 +731,6 @@
                     alert("Wpisz listę składników!");
                     return;
                 }
-                // Przekształcamy każdą linię na obiekt z wykrytą wagą (jeśli wpisano np. "50g")
                 finalIngredients = manualText.split('\n').map(line => {
                     const w = extractWeightFromText(line);
                     return { name: line, measure: '', weight: w, kcal: 0 };
@@ -934,12 +932,10 @@
                 if (ing.weight !== undefined && ing.weight > 0) {
                     const scaledWeight = Math.round(ing.weight * ratio);
                     if (ing.kcal !== undefined && ing.kcal > 0) {
-                        // Standardowy składnik ze szczegółowym makro
                         const measureText = ing.measure ? `(${ing.measure}, ${scaledWeight}g)` : `(${scaledWeight}g)`;
                         const scaledKcal = Math.round(ing.kcal * ratio);
                         html += `<li>${escapeHtml(ing.name)} ${measureText} — ${scaledKcal} kcal</li>`;
                     } else {
-                        // Tryb ręczny: podmieniamy wykrytą wagę w tekście
                         let updatedName = ing.name.replace(new RegExp(`${ing.weight}\\s*g`, 'i'), `${scaledWeight}g`);
                         html += `<li>${escapeHtml(updatedName)}</li>`;
                     }
