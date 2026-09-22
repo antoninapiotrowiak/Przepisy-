@@ -182,17 +182,18 @@
             display: block;
         }
 
+      
         /* Pływający szklany pasek nawigacji iOS */
         .floating-glass-nav {
             position: fixed !important;
             bottom: 20px !important;
             left: 50% !important;
-            transform: translateX(-50%) !important;
+            transform: translateX(-50%) translateZ(0) !important;
             width: 92% !important;
             max-width: 480px !important;
             background: rgba(255, 255, 255, 0.5) !important;
-            backdrop-filter: blur(25px) !important;
-            -webkit-backdrop-filter: blur(25px) !important;
+            backdrop-filter: blur(20px) !important; /* Lekkie zmniejszenie rozmycia tła pomaga wydajności */
+            -webkit-backdrop-filter: blur(20px) !important;
             border: 1px solid rgba(255, 255, 255, 0.8) !important;
             box-shadow: 0 15px 35px rgba(31, 38, 135, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
             border-radius: 9999px !important;
@@ -202,6 +203,8 @@
             padding: 8px 12px !important;
             z-index: 1000 !important;
             touch-action: none;
+            will-change: transform;
+            backface-visibility: hidden;
         }
 
         .liquid-bubble {
@@ -209,15 +212,16 @@
             top: 6px;
             bottom: 6px;
             width: 20%;
-            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.5) 70%);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.85); /* Uproszczenie gradientu na rzecz wydajności */
+            /* Usunięto wewnętrzny backdrop-filter z bąbelka, bo potrafi mocno dławić mobilne GPU */
             border-radius: 9999px;
-            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.9);
-            transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), left 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), left 0.2s cubic-bezier(0.25, 1, 0.5, 1);
             pointer-events: none;
             z-index: 1;
+            will-change: left, transform;
+            transform: translateZ(0);
         }
 
         .tab-btn { 
