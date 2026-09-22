@@ -40,7 +40,8 @@ export async function onRequest(context) {
     }
 
     // Wywołanie oficjalnego API Gemini
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
+
 
     const apiResponse = await fetch(apiUrl, {
       method: "POST",
