@@ -33,7 +33,6 @@
             font-size: 28px;
         }
 
-        /* Glassmorphism dla głównych kart */
         .card { 
             background: var(--card-bg); 
             backdrop-filter: blur(16px);
@@ -86,20 +85,34 @@
             box-shadow: 0 8px 25px rgba(236, 72, 153, 0.35);
         }
 
-        /* Pudełko pojedynczego przepisu w stylu Glass */
+        /* Styl karty przepisu w katalogu (zwinięta / rozwinięta) */
         .recipe-item { 
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.9);
-            padding: 22px; 
-            margin-bottom: 20px; 
+            padding: 20px; 
+            margin-bottom: 16px; 
             border-radius: 20px; 
             box-shadow: 0 8px 20px rgba(0,0,0,0.03); 
-            transition: transform 0.2s ease;
+            transition: all 0.2s ease;
+            cursor: pointer;
         }
         
         .recipe-item:hover {
             transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(236, 72, 153, 0.12);
+        }
+
+        .recipe-details {
+            display: none;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(0,0,0,0.06);
+            cursor: default;
+        }
+
+        .recipe-item.expanded .recipe-details {
+            display: block;
         }
 
         .hidden { display: none; }
@@ -116,12 +129,11 @@
             border: 1px solid rgba(255, 255, 255, 0.8);
         }
 
-        /* Pigułki makroskładników (Badges) */
         .macro-badge-container {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin: 12px 0;
+            margin: 10px 0;
         }
 
         .macro-badge {
@@ -140,7 +152,6 @@
         .badge-fat { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
         .badge-carbs { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
 
-        /* Pigułki filtrowania */
         .filter-chips {
             display: flex;
             gap: 8px;
@@ -169,7 +180,6 @@
             box-shadow: 0 4px 12px rgba(236, 72, 153, 0.2);
         }
 
-        /* Stan pusty (Empty State) */
         .empty-state {
             text-align: center;
             padding: 40px 20px;
@@ -182,7 +192,6 @@
             display: block;
         }
 
-        /* Pływający szklany pasek nawigacji iOS (5 zakładek) */
         .floating-glass-nav {
             position: fixed !important;
             bottom: 20px !important;
@@ -210,7 +219,7 @@
             position: absolute;
             top: 6px;
             bottom: 6px;
-            width: 20%; /* 5 przycisków -> 20% szerokości każdy */
+            width: 20%;
             background: rgba(255, 255, 255, 0.85);
             border-radius: 9999px;
             box-shadow: 0 4px 15px rgba(236, 72, 153, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.9);
@@ -263,7 +272,6 @@
 </head>
 <body>
 
-    <!-- Mały, dyskretny kwadracik profilu w prawym górnym rogu -->
     <div style="position: absolute; top: 20px; right: 20px; z-index: 100;">
         <div id="profile-trigger" onclick="switchTab('profile')" style="width: 34px; height: 34px; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: var(--primary-pink); cursor: pointer; box-shadow: 0 4px 12px rgba(236, 72, 153, 0.1); transition: transform 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
             👤
@@ -274,7 +282,6 @@
     
     <div id="auth-status">Sprawdzanie stanu logowania...</div>
 
-    <!-- Sekcja Logowania / Rejestracji -->
     <div id="auth-section" class="card">
         <h3 style="margin-top:0; color: #db2777;">Witaj ponownie! ✨</h3>
         <input type="email" id="email" placeholder="Twój e-mail">
@@ -291,7 +298,6 @@
         <button id="btn-google" style="background: #ffffff; color: #3b82f6; border: 2px solid #3b82f6; box-shadow: none;">Zaloguj przez Google</button>
     </div>
 
-    <!-- Pasek zakładek z efektem Liquid Glass (5 przycisków) -->
     <div id="app-tabs" class="tabs hidden floating-glass-nav" onmouseleave="resetBubble()">
         <div id="liquid-bubble" class="liquid-bubble"></div>
         <button class="tab-btn active" onclick="switchTab('catalog')" onmouseenter="moveBubble(0)" ontouchstart="moveBubble(0)">🌐 Katalog</button>
@@ -301,16 +307,15 @@
         <button class="tab-btn" onclick="switchTab('profile')" onmouseenter="moveBubble(4)" ontouchstart="moveBubble(4)">👤 Profil</button>
     </div>
 
-    <!-- ZAKŁADKA 1: Katalog publiczny z filtrami -->
+    <!-- ZAKŁADKA 1: Katalog -->
     <div id="section-catalog" class="tab-content active">
         <div class="card">
             <h3 style="margin-top:0; color: #db2777;">Przepisy społeczności 🧁</h3>
             
-            <!-- Pigułki filtrowania -->
             <div class="filter-chips">
                 <div class="chip active" onclick="setCatalogFilter('all', this)">Wszystkie</div>
                 <div class="chip" onclick="setCatalogFilter('quick', this)">Szybkie (do 20 min)</div>
-                <div class="chip" onclick="setCatalogFilter('fit', this)">Lekkie (do 350 kcal)</div>
+                <div class="chip" onclick="setCatalogFilter('fit', this)">Lekkie (do 350 kcal/porcja)</div>
             </div>
 
             <div id="catalog-container">Ładowanie przepisów...</div>
@@ -332,21 +337,33 @@
             
             <input type="text" id="recipe-title" placeholder="Nazwa przepisu (np. Waniliowa owsianka)">
             
-            <label for="recipe-pan" style="font-size: 14px; font-weight: 600; color: #4a5568; display: block; margin-bottom: 6px;">Wybierz foremkę / naczynie bazowe:</label>
-            <select id="recipe-pan">
-                <option value="Tortownica okrągła 22 cm">Tortownica okrągła (22 cm)</option>
-                <option value="Tortownica okrągła 24 cm">Tortownica okrągła (24 cm)</option>
-                <option value="Blacha prostokątna 20x30 cm">Blacha prostokątna (20x30 cm)</option>
-                <option value="Blacha prostokątna 25x35 cm">Blacha prostokątna (25x35 cm)</option>
-                <option value="Keksówka 30 cm">Keksówka (30 cm)</option>
-                <option value="Foremka do muffinek (12 szt.)">Foremka do muffinek (12 szt.)</option>
-                <option value="Inne">Inne</option>
-            </select>
+            <div style="display: flex; gap: 10px;">
+                <div style="flex: 2;">
+                    <label for="recipe-pan" style="font-size: 13px; font-weight: 600; color: #4a5568; display: block; margin-bottom: 4px;">Naczynie / foremka:</label>
+                    <select id="recipe-pan">
+                        <option value="Tortownica okrągła 22 cm">Tortownica (22 cm)</option>
+                        <option value="Tortownica okrągła 24 cm">Tortownica (24 cm)</option>
+                        <option value="Blacha prostokątna 20x30 cm">Blacha 20x30 cm</option>
+                        <option value="Blacha prostokątna 25x35 cm">Blacha 25x35 cm</option>
+                        <option value="Keksówka 30 cm">Keksówka 30 cm</option>
+                        <option value="Foremka do muffinek (12 szt.)">Muffinki (12 szt.)</option>
+                        <option value="Inne">Inne</option>
+                    </select>
+                </div>
+                <div style="flex: 1;">
+                    <label for="recipe-portions" style="font-size: 13px; font-weight: 600; color: #4a5568; display: block; margin-bottom: 4px;">Liczba porcji:</label>
+                    <input type="number" id="recipe-portions" value="4" min="1" style="margin-top: 0;">
+                </div>
+            </div>
 
             <div style="background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); padding: 16px; border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.6);">
                 <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Składniki i makro (na 100g)</h4>
 
                 <input type="text" id="ingredient-name" placeholder="Nazwa składnika (np. Płatki owsiane)">
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="ingredient-measure" placeholder="Miara domowa (np. 2 łyżki, 1 szt.)" style="margin-bottom: 8px;">
+                    <input type="number" id="ing-weight" placeholder="Waga w gramach (np. 50)" style="margin-bottom: 8px;">
+                </div>
                 <div style="display: flex; gap: 8px;">
                     <input type="number" id="ing-kcal" placeholder="Kcal / 100g">
                     <input type="number" id="ing-protein" placeholder="Białko / 100g">
@@ -355,7 +372,6 @@
                     <input type="number" id="ing-fat" placeholder="Tłuszcz / 100g">
                     <input type="number" id="ing-carbs" placeholder="Węgle / 100g">
                 </div>
-                <input type="number" id="ing-weight" placeholder="Waga użyta w przepisie (w gramach, np. 50)">
                 
                 <button type="button" id="btn-add-ingredient" style="background: linear-gradient(135deg, #f472b6 0%, #38bdf8 100%); margin-top: 5px;">➕ Dodaj składnik</button>
             </div>
@@ -397,7 +413,7 @@
         </div>
     </div>
 
-    <!-- ZAKŁADKA 5: Profil (z przyciskiem wylogowania) -->
+    <!-- ZAKŁADKA 5: Profil -->
     <div id="section-profile" class="tab-content">
         <div class="card">
             <h3 style="margin-top:0; color: #db2777;">Twój profil 👤</h3>
@@ -515,6 +531,7 @@
 
         document.getElementById("btn-add-ingredient").addEventListener("click", () => {
             const name = document.getElementById("ingredient-name").value.trim();
+            const measure = document.getElementById("ingredient-measure").value.trim();
             const kcal100 = parseFloat(document.getElementById("ing-kcal").value) || 0;
             const protein100 = parseFloat(document.getElementById("ing-protein").value) || 0;
             const fat100 = parseFloat(document.getElementById("ing-fat").value) || 0;
@@ -522,13 +539,14 @@
             const weight = parseFloat(document.getElementById("ing-weight").value) || 0;
 
             if (!name || weight <= 0) {
-                alert("Podaj nazwę składnika oraz wagę użytą w przepisie!");
+                alert("Podaj nazwę składnika oraz wagę w gramach!");
                 return;
             }
 
             const factor = weight / 100;
             const ingredientData = {
                 name,
+                measure,
                 weight,
                 kcal: Math.round(kcal100 * factor),
                 protein: parseFloat((protein100 * factor).toFixed(1)),
@@ -540,6 +558,7 @@
             updateIngredientsUI();
 
             document.getElementById("ingredient-name").value = "";
+            document.getElementById("ingredient-measure").value = "";
             document.getElementById("ing-kcal").value = "";
             document.getElementById("ing-protein").value = "";
             document.getElementById("ing-fat").value = "";
@@ -558,7 +577,8 @@
             let totalKcal = 0, totalP = 0, totalF = 0, totalC = 0;
 
             currentRecipeIngredients.forEach((item, index) => {
-                html += `<li style="margin-bottom: 4px;">${escapeHtml(item.name)} (${item.weight}g) — ${item.kcal} kcal | B: ${item.protein}g | T: ${item.fat}g | W: ${item.carbs}g 
+                const measureText = item.measure ? `(${item.measure}, ${item.weight}g)` : `(${item.weight}g)`;
+                html += `<li style="margin-bottom: 4px;">${escapeHtml(item.name)} ${measureText} — ${item.kcal} kcal | B: ${item.protein}g | T: ${item.fat}g | W: ${item.carbs}g 
                          <button type="button" onclick="removeIngredient(${index})" style="width: auto; padding: 2px 6px; font-size: 11px; background: #ef4444; margin-left: 5px; border-radius: 6px; box-shadow: none;">Usuń</button></li>`;
                 totalKcal += item.kcal;
                 totalP += item.protein;
@@ -640,6 +660,7 @@
         document.getElementById("btn-add-recipe").addEventListener("click", async () => {
             const title = document.getElementById("recipe-title").value.trim();
             const panSize = document.getElementById("recipe-pan").value;
+            const portions = parseInt(document.getElementById("recipe-portions").value) || 1;
             const steps = document.getElementById("recipe-steps").value.trim();
             const time = document.getElementById("recipe-time").value.trim();
             const visibility = document.getElementById("recipe-visibility").value;
@@ -662,10 +683,18 @@
                 return acc;
             }, { kcal: 0, protein: 0, fat: 0, carbs: 0 });
 
+            const perPortion = {
+                kcal: Math.round(totals.kcal / portions),
+                protein: parseFloat((totals.protein / portions).toFixed(1)),
+                fat: parseFloat((totals.fat / portions).toFixed(1)),
+                carbs: parseFloat((totals.carbs / portions).toFixed(1))
+            };
+
             try {
                 await addDoc(collection(db, "recipes"), {
                     title,
                     panSize,
+                    portions,
                     ingredients: currentRecipeIngredients,
                     totalMacros: {
                         kcal: totals.kcal,
@@ -673,6 +702,7 @@
                         fat: parseFloat(totals.fat.toFixed(1)),
                         carbs: parseFloat(totals.carbs.toFixed(1))
                     },
+                    perPortionMacros: perPortion,
                     steps,
                     time,
                     isPublic: visibility === "public",
@@ -684,6 +714,7 @@
                 document.getElementById("recipe-title").value = "";
                 document.getElementById("recipe-steps").value = "";
                 document.getElementById("recipe-time").value = "";
+                document.getElementById("recipe-portions").value = "4";
                 currentRecipeIngredients = [];
                 updateIngredientsUI();
 
@@ -721,28 +752,61 @@
             renderCatalog();
         };
 
+        window.toggleRecipeCard = function(cardEl, event) {
+            if (event.target.tagName === 'BUTTON' || event.target.tagName === 'INPUT' || event.target.tagName === 'LABEL' || event.target.closest('button') || event.target.closest('input')) {
+                return;
+            }
+            cardEl.classList.toggle('expanded');
+        };
+
+        window.updatePortionMultiplier = function(docId, basePortions, ingredientsJson) {
+            const multiplierInput = document.getElementById(`portion-input-${docId}`);
+            const selectedPortions = parseFloat(multiplierInput.value) || 1;
+            const ratio = selectedPortions / basePortions;
+
+            const ingredientsContainer = document.getElementById(`scaled-ingredients-${docId}`);
+            const ingredients = JSON.parse(ingredientsJson);
+
+            let html = "";
+            ingredients.forEach(ing => {
+                const scaledWeight = Math.round(ing.weight * ratio);
+                const measureText = ing.measure ? `(${ing.measure}, ${scaledWeight}g)` : `(${scaledWeight}g)`;
+                const scaledKcal = Math.round(ing.kcal * ratio);
+                html += `<li>${escapeHtml(ing.name)} ${measureText} — ${scaledKcal} kcal</li>`;
+            });
+            ingredientsContainer.innerHTML = html;
+        };
+
         function renderRecipeCard(recipe, docId = Math.random().toString(36).substring(7)) {
             const badge = recipe.isPublic ? "🌐 Publiczny" : "🔒 Prywatny";
+            const basePortions = recipe.portions || 1;
             const panHtml = recipe.panSize ? `<p style="color: #db2777; font-size: 13px; margin: 4px 0;">🍰 <strong>Foremka:</strong> ${escapeHtml(recipe.panSize)}</p>` : "";
             
-            let ingredientsHtml = "<ul style='padding-left: 20px; color: #4a5568;'>";
-            if (Array.isArray(recipe.ingredients)) {
-                recipe.ingredients.forEach(ing => {
-                    ingredientsHtml += `<li>${escapeHtml(ing.name)} (${ing.weight}g) — ${ing.kcal} kcal (B: ${ing.protein}g, T: ${ing.fat}g, W: ${ing.carbs}g)</li>`;
-                });
-            }
-            ingredientsHtml += "</ul>";
-
             let macrosHtml = "";
-            if (recipe.totalMacros) {
+            let portionMacro = recipe.perPortionMacros || (recipe.totalMacros ? {
+                kcal: Math.round(recipe.totalMacros.kcal / basePortions),
+                protein: (recipe.totalMacros.protein / basePortions).toFixed(1),
+                fat: (recipe.totalMacros.fat / basePortions).toFixed(1),
+                carbs: (recipe.totalMacros.carbs / basePortions).toFixed(1)
+            } : null);
+
+            if (portionMacro) {
                 macrosHtml = `
                     <div class="macro-badge-container">
-                        <span class="macro-badge badge-kcal">🔥 ${recipe.totalMacros.kcal} kcal</span>
-                        <span class="macro-badge badge-protein">💪 B: ${recipe.totalMacros.protein}g</span>
-                        <span class="macro-badge badge-fat">🥑 T: ${recipe.totalMacros.fat}g</span>
-                        <span class="macro-badge badge-carbs">🌾 W: ${recipe.totalMacros.carbs}g</span>
+                        <span class="macro-badge badge-kcal">🔥 ${portionMacro.kcal} kcal / porcja</span>
+                        <span class="macro-badge badge-protein">💪 B: ${portionMacro.protein}g</span>
+                        <span class="macro-badge badge-fat">🥑 T: ${portionMacro.fat}g</span>
+                        <span class="macro-badge badge-carbs">🌾 W: ${portionMacro.carbs}g</span>
                     </div>
                 `;
+            }
+
+            let initialIngredientsHtml = "";
+            if (Array.isArray(recipe.ingredients)) {
+                recipe.ingredients.forEach(ing => {
+                    const measureText = ing.measure ? `(${ing.measure}, ${ing.weight}g)` : `(${ing.weight}g)`;
+                    initialIngredientsHtml += `<li>${escapeHtml(ing.name)} ${measureText} — ${ing.kcal} kcal</li>`;
+                });
             }
 
             let timeMinutes = 15;
@@ -760,24 +824,43 @@
                     </div>
                 </div>` : "";
 
-            return `
-                <div class="recipe-item">
-                    <h4 style="margin-top: 0; color: #1e293b; font-size: 18px;">${escapeHtml(recipe.title)} <small style="font-size: 12px; color: #94a3b8; font-weight: normal;">(${badge})</small></h4>
-                    ${panHtml}
-                    ${timeHtml}
-                    ${macrosHtml}
-                    <p style="font-weight: 600; color: #334155; margin-bottom: 4px;">Składniki:</p>
-                    ${ingredientsHtml}
-                    <p style="font-weight: 600; color: #334155; margin-bottom: 4px; margin-top: 12px;">Przygotowanie:</p>
-                    <p style="color: #4a5568; line-height: 1.5; margin-top: 0;">${escapeHtml(recipe.steps).replace(/\n/g, '<br>')}</p>
-                    
-                    <div style="margin-top: 15px; background: rgba(250, 245, 255, 0.7); padding: 10px; border-radius: 12px; border: 1px solid #f3e8ff;">
-                        <input type="text" id="recipe-ai-input-${docId}" placeholder="Zapytaj AI o ten przepis..." style="margin: 0 0 6px 0; font-size: 13px;">
-                        <button type="button" onclick="askRecipeAI('${docId}')" style="width: auto; padding: 6px 12px; font-size: 12px; margin-bottom: 0; background: #ec4899;">🤖 Zapytaj AI o przepis</button>
-                        <div id="recipe-ai-output-${docId}" style="margin-top: 8px; font-size: 13px; color: #4a5568; white-space: pre-wrap; display: none; background: #fff; padding: 8px; border-radius: 8px;"></div>
-                    </div>
+            const ingredientsString = JSON.stringify(recipe.ingredients).replace(/"/g, '&quot;');
 
-                    <small style="color: #94a3b8; display: block; margin-top: 10px;">Autor: ${recipe.userEmail || 'Nieznany'}</small>
+            return `
+                <div class="recipe-item" onclick="toggleRecipeCard(this, event)">
+                    <h4 style="margin-top: 0; color: #1e293b; font-size: 18px; display: flex; justify-content: space-between; align-items: center;">
+                        <span>${escapeHtml(recipe.title)} <small style="font-size: 12px; color: #94a3b8; font-weight: normal;">(${badge})</small></span>
+                        <span style="font-size: 13px; color: var(--primary-pink); font-weight: 600;">👥 ${basePortions} porcje ▼</span>
+                    </h4>
+                    ${panHtml}
+                    <p style="font-size: 13px; color: #64748b; margin: 4px 0;">Kliknij kartę, aby zobaczyć cały przepis i składniki</p>
+                    ${macrosHtml}
+
+                    <div class="recipe-details">
+                        ${timeHtml}
+                        
+                        <div style="background: rgba(236, 72, 153, 0.05); padding: 12px; border-radius: 12px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                            <label style="font-size: 13px; font-weight: 600; color: #db2777; margin: 0; white-space: nowrap;">Kalkulator porcji:</label>
+                            <input type="number" id="portion-input-${docId}" value="${basePortions}" min="1" style="width: 80px; margin: 0; padding: 6px 10px;" oninput="updatePortionMultiplier('${docId}', ${basePortions}, '${ingredientsString}')">
+                            <span style="font-size: 13px; color: #64748b;">porcji</span>
+                        </div>
+
+                        <p style="font-weight: 600; color: #334155; margin-bottom: 4px;">Składniki (przeliczone):</p>
+                        <ul id="scaled-ingredients-${docId}" style="padding-left: 20px; color: #4a5568;">
+                            ${initialIngredientsHtml}
+                        </ul>
+
+                        <p style="font-weight: 600; color: #334155; margin-bottom: 4px; margin-top: 12px;">Przygotowanie:</p>
+                        <p style="color: #4a5568; line-height: 1.5; margin-top: 0;">${escapeHtml(recipe.steps).replace(/\n/g, '<br>')}</p>
+                        
+                        <div style="margin-top: 15px; background: rgba(250, 245, 255, 0.7); padding: 10px; border-radius: 12px; border: 1px solid #f3e8ff;">
+                            <input type="text" id="recipe-ai-input-${docId}" placeholder="Zapytaj AI o ten przepis..." style="margin: 0 0 6px 0; font-size: 13px;">
+                            <button type="button" onclick="askRecipeAI('${docId}')" style="width: auto; padding: 6px 12px; font-size: 12px; margin-bottom: 0; background: #ec4899;">🤖 Zapytaj AI o przepis</button>
+                            <div id="recipe-ai-output-${docId}" style="margin-top: 8px; font-size: 13px; color: #4a5568; white-space: pre-wrap; display: none; background: #fff; padding: 8px; border-radius: 8px;"></div>
+                        </div>
+
+                        <small style="color: #94a3b8; display: block; margin-top: 10px;">Autor: ${recipe.userEmail || 'Nieznany'}</small>
+                    </div>
                 </div>
             `;
         }
@@ -802,7 +885,9 @@
                     return match && parseInt(match[0]) <= 20;
                 }
                 if (currentCatalogFilter === 'fit') {
-                    return data.totalMacros && data.totalMacros.kcal <= 350;
+                    const baseP = data.portions || 1;
+                    const perKcal = data.totalMacros ? (data.totalMacros.kcal / baseP) : 0;
+                    return perKcal <= 350;
                 }
                 return true;
             });
