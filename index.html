@@ -241,57 +241,57 @@
 
     <!-- ZAKŁADKA 3: Dodawanie przepisu -->
     <div id="section-add-recipe" class="tab-content">
-        <div class="card">
-            <h3 style="margin-top:0; color: #db2777;">Stwórz nowy przepis 🧁</h3>
-            
-            <input type="text" id="recipe-title" placeholder="Nazwa przepisu (np. Waniliowa owsianka)">
-            
-            <label for="recipe-pan" style="font-size: 14px; font-weight: 600; color: #4a5568;">Wybierz foremkę / naczynie bazowe:</label>
-            <select id="recipe-pan">
-                <option value="Tortownica okrągła 22 cm">Tortownica okrągła (22 cm)</option>
-                <option value="Tortownica okrągła 24 cm">Tortownica okrągła (24 cm)</option>
-                <option value="Blacha prostokątna 20x30 cm">Blacha prostokątna (20x30 cm)</option>
-                <option value="Blacha prostokątna 25x35 cm">Blacha prostokątna (25x35 cm)</option>
-                <option value="Keksówka 30 cm">Keksówka (30 cm)</option>
-                <option value="Foremka do muffinek (12 szt.)">Foremka do muffinek (12 szt.)</option>
-                <option value="Inne">Inne</option>
-            </select>
+    <div class="glass-card" style="padding: 24px; border-radius: 24px; margin-bottom: 20px;">
+        <h3 style="margin-top:0; color: #db2777; font-weight: 700;">Stwórz nowy przepis 🧁</h3>
+        
+        <input type="text" id="recipe-title" placeholder="Nazwa przepisu (np. Waniliowa owsianka)">
+        
+        <label for="recipe-pan" style="font-size: 14px; font-weight: 600; color: #4a5568; display: block; margin-bottom: 6px;">Wybierz foremkę / naczynie bazowe:</label>
+        <select id="recipe-pan">
+            <option value="Tortownica okrągła 22 cm">Tortownica okrągła (22 cm)</option>
+            <option value="Tortownica okrągła 24 cm">Tortownica okrągła (24 cm)</option>
+            <option value="Blacha prostokątna 20x30 cm">Blacha prostokątna (20x30 cm)</option>
+            <option value="Blacha prostokątna 25x35 cm">Blacha prostokątna (25x35 cm)</option>
+            <option value="Keksówka 30 cm">Keksówka (30 cm)</option>
+            <option value="Foremka do muffinek (12 szt.)">Foremka do muffinek (12 szt.)</option>
+            <option value="Inne">Inne</option>
+        </select>
 
-            <div style="background: #fdf2f8; padding: 16px; border-radius: 16px; margin-bottom: 15px; border: 1px solid #fbcfe8;">
-                <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Składniki i makro (na 100g)</h4>
+        <div style="background: rgba(255, 255, 255, 0.35); backdrop-filter: blur(8px); padding: 16px; border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.5);">
+            <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Składniki i makro (na 100g)</h4>
 
-                <input type="text" id="ingredient-name" placeholder="Nazwa składnika (np. Płatki owsiane)">
-                <div style="display: flex; gap: 8px;">
-                    <input type="number" id="ing-kcal" placeholder="Kcal / 100g">
-                    <input type="number" id="ing-protein" placeholder="Białko / 100g">
-                </div>
-                <div style="display: flex; gap: 8px;">
-                    <input type="number" id="ing-fat" placeholder="Tłuszcz / 100g">
-                    <input type="number" id="ing-carbs" placeholder="Węgle / 100g">
-                </div>
-                <input type="number" id="ing-weight" placeholder="Waga użyta w przepisie (w gramach, np. 50)">
-                
-                <button type="button" id="btn-add-ingredient" style="background: linear-gradient(135deg, #f472b6 0%, #38bdf8 100%); margin-top: 5px;">➕ Dodaj składnik</button>
+            <input type="text" id="ingredient-name" placeholder="Nazwa składnika (np. Płatki owsiane)">
+            <div style="display: flex; gap: 8px;">
+                <input type="number" id="ing-kcal" placeholder="Kcal / 100g">
+                <input type="number" id="ing-protein" placeholder="Białko / 100g">
             </div>
-
-            <div id="ingredients-summary-container" style="margin-bottom: 15px; font-size: 14px;">
-                <p style="color: #64748b;"><em>Brak dodanych składników.</em></p>
+            <div style="display: flex; gap: 8px;">
+                <input type="number" id="ing-fat" placeholder="Tłuszcz / 100g">
+                <input type="number" id="ing-carbs" placeholder="Węgle / 100g">
             </div>
-
-            <textarea id="recipe-steps" rows="4" placeholder="Krok po kroku (opis przygotowania)..."></textarea>
-            <input type="text" id="recipe-time" placeholder="Czas przygotowania / pieczenia (np. 25 minut)">
+            <input type="number" id="ing-weight" placeholder="Waga użyta w przepisie (w gramach, np. 50)">
             
-            <label for="recipe-visibility" style="font-size: 14px; font-weight: 600; color: #4a5568;">Widoczność:</label>
-            <select id="recipe-visibility">
-                <option value="public">Publiczny (widoczny w katalogu)</option>
-                <option value="private">Prywatny (tylko dla mnie)</option>
-            </select>
-            
-<button id="btn-add-recipe" class="glass-button" style="margin-top: 10px; padding: 12px 20px; border-radius: 12px; font-weight: 600; color: #db2777; cursor: pointer;">
-  Opublikuj cały przepis ✨
-</button>
+            <button type="button" id="btn-add-ingredient" class="glass-button" style="background: linear-gradient(135deg, #f472b6 0%, #38bdf8 100%); margin-top: 5px; color: white; width: 100%; border: none; padding: 10px; border-radius: 12px; font-weight: 600; cursor: pointer;">➕ Dodaj składnik</button>
         </div>
+
+        <div id="ingredients-summary-container" style="margin-bottom: 15px; font-size: 14px;">
+            <p style="color: #64748b;"><em>Brak dodanych składników.</em></p>
+        </div>
+
+        <textarea id="recipe-steps" rows="4" placeholder="Krok po kroku (opis przygotowania)..."></textarea>
+        <input type="text" id="recipe-time" placeholder="Czas przygotowania / pieczenia (np. 25 minut)">
+        
+        <label for="recipe-visibility" style="font-size: 14px; font-weight: 600; color: #4a5568; display: block; margin-bottom: 6px;">Widoczność:</label>
+        <select id="recipe-visibility">
+            <option value="public">Publiczny (widoczny w katalogu)</option>
+            <option value="private">Prywatny (tylko dla mnie)</option>
+        </select>
+        
+        <button id="btn-add-recipe" class="glass-button" style="margin-top: 15px; width: 100%; padding: 14px 20px; border-radius: 14px; font-weight: 600; color: #db2777; cursor: pointer; text-align: center;">
+          Opublikuj cały przepis ✨
+        </button>
     </div>
+</div>
 
     <!-- ZAKŁADKA 4: AI Studio (Zasilane przez Cloudflare /api/gemini) -->
     <div id="section-ai-helper" class="tab-content">
