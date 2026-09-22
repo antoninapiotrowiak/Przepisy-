@@ -150,21 +150,30 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-/* Efekt szklanego przycisku i kart w stylu iOS */
-.glass-card, .glass-button {
-  background: rgba(255, 255, 255, 0.30) !important; /* Bardziej przezroczyste szkło */
+/* Osobno dla szklanych kart (ciemny tekst) */
+.glass-card {
+  background: rgba(255, 255, 255, 0.35) !important;
   backdrop-filter: blur(16px) !important;
   -webkit-backdrop-filter: blur(16px) !important;
   border: 1px solid rgba(255, 255, 255, 0.6) !important;
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.12) !important;
+  color: #1f2937 !important; /* Ciemny, czytelny kolor tekstu */
+}
+
+/* Osobno dla szklanych przycisków */
+.glass-button {
+  background: rgba(255, 255, 255, 0.45) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  box-shadow: 0 4px 20px rgba(31, 38, 135, 0.08) !important;
+  color: #db2777 !important; /* Różowy, wyraźny tekst na przyciskach */
   transition: all 0.3s ease;
 }
 
-/* Interakcja po najechaniu / kliknięciu */
 .glass-button:hover {
-  background: rgba(255, 255, 255, 0.50) !important;
+  background: rgba(255, 255, 255, 0.65) !important;
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(219, 39, 119, 0.15);
 }
 
 .glass-button:active {
