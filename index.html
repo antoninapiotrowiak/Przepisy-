@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Książka z Przepisami</title>
     <style>
+
         :root {
             --primary-pink: #ec4899;
             --primary-blue: #3b82f6;
@@ -146,6 +147,38 @@
 
         .tab-content { display: none; }
         .tab-content.active { display: block; }
+
+/* Efekt szklanego przycisku i kart w stylu iOS */
+.glass-card, .glass-button {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  transition: all 0.3s ease;
+}
+
+/* Interakcja po najechaniu / kliknięciu */
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.85);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(219, 39, 119, 0.15);
+}
+
+.glass-button:active {
+  transform: translateY(0);
+}
+
+/* Płynna animacja pojawiania się */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+        
     </style>
     <link rel="manifest" href="/manifest.json">
 
@@ -252,7 +285,9 @@
                 <option value="private">Prywatny (tylko dla mnie)</option>
             </select>
             
-            <button id="btn-add-recipe" style="margin-top: 10px;">Opublikuj cały przepis ✨</button>
+<button id="btn-add-recipe" class="glass-button" style="margin-top: 10px; padding: 12px 20px; border-radius: 12px; font-weight: 600; color: #db2777; cursor: pointer;">
+  Opublikuj cały przepis ✨
+</button>
         </div>
     </div>
 
