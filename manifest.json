@@ -1,0 +1,15 @@
+{
+  "name": "Moja Książka Przepisów",
+  "short_name": "Przepisy",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#db2777",
+  "icons": [
+    {
+      "src": "https://cdn.jsdelivr.net/npm/@tabler/icons@latest/icons/outline/chef-hat.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
