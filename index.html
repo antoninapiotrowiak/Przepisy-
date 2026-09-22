@@ -3,578 +3,524 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Y2K Przepisy & AI Kitchen 🌸</title>
+    <title>Moja Książka z Przepisami ✨ z AI</title>
     <style>
         :root {
-            --bg-color: #ffe6f2;
-            --container-bg: #fff0f8;
-            --border-color: #ff66b2;
-            --text-color: #4a0033;
-            --accent-color: #ff1493;
-            --accent-hover: #ff69b4;
+            --primary-pink: #ec4899;
+            --primary-blue: #3b82f6;
+            --soft-bg: linear-gradient(135deg, #fdf2f8 0%, #e0f2fe 100%);
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --text-color: #2d3748;
+            --border-color: #f3e8ff;
         }
 
-        body {
-            background-color: var(--bg-color);
-            background-image: radial-gradient(#ffb3d9 15%, transparent 16%), radial-gradient(#ffb3d9 15%, transparent 16%);
-            background-size: 20px 20px;
-            background-position: 0 0, 10px 10px;
-            font-family: 'Courier New', Courier, monospace;
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            max-width: 650px; 
+            margin: 30px auto; 
+            padding: 0 20px; 
+            background: var(--soft-bg); 
             color: var(--text-color);
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 750px;
-            margin: 20px auto;
-            background: var(--container-bg);
-            border: 3px solid var(--border-color);
-            box-shadow: 6px 6px 0px #ff99cc;
-            padding: 25px;
-            border-radius: 4px;
+            min-height: 100vh;
         }
 
         h1 {
             text-align: center;
-            color: var(--accent-color);
-            text-shadow: 2px 2px 0px #ffb3d9;
-            font-size: 2em;
-            margin-bottom: 5px;
+            color: var(--primary-pink);
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 25px;
+            font-size: 28px;
         }
 
-        .subtitle {
-            text-align: center;
-            font-size: 0.85em;
-            margin-bottom: 20px;
-            color: #880044;
+        .card { 
+            background: var(--card-bg); 
+            backdrop-filter: blur(10px);
+            padding: 25px; 
+            margin-bottom: 20px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 25px -5px rgba(236, 72, 153, 0.08), 0 8px 10px -6px rgba(59, 130, 246, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.8);
         }
 
-        /* Nawigacja zakładková */
-        .nav-tabs {
-            display: flex;
-            gap: 5px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
-        }
-
-        .nav-tabs button {
-            background: #fff;
-            border: 2px solid var(--border-color);
-            padding: 8px 12px;
-            cursor: pointer;
-            font-family: 'Courier New', Courier, monospace;
-            font-weight: bold;
+        input, textarea, select { 
+            width: 100%; 
+            padding: 12px 16px; 
+            margin: 8px 0 16px 0; 
+            box-sizing: border-box; 
+            border: 2px solid var(--border-color); 
+            border-radius: 12px; 
+            background: #faf5ff;
+            font-size: 14px;
             color: var(--text-color);
+            transition: all 0.3s ease;
         }
 
-        .nav-tabs button.active {
-            background: var(--accent-color);
-            color: white;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .section {
-            border: 2px dashed var(--border-color);
-            padding: 15px;
-            margin-bottom: 20px;
-            background: #ffffff;
-        }
-
-        h2 {
-            font-size: 1.1em;
-            color: var(--accent-color);
-            margin-top: 0;
-            border-bottom: 1px dashed var(--border-color);
-            padding-bottom: 5px;
-        }
-
-        input[type="text"], input[type="email"], input[type="password"], input[type="number"], textarea, select {
-            width: 100%;
-            padding: 8px;
-            margin: 6px 0 12px 0;
-            border: 2px solid var(--border-color);
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-pink);
             background: #fff;
-            font-family: 'Courier New', Courier, monospace;
-            box-sizing: border-box;
+            box-shadow: 0 0 0 4px rgba(236, 72, 153, 0.1);
         }
 
-        .row {
-            display: flex;
-            gap: 10px;
+        button { 
+            width: 100%; 
+            background: linear-gradient(135deg, var(--primary-pink) 0%, var(--primary-blue) 100%); 
+            color: white; 
+            border: none; 
+            padding: 12px 20px; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-weight: 700; 
+            font-size: 15px;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.2);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-bottom: 8px; 
         }
 
-        .col {
-            flex: 1;
+        button:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(236, 72, 153, 0.3);
         }
 
-        button.main-btn {
-            background-color: var(--accent-color);
-            color: white;
-            border: 2px solid #880044;
-            padding: 10px 15px;
-            font-weight: bold;
-            font-family: 'Courier New', Courier, monospace;
-            cursor: pointer;
-            box-shadow: 3px 3px 0px #880044;
-            width: 100%;
-            margin-top: 5px;
+        .recipe-item { 
+            border-top: 4px solid var(--primary-pink); 
+            padding: 20px; 
+            margin-bottom: 20px; 
+            background: #fff; 
+            border-radius: 16px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03); 
         }
 
-        button.main-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: 1px 1px 0px #880044;
-        }
-
-        button.main-btn:hover {
-            background-color: var(--accent-hover);
-        }
-
-        .checkbox-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85em;
-            margin-bottom: 10px;
-        }
-
-        .ai-response {
-            margin-top: 10px;
-            background: #fff5fb;
-            border: 1px solid var(--border-color);
-            padding: 12px;
-            white-space: pre-wrap;
-            font-size: 0.9em;
-            min-height: 40px;
-        }
-
-        .recipe-card {
-            border: 1px solid var(--border-color);
+        .hidden { display: none; }
+        
+        #auth-status { 
+            font-weight: 600; 
+            color: #4a5568; 
+            margin-bottom: 15px; 
+            text-align: center;
+            background: rgba(255, 255, 255, 0.5);
             padding: 10px;
-            margin-bottom: 10px;
-            background: #fff9fc;
+            border-radius: 12px;
         }
 
-        .hidden {
-            display: none !important;
+        .tabs { 
+            display: flex; 
+            gap: 4px; 
+            margin-bottom: 25px; 
+            background: rgba(255, 255, 255, 0.6);
+            padding: 6px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            overflow-x: auto;
         }
+        
+        .tab-btn { 
+            flex: 1; 
+            padding: 8px 10px; 
+            background: transparent; 
+            border: none; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-weight: 600; 
+            color: #64748b; 
+            width: auto; 
+            white-space: nowrap;
+            margin-bottom: 0;
+            box-shadow: none;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary-pink);
+            transform: none;
+            box-shadow: none;
+        }
+
+        .tab-btn.active { 
+            background: #ffffff; 
+            color: var(--primary-pink); 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>✨ Y2K Przepisy & AI ✨</h1>
-        <div class="subtitle">~ Katalog przepisów, makro-kalkulator i asystent Gemini ~</div>
+    <h1>✨ Moja Książka Przepisów ✨</h1>
+    
+    <div id="auth-status">Sprawdzanie stanu logowania...</div>
 
-        <!-- Panel Logowania / Stanu Użytkownika -->
-        <div id="auth-status" class="section" style="text-align: right; font-size: 0.85em; padding: 8px 15px;">
-            <span>Ładowanie stanu sesji...</span>
+    <!-- Sekcja Logowania / Rejestracji -->
+    <div id="auth-section" class="card">
+        <h3 style="margin-top:0; color: #db2777;">Witaj ponownie! 🌸</h3>
+        <input type="email" id="email" placeholder="Twój e-mail">
+        <input type="password" id="password" placeholder="Hasło (min. 6 znaków)">
+        
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px; font-size: 14px; color: #4a5568;">
+            <input type="checkbox" id="remember-me" style="width: auto; margin: 0; accent-color: #ec4899;">
+            <label for="remember-me" style="cursor: pointer;">Zapamiętaj mnie na tym urządzeniu</label>
         </div>
 
-        <!-- Menu Zakładek -->
-        <div class="nav-tabs">
-            <button onclick="switchTab('public')" class="active">Katalog Publiczny 🌍</button>
-            <button onclick="switchTab('private')">Moje Przepisy 📖</button>
-            <button onclick="switchTab('add')">Dodaj Przepis ➕</button>
-            <button onclick="switchTab('ai')">Asystent AI 🤖</button>
-            <button onclick="switchTab('profile')">Profil & Logowanie 👤</button>
-        </div>
+        <button id="btn-login">Zaloguj się e-mailem</button>
+        <button id="btn-register" style="background: linear-gradient(135deg, #60a5fa 100%, #3b82f6 0%);">Zarejestruj się</button>
+        <hr style="margin: 15px 0; border: 0; border-top: 1px solid #f3e8ff;">
+        <button id="btn-google" style="background: #ffffff; color: #3b82f6; border: 2px solid #3b82f6; box-shadow: none;">Zaloguj przez Google</button>
+    </div>
 
-        <!-- 1. KATALOG PUBLICZNY -->
-        <div id="tab-public" class="tab-content active">
-            <div class="section">
-                <h2>🌍 Publiczne przepisy społeczności</h2>
-                <div id="public-recipes-list">Wczytuję publiczne przepisy...</div>
-            </div>
-        </div>
+    <div id="logout-section" class="card hidden" style="padding: 15px;">
+        <button id="btn-logout" style="background: #94a3b8; margin-bottom: 0;">Wyloguj się</button>
+    </div>
 
-        <!-- 2. PRYWATNE PRZEPISY -->
-        <div id="tab-private" class="tab-content">
-            <div class="section">
-                <h2>📖 Twoje prywatne przepisy</h2>
-                <div id="private-recipes-list">Zaloguj się, aby widzieć swoje przepisy.</div>
-            </div>
-        </div>
+    <!-- Pasek zakładek -->
+    <div id="app-tabs" class="tabs hidden">
+        <button class="tab-btn active" onclick="switchTab('catalog')">🌐 Katalog</button>
+        <button class="tab-btn" onclick="switchTab('my-recipes')">📖 Moje</button>
+        <button class="tab-btn" onclick="switchTab('add-recipe')">➕ Dodaj</button>
+        <button class="tab-btn" onclick="switchTab('ai-helper')">🤖 AI Studio</button>
+        <button class="tab-btn" onclick="switchTab('ai-cloudflare')">☁️ Asystent Cloudflare</button>
+        <button class="tab-btn" onclick="switchTab('profile')">👤 Profil</button>
+    </div>
 
-        <!-- 3. DODAWANIE PRZEPISU + KALKULATOR MAKRO -->
-        <div id="tab-add" class="tab-content">
-            <div class="section">
-                <h2>➕ Dodaj nowy przepis z kalkulatorem makro</h2>
-                <form id="recipe-form" onsubmit="saveRecipe(event)">
-                    <label>Nazwa przepisu:</label>
-                    <input type="text" id="recipe-title" required placeholder="Np. Puszcyste owsianki bananowe">
-
-                    <label>Składniki (opisowo lub z kalkulatorem poniżej):</label>
-                    <textarea id="recipe-ingredients" rows="3" placeholder="Wypisz składniki..."></textarea>
-
-                    <h3>🧮 Kalkulator Makro i Porcji (na 100g)</h3>
-                    <div class="row">
-                        <div class="col">
-                            <label>Kalorie (kcal / 100g):</label>
-                            <input type="number" step="0.1" id="macro-kcal" value="0">
-                        </div>
-                        <div class="col">
-                            <label>Białko (g / 100g):</label>
-                            <input type="number" step="0.1" id="macro-protein" value="0">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <label>Tłuszcze (g / 100g):</label>
-                            <input type="number" step="0.1" id="macro-fat" value="0">
-                        </div>
-                        <div class="col">
-                            <label>Węglowodany (g / 100g):</label>
-                            <input type="number" step="0.1" id="macro-carbs" value="0">
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col">
-                            <label>Waga całej porcji / gotowego dania (g):</label>
-                            <input type="number" step="1" id="recipe-total-weight" value="100">
-                        </div>
-                        <div class="col">
-                            <label>Liczba porcji:</label>
-                            <input type="number" step="1" id="recipe-servings" value="1">
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col">
-                            <label>Czas robienia (np. 20 min):</label>
-                            <input type="text" id="recipe-time" placeholder="20 min">
-                        </div>
-                        <div class="col">
-                            <label>Foremka / Naczynie:</label>
-                            <input type="text" id="recipe-pan" placeholder="Np. tortownica 20cm / air fryer">
-                        </div>
-                    </div>
-
-                    <label>Kroki przygotowania:</label>
-                    <textarea id="recipe-steps" rows="4" placeholder="1. Zmiksuj składniki...&#10;2. Piecz w..."></textarea>
-
-                    <div class="checkbox-container">
-                        <input type="checkbox" id="recipe-public">
-                        <label for="recipe-public" style="margin:0; cursor:pointer;">Oznacz przepis jako publiczny (widoczny dla wszystkich)</label>
-                    </div>
-
-                    <button type="submit" class="main-btn">Zapisz przepis w bazie 💾</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- 4. ASYSTENT AI -->
-        <div id="tab-ai" class="tab-content">
-            <div class="section">
-                <h2>🤖 Asystent Kuchni Gemini AI</h2>
-                <p style="font-size: 0.85em;">Masz składniki i nie Wiesz co zrobić? Zapytaj AI o modyfikację przepisu lub nowy pomysł!</p>
-                <input type="text" id="ai-prompt" placeholder="Np. Co mogę wyczarować z płatków owsianych i banana w air fryerze?">
-                <button type="button" class="main-btn" onclick="askGemini()">Zapytaj AI 💖</button>
-                <div id="ai-output" class="ai-response">Tutaj pojawi się odpowiedź od sztucznej inteligencji...</div>
-            </div>
-        </div>
-
-        <!-- 5. PROFIL I LOGOWANIE -->
-        <div id="tab-profile" class="tab-content">
-            <div id="logged-out-view" class="section">
-                <h2>🔑 Logowanie / Rejestracja</h2>
-                
-                <div style="margin-bottom: 15px;">
-                    <button type="button" class="main-btn" style="background-color: #db4437; border-color: #880000;" onclick="loginWithGoogle()">Zaloguj przez Google 🌐</button>
-                </div>
-
-                <hr style="border: 1px dashed var(--border-color); margin: 15px 0;">
-
-                <label>E-mail:</label>
-                <input type="email" id="auth-email" placeholder="twoj@email.com">
-
-                <label>Hasło:</label>
-                <input type="password" id="auth-password" placeholder="********">
-
-                <div class="checkbox-container">
-                    <input type="checkbox" id="remember-me" checked>
-                    <label for="remember-me" style="margin:0; cursor:pointer;">Zapamiętaj mnie na tym urządzeniu (trwała sesja)</label>
-                </div>
-
-                <div class="row">
-                    <div class="col"><button type="button" class="main-btn" onclick="loginWithEmail()">Zaloguj się</button></div>
-                    <div class="col"><button type="button" class="main-btn" style="background-color: #ff66b2;" onclick="registerWithEmail()">Zarejestruj się</button></div>
-                </div>
-            </div>
-
-            <div id="logged-in-view" class="section hidden">
-                <h2>👤 Twój Profil</h2>
-                <p>Zalogowano jako: <strong id="user-email-display"></strong></p>
-                <button type="button" class="main-btn" style="background-color: #cc0000; border-color: #550000;" onclick="logoutUser()">Wyloguj się 👋</button>
-            </div>
-        </div>
-
-        <div class="footer" style="text-align: center; font-size: 0.75em; margin-top: 20px; color: #a64d79;">
-            Made with 💖 in Y2K Style | Powered by Cloudflare & Gemini API
+    <!-- ZAKŁADKA 1: Katalog publiczny -->
+    <div id="section-catalog" class="tab-content active">
+        <div class="card">
+            <h3 style="margin-top:0; color: #db2777;">Przepisy społeczności</h3>
+            <div id="catalog-container">Ładowanie przepisów...</div>
         </div>
     </div>
 
-    <!-- Firebase SDK (Modular) -->
+    <!-- ZAKŁADKA 2: Moje przepisy -->
+    <div id="section-my-recipes" class="tab-content">
+        <div class="card">
+            <h3 style="margin-top:0; color: #db2777;">Twoja kolekcja</h3>
+            <div id="my-recipes-container">Ładowanie Twoich przepisów...</div>
+        </div>
+    </div>
+
+    <!-- ZAKŁADKA 3: Dodawanie przepisu -->
+    <div id="section-add-recipe" class="tab-content">
+        <div class="card">
+            <h3 style="margin-top:0; color: #db2777;">Stwórz nowy przepis 🧁</h3>
+            
+            <input type="text" id="recipe-title" placeholder="Nazwa przepisu (np. Waniliowa owsianka)">
+            
+            <label for="recipe-pan" style="font-size: 14px; font-weight: 600; color: #4a5568;">Wybierz foremkę / naczynie bazowe:</label>
+            <select id="recipe-pan">
+                <option value="Tortownica okrągła 22 cm">Tortownica okrągła (22 cm)</option>
+                <option value="Tortownica okrągła 24 cm">Tortownica okrągła (24 cm)</option>
+                <option value="Blacha prostokątna 20x30 cm">Blacha prostokątna (20x30 cm)</option>
+                <option value="Blacha prostokątna 25x35 cm">Blacha prostokątna (25x35 cm)</option>
+                <option value="Keksówka 30 cm">Keksówka (30 cm)</option>
+                <option value="Foremka do muffinek (12 szt.)">Foremka do muffinek (12 szt.)</option>
+                <option value="Inne / Air Fryer / Miska">Inne / Air Fryer / Miska</option>
+            </select>
+
+            <div style="background: #fdf2f8; padding: 16px; border-radius: 16px; margin-bottom: 15px; border: 1px solid #fbcfe8;">
+                <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Składniki i makro (na 100g)</h4>
+
+                <input type="text" id="ingredient-name" placeholder="Nazwa składnika (np. Płatki owsiane)">
+                <div style="display: flex; gap: 8px;">
+                    <input type="number" id="ing-kcal" placeholder="Kcal / 100g">
+                    <input type="number" id="ing-protein" placeholder="Białko / 100g">
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <input type="number" id="ing-fat" placeholder="Tłuszcz / 100g">
+                    <input type="number" id="ing-carbs" placeholder="Węgle / 100g">
+                </div>
+                <input type="number" id="ing-weight" placeholder="Waga użyta w przepisie (w gramach, np. 50)">
+                
+                <button type="button" id="btn-add-ingredient" style="background: linear-gradient(135deg, #f472b6 0%, #38bdf8 100%); margin-top: 5px;">➕ Dodaj składnik</button>
+            </div>
+
+            <div id="ingredients-summary-container" style="margin-bottom: 15px; font-size: 14px;">
+                <p style="color: #64748b;"><em>Brak dodanych składników.</em></p>
+            </div>
+
+            <textarea id="recipe-steps" rows="4" placeholder="Krok po kroku (opis przygotowania)..."></textarea>
+            <input type="text" id="recipe-time" placeholder="Czas przygotowania / pieczenia (np. 25 minut)">
+            
+            <label for="recipe-visibility" style="font-size: 14px; font-weight: 600; color: #4a5568;">Widoczność:</label>
+            <select id="recipe-visibility">
+                <option value="public">Publiczny (widoczny w katalogu)</option>
+                <option value="private">Prywatny (tylko dla mnie)</option>
+            </select>
+            
+            <button id="btn-add-recipe" style="margin-top: 10px;">Opublikuj cały przepis ✨</button>
+        </div>
+    </div>
+
+    <!-- ZAKŁADKA 4: AI Studio (Generator z lodówki & Czat) -->
+    <div id="section-ai-helper" class="tab-content">
+        <div class="card">
+            <h3 style="margin-top:0; color: #db2777;">🤖 Inteligentny Asystent Kulinarny AI</h3>
+            <p style="font-size: 14px; color: #64748b;">Wpisz, co masz w lodówce albo zadaj dowolne pytanie o gotowanie, a Gemini od razu Ci pomoże!</p>
+            
+            <textarea id="ai-fridge-input" rows="3" placeholder="Co masz w lodówce? (np. mam twaróg, jogurt naturalny, jajka i banany)"></textarea>
+            <button type="button" onclick="generateRecipeFromFridge()">✨ Wygeneruj przepis z lodówki</button>
+            
+            <div id="ai-generator-result" style="margin-top: 15px; padding: 14px; background: #fff; border-radius: 14px; border: 1px solid #fbcfe8; display: none; font-size: 14px; line-height: 1.5;"></div>
+        </div>
+
+        <div class="card">
+            <h3 style="margin-top:0; color: #db2777;">💬 Czat z Szefem Kuchni</h3>
+            <input type="text" id="ai-general-query" placeholder="Zadaj pytanie (np. Czym zastąpić mąkę pszenną w cieście?)">
+            <button type="button" onclick="askGeneralAI()">Wyślij pytanie do AI</button>
+            <div id="ai-general-result" style="margin-top: 15px; padding: 14px; background: #fff; border-radius: 14px; border: 1px solid #e0f2fe; display: none; font-size: 14px; line-height: 1.5;"></div>
+        </div>
+    </div>
+
+    <!-- ZAKŁADKA 5: Asystent Cloudflare (Back-end AI proxy) -->
+    <div id="section-ai-cloudflare" class="tab-content">
+        <div class="card">
+            <h3 style="margin-top:0; color: #db2777;">☁️ Asystent Cloudflare (/api/gemini)</h3>
+            <p style="font-size: 14px; color: #64748b;">To okienko korzysta bezpośrednio z bezpiecznego klucza ukrytego na serwerze Cloudflare Pages!</p>
+            
+            <input type="text" id="cf-ai-prompt" placeholder="Np. Co szybkiego zrobię z jajek i awokado?">
+            <button type="button" onclick="askCloudflareAI()">Zapytaj przez Cloudflare 🚀</button>
+            
+            <div id="cf-ai-output" style="margin-top: 15px; padding: 14px; background: #fff; border-radius: 14px; border: 1px solid #fbcfe8; white-space: pre-wrap; display: none; font-size: 14px; line-height: 1.5;"></div>
+        </div>
+    </div>
+
+    <!-- ZAKŁADKA 6: Profil -->
+    <div id="section-profile" class="tab-content">
+        <div class="card">
+            <h3 style="margin-top:0; color: #db2777;">Twój profil i klucz AI</h3>
+            <p><strong>E-mail:</strong> <span id="profile-email">-</span></p>
+            <p><strong>ID użytkownika:</strong> <span id="profile-uid" style="font-size: 12px; color: #666;">-</span></p>
+            
+            <hr style="margin: 15px 0; border: 0; border-top: 1px solid #f3e8ff;">
+            <label for="user-gemini-key" style="font-size: 14px; font-weight: 600; color: #4a5568;">🔑 Twój Gemini API Key (dla AI Studio):</label>
+            <input type="password" id="user-gemini-key" placeholder="Wklej klucz z AI Studio (np. AIzaSy...)">
+            <button type="button" onclick="saveApiKey()" style="background: #3b82f6;">Zapisz klucz w przeglądarce</button>
+            <small style="color: #64748b; display: block; margin-top: 5px;">Klucz zapisuje się w pamięci Twojej przeglądarki.</small>
+        </div>
+    </div>
+
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
         import { 
             getAuth, 
-            signInWithEmailAndPassword, 
-            createUserWithEmailAndPassword, 
-            signOut, 
-            onAuthStateChanged, 
-            GoogleAuthProvider, 
-            signInWithPopup,
             setPersistence,
             browserLocalPersistence,
-            browserSessionPersistence
-        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, query, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+            browserSessionPersistence,
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword, 
+            signInWithPopup,
+            GoogleAuthProvider,
+            signOut, 
+            onAuthStateChanged 
+        } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            collection, 
+            addDoc, 
+            query, 
+            where,
+            onSnapshot, 
+            serverTimestamp 
+        } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+        import { GoogleGenAI } from "https://esm.run/@google/genai";
 
-        // Konfiguracja Firebase (dostosuj, jeśli masz swoje klucze Firebase)
         const firebaseConfig = {
-            apiKey: "TWÓJ_FIREBASE_API_KEY",
-            authDomain: "twoj-projekt.firebaseapp.com",
-            projectId: "twoj-projekt",
-            storageBucket: "twoj-projekt.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:123:web:abc"
+            apiKey: "AIzaSyACAYq6d_bOfUV8s_wlX-yTdTKhU9YVwnE",
+            authDomain: "przepisy-1666b.firebaseapp.com",
+            projectId: "przepisy-1666b",
+            storageBucket: "przepisy-1666b.firebasestorage.app",
+            messagingSenderId: "1080998982984",
+            appId: "1:1080998982984:web:1d8eab4db37ab520a6af7d",
+            measurementId: "G-484BSEC9FE"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const googleProvider = new GoogleAuthProvider();
 
-        let currentUser = null;
+        const authStatus = document.getElementById("auth-status");
+        const authSection = document.getElementById("auth-section");
+        const logoutSection = document.getElementById("logout-section");
+        const appTabs = document.getElementById("app-tabs");
+        const emailInput = document.getElementById("email");
+        const passwordInput = document.getElementById("password");
+        const rememberMeCheckbox = document.getElementById("remember-me");
 
-        // Przełączanie zakładek widoku
+        let currentRecipeIngredients = [];
+
+        function getAiClient() {
+            const savedKey = localStorage.getItem("gemini_api_key");
+            if (!savedKey) return null;
+            return new GoogleGenAI({ apiKey: savedKey });
+        }
+
+        window.saveApiKey = function() {
+            const key = document.getElementById("user-gemini-key").value.trim();
+            if (!key) {
+                alert("Wpisz poprawny klucz API!");
+                return;
+            }
+            localStorage.setItem("gemini_api_key", key);
+            alert("Klucz API został zapisany w Twojej przeglądarce! 🎉");
+        };
+
         window.switchTab = function(tabName) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-tabs button').forEach(el => el.classList.remove('active'));
-            
-            document.getElementById('tab-' + tabName).classList.add('active');
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+            if (tabName === 'catalog') {
+                document.getElementById('section-catalog').classList.add('active');
+            } else if (tabName === 'my-recipes') {
+                document.getElementById('section-my-recipes').classList.add('active');
+            } else if (tabName === 'add-recipe') {
+                document.getElementById('section-add-recipe').classList.add('active');
+            } else if (tabName === 'ai-helper') {
+                document.getElementById('section-ai-helper').classList.add('active');
+            } else if (tabName === 'ai-cloudflare') {
+                document.getElementById('section-ai-cloudflare').classList.add('active');
+            } else if (tabName === 'profile') {
+                document.getElementById('section-profile').classList.add('active');
+            }
             event.currentTarget.classList.add('active');
+        };
 
-            if(tabName === 'public') loadPublicRecipes();
-            if(tabName === 'private' && currentUser) loadPrivateRecipes();
+        async function applyPersistence() {
+            const persistenceType = rememberMeCheckbox.checked ? browserLocalPersistence : browserSessionPersistence;
+            await setPersistence(auth, persistenceType);
         }
 
-        // Nasłuchiwanie stanu autoryzacji
-        onAuthStateChanged(auth, (user) => {
-            currentUser = user;
-            const statusEl = document.getElementById('auth-status');
-            const loggedOutView = document.getElementById('logged-out-view');
-            const loggedInView = document.getElementById('logged-in-view');
-            const emailDisplay = document.getElementById('user-email-display');
+        document.getElementById("btn-add-ingredient").addEventListener("click", () => {
+            const name = document.getElementById("ingredient-name").value.trim();
+            const kcal100 = parseFloat(document.getElementById("ing-kcal").value) || 0;
+            const protein100 = parseFloat(document.getElementById("ing-protein").value) || 0;
+            const fat100 = parseFloat(document.getElementById("ing-fat").value) || 0;
+            const carbs100 = parseFloat(document.getElementById("ing-carbs").value) || 0;
+            const weight = parseFloat(document.getElementById("ing-weight").value) || 0;
 
-            if (user) {
-                statusEl.innerHTML = `Zalogowany: <b>${user.email}</b> ✨`;
-                loggedOutView.classList.add('hidden');
-                loggedInView.classList.remove('hidden');
-                emailDisplay.innerText = user.email;
-                loadPrivateRecipes();
-            } else {
-                statusEl.innerHTML = `Niezalogowany (<a href="#" onclick="switchTab('profile'); return false;">Zaloguj się</a>)`;
-                loggedOutView.classList.remove('hidden');
-                loggedInView.classList.add('hidden');
-                document.getElementById('private-recipes-list').innerHTML = "Zaloguj się, aby widzieć swoje przepisy.";
-            }
-            loadPublicRecipes();
-        });
-
-        // Logowanie / Rejestracja mailowa
-        async function getPersistenceType() {
-            const remember = document.getElementById('remember-me').checked;
-            return remember ? browserLocalPersistence : browserSessionPersistence;
-        }
-
-        window.registerWithEmail = async function() {
-            const email = document.getElementById('auth-email').value;
-            const pass = document.getElementById('auth-password').value;
-            try {
-                await setPersistence(auth, await getPersistenceType());
-                await createUserWithEmailAndPassword(auth, email, pass);
-                alert("Konto utworzone pomyślnie! 🎉");
-                switchTab('profile');
-            } catch (e) {
-                alert("Błąd rejestracji: " + e.message);
-            }
-        }
-
-        window.loginWithEmail = async function() {
-            const email = document.getElementById('auth-email').value;
-            const pass = document.getElementById('auth-password').value;
-            try {
-                await setPersistence(auth, await getPersistenceType());
-                await signInWithEmailAndPassword(auth, email, pass);
-                alert("Zalogowano pomyślnie! 💖");
-                switchTab('public');
-            } catch (e) {
-                alert("Błąd logowania: " + e.message);
-            }
-        }
-
-        window.loginWithGoogle = async function() {
-            const provider = new GoogleAuthProvider();
-            try {
-                await setPersistence(auth, await getPersistenceType());
-                await signInWithPopup(auth, provider);
-                alert("Zalogowano przez Google! 🌐");
-                switchTab('public');
-            } catch (e) {
-                alert("Błąd Google Auth: " + e.message);
-            }
-        }
-
-        window.logoutUser = async function() {
-            await signOut(auth);
-            alert("Wylogowano pomyślnie.");
-            switchTab('profile');
-        }
-
-        // Zapisywanie przepisu z kalkulatorem makro
-        window.saveRecipe = async function(event) {
-            event.preventDefault();
-            if (!currentUser) {
-                alert("Musisz być zalogowany, aby dodać przepis, Młoda!");
-                switchTab('profile');
+            if (!name || weight <= 0) {
+                alert("Podaj nazwę składnika oraz wagę użytą w przepisie!");
                 return;
             }
 
-            const title = document.getElementById('recipe-title').value;
-            const ingredients = document.getElementById('recipe-ingredients').value;
-            const kcal100 = parseFloat(document.getElementById('macro-kcal').value) || 0;
-            const protein100 = parseFloat(document.getElementById('macro-protein').value) || 0;
-            const fat100 = parseFloat(document.getElementById('macro-fat').value) || 0;
-            const carbs100 = parseFloat(document.getElementById('macro-carbs').value) || 0;
-            const totalWeight = parseFloat(document.getElementById('recipe-total-weight').value) || 100;
-            const servings = parseInt(document.getElementById('recipe-servings').value) || 1;
-            const time = document.getElementById('recipe-time').value;
-            const pan = document.getElementById('recipe-pan').value;
-            const steps = document.getElementById('recipe-steps').value;
-            const isPublic = document.getElementById('recipe-public').checked;
+            const factor = weight / 100;
+            const ingredientData = {
+                name,
+                weight,
+                kcal: Math.round(kcal100 * factor),
+                protein: parseFloat((protein100 * factor).toFixed(1)),
+                fat: parseFloat((fat100 * factor).toFixed(1)),
+                carbs: parseFloat((carbs100 * factor).toFixed(1))
+            };
 
-            // Obliczenia makro na całość i na porcję
-            const totalKcal = (kcal100 * totalWeight) / 100;
-            const totalProtein = (protein100 * totalWeight) / 100;
-            const totalFat = (fat100 * totalWeight) / 100;
-            const totalCarbs = (carbs100 * totalWeight) / 100;
+            currentRecipeIngredients.push(ingredientData);
+            updateIngredientsUI();
 
-            const perServingKcal = totalKcal / servings;
-            const perServingProtein = totalProtein / servings;
-            const perServingFat = totalFat / servings;
-            const perServingCarbs = totalCarbs / servings;
+            document.getElementById("ingredient-name").value = "";
+            document.getElementById("ing-kcal").value = "";
+            document.getElementById("ing-protein").value = "";
+            document.getElementById("ing-fat").value = "";
+            document.getElementById("ing-carbs").value = "";
+            document.getElementById("ing-weight").value = "";
+        });
+
+        function updateIngredientsUI() {
+            const container = document.getElementById("ingredients-summary-container");
+            if (currentRecipeIngredients.length === 0) {
+                container.innerHTML = "<p style='color: #64748b;'><em>Brak dodanych składników.</em></p>";
+                return;
+            }
+
+            let html = "<strong style='color: #475569;'>Dodane składniki:</strong><ul style='padding-left: 20px; margin: 8px 0;'>";
+            let totalKcal = 0, totalP = 0, totalF = 0, totalC = 0;
+
+            currentRecipeIngredients.forEach((item, index) => {
+                html += `<li style="margin-bottom: 4px;">${escapeHtml(item.name)} (${item.weight}g) — ${item.kcal} kcal | B: ${item.protein}g | T: ${item.fat}g | W: ${item.carbs}g 
+                         <button type="button" onclick="removeIngredient(${index})" style="width: auto; padding: 2px 6px; font-size: 11px; background: #ef4444; margin-left: 5px; border-radius: 6px; box-shadow: none;">Usuń</button></li>`;
+                totalKcal += item.kcal;
+                totalP += item.protein;
+                totalF += item.fat;
+                totalC += item.carbs;
+            });
+
+            html += `</ul><div style="background: #e0f2fe; padding: 10px; border-radius: 12px; color: #0369a1; font-weight: 500; margin-top: 10px;"><strong>Łącznie w daniu:</strong> ${totalKcal} kcal | B: ${totalP.toFixed(1)}g | T: ${totalF.toFixed(1)}g | W: ${totalC.toFixed(1)}g</div>`;
+            container.innerHTML = html;
+        }
+
+        window.removeIngredient = function(index) {
+            currentRecipeIngredients.splice(index, 1);
+            updateIngredientsUI();
+        };
+
+        window.generateRecipeFromFridge = async function() {
+            const ai = getAiClient();
+            if (!ai) {
+                alert("Najpierw wpisz klucz API w profilu!");
+                switchTab('profile');
+                return;
+            }
+            const fridge = document.getElementById("ai-fridge-input").value.trim();
+            const resBox = document.getElementById("ai-generator-result");
+            if (!fridge) {
+                alert("Wpisz co masz w lodówce!");
+                return;
+            }
+
+            resBox.style.display = 'block';
+            resBox.innerHTML = "⏳ Gemini wymyśla pyszny przepis...";
 
             try {
-                await addDoc(collection(db, "recipes"), {
-                    uid: currentUser.uid,
-                    authorEmail: currentUser.email,
-                    title,
-                    ingredients,
-                    macro: {
-                        kcal100, protein100, fat100, carbs100,
-                        totalWeight, servings,
-                        perServing: {
-                            kcal: perServingKcal.toFixed(1),
-                            protein: perServingProtein.toFixed(1),
-                            fat: perServingFat.toFixed(1),
-                            carbs: perServingCarbs.toFixed(1)
-                        }
-                    },
-                    time,
-                    pan,
-                    steps,
-                    isPublic,
-                    createdAt: serverTimestamp()
+                const response = await ai.models.generateContent({
+                    model: 'gemini-2.5-flash',
+                    contents: `Jesteś szefem kuchni. Użytkownik ma w lodówce: "${fridge}". Ułóż z tego fajny, konkretny przepis kulinarny (podaj nazwę, składniki z gramaturą, makro na całość i krok po kroku). Odpowiedz po polsku w estetycznym formacie HTML (użyj tagów <b>, <br>, <ul> itp.).`
                 });
-
-                alert("Przepis zapisany w bazie pomyślnie! 🚀");
-                document.getElementById('recipe-form').reset();
-                switchTab(isPublic ? 'public' : 'private');
-            } catch (e) {
-                console.error(e);
-                alert("Błąd zapisu przepisu: " + e.message);
+                resBox.innerHTML = response.text;
+            } catch (err) {
+                resBox.innerHTML = "❌ Błąd AI: " + err.message;
             }
-        }
+        };
 
-        // Pobieranie przepisów publicznych
-        async function loadPublicRecipes() {
-            const listEl = document.getElementById('public-recipes-list');
-            listEl.innerHTML = "Wczytuję publiczne przepisy...";
+        window.askGeneralAI = async function() {
+            const ai = getAiClient();
+            if (!ai) {
+                alert("Najpierw wpisz klucz API w profilu!");
+                switchTab('profile');
+                return;
+            }
+            const queryText = document.getElementById("ai-general-query").value.trim();
+            const resBox = document.getElementById("ai-general-result");
+            if (!queryText) return;
+
+            resBox.style.display = 'block';
+            resBox.innerHTML = "⏳ Szef kuchni myśli...";
+
             try {
-                const q = query(collection(db, "recipes"), where("isPublic", "==", true));
-                const querySnapshot = await getDocs(q);
-                let html = "";
-                querySnapshot.forEach((docSnap) => {
-                    const r = docSnap.data();
-                    html += renderRecipeCard(r);
+                const response = await ai.models.generateContent({
+                    model: 'gemini-2.5-flash',
+                    contents: `Jesteś pomocnym asystentem kulinarnym. Odpowiedz zwięźle i praktycznie na pytanie użytkownika: "${queryText}"`
                 });
-                listEl.innerHTML = html || "Brak publicznych przepisów w bazie.";
-            } catch (e) {
-                listEl.innerHTML = "Błąd pobierania publicznych przepisów (sprawdź reguły Firestore).";
+                resBox.innerHTML = response.text;
+            } catch (err) {
+                resBox.innerHTML = "❌ Błąd AI: " + err.message;
             }
-        }
+        };
 
-        // Pobieranie prywatnych przepisów użytkownika
-        async function loadPrivateRecipes() {
-            if (!currentUser) return;
-            const listEl = document.getElementById('private-recipes-list');
-            listEl.innerHTML = "Wczytuję Twoje przepisy...";
-            try {
-                const q = query(collection(db, "recipes"), where("uid", "==", currentUser.uid));
-                const querySnapshot = await getDocs(q);
-                let html = "";
-                querySnapshot.forEach((docSnap) => {
-                    const r = docSnap.data();
-                    html += renderRecipeCard(r);
-                });
-                listEl.innerHTML = html || "Nie dodałaś jeszcze żadnych własnych przepisów.";
-            } catch (e) {
-                listEl.innerHTML = "Błąd ładowania prywatnych przepisów.";
-            }
-        }
-
-        function renderRecipeCard(r) {
-            let macroHtml = "";
-            if (r.macro && r.macro.perServing) {
-                macroHtml = `<div style="font-size: 0.8em; color: #880044; margin-top: 5px; background: #ffe6f2; padding: 5px;">
-                    <b>Makro na 1 porcję:</b> ${r.macro.perServing.kcal} kcal | B: ${r.macro.perServing.protein}g | T: ${r.macro.perServing.fat}g | W: ${r.macro.perServing.carbs}g<br>
-                    <b>Czas:</b> ${r.time || 'B/D'} | <b>Foremka:</b> ${r.pan || 'B/D'} | <b>Porcje:</b> ${r.macro.servings || 1}
-                </div>`;
-            }
-            return `<div class="recipe-card">
-                <strong style="font-size: 1.1em; color: var(--accent-color);">${r.title}</strong>
-                <div style="font-size: 0.75em; color: #666; margin-bottom: 4px;">Autor: ${r.authorEmail || 'Nieznany'}</div>
-                <div style="font-size: 0.85em; white-space: pre-wrap; margin-top: 5px;"><b>Składniki:</b><br>${r.ingredients || ''}</div>
-                <div style="font-size: 0.85em; white-space: pre-wrap; margin-top: 5px;"><b>Kroki:</b><br>${r.steps || ''}</div>
-                ${macroHtml}
-            </div>`;
-        }
-    </script>
-
-    <!-- Skrypt komunikacji z backendem AI (Cloudflare Functions /api/gemini) -->
-    <script>
-        window.askGemini = async function() {
-            const promptInput = document.getElementById('ai-prompt');
-            const outputDiv = document.getElementById('ai-output');
+        // Funkcja komunikacji z Cloudflare Pages Function (/api/gemini)
+        window.askCloudflareAI = async function() {
+            const promptInput = document.getElementById('cf-ai-prompt');
+            const outputDiv = document.getElementById('cf-ai-output');
             const userText = promptInput.value.trim();
 
             if (!userText) {
-                outputDiv.innerText = "Wpisz najpierw jakieś pytanie lub składniki, Młoda! 😉";
+                outputDiv.style.display = 'block';
+                outputDiv.innerText = "Wpisz najpierw jakieś pytanie, Młoda! 😉";
                 return;
             }
 
-            outputDiv.innerText = "Gemini analizuje Twoje zapytanie... ⏳";
+            outputDiv.style.display = 'block';
+            outputDiv.innerText = "Cloudflare & Gemini myślą nad odpowiedzią... ⏳";
 
             try {
                 const response = await fetch('/api/gemini', {
@@ -596,6 +542,242 @@
                 console.error(err);
                 outputDiv.innerText = "Błąd połączenia z serwerem Cloudflare.";
             }
+        };
+
+        window.askRecipeAI = async function(docId) {
+            const ai = getAiClient();
+            if (!ai) {
+                alert("Wpisz klucz API w zakładce Profil!");
+                return;
+            }
+            const inputField = document.getElementById(`recipe-ai-input-${docId}`);
+            const outputBox = document.getElementById(`recipe-ai-output-${docId}`);
+            const question = inputField.value.trim();
+            if (!question) return;
+
+            outputBox.style.display = 'block';
+            outputBox.textContent = "⏳ Analizuję przepis...";
+
+            try {
+                const response = await ai.models.generateContent({
+                    model: 'gemini-2.5-flash',
+                    contents: `Jesteś asystentem w książce kucharskiej. Pytanie użytkownika do przepisu: "${question}". Odpowiedz krótko i rzeczowo po polsku.`
+                });
+                outputBox.textContent = response.text;
+            } catch (err) {
+                outputBox.textContent = "❌ Błąd: " + err.message;
+            }
+        };
+
+        document.getElementById("btn-add-recipe").addEventListener("click", async () => {
+            const title = document.getElementById("recipe-title").value.trim();
+            const panSize = document.getElementById("recipe-pan").value;
+            const steps = document.getElementById("recipe-steps").value.trim();
+            const time = document.getElementById("recipe-time").value.trim();
+            const visibility = document.getElementById("recipe-visibility").value;
+            const user = auth.currentUser;
+
+            if (!title) {
+                alert("Podaj nazwę przepisu!");
+                return;
+            }
+            if (currentRecipeIngredients.length === 0) {
+                alert("Dodaj przynajmniej jeden składnik!");
+                return;
+            }
+
+            const totals = currentRecipeIngredients.reduce((acc, item) => {
+                acc.kcal += item.kcal;
+                acc.protein += item.protein;
+                acc.fat += item.fat;
+                acc.carbs += item.carbs;
+                return acc;
+            }, { kcal: 0, protein: 0, fat: 0, carbs: 0 });
+
+            try {
+                await addDoc(collection(db, "recipes"), {
+                    title,
+                    panSize,
+                    ingredients: currentRecipeIngredients,
+                    totalMacros: {
+                        kcal: totals.kcal,
+                        protein: parseFloat(totals.protein.toFixed(1)),
+                        fat: parseFloat(totals.fat.toFixed(1)),
+                        carbs: parseFloat(totals.carbs.toFixed(1))
+                    },
+                    steps,
+                    time,
+                    isPublic: visibility === "public",
+                    userId: user.uid,
+                    userEmail: user.email || user.displayName,
+                    createdAt: serverTimestamp()
+                });
+
+                document.getElementById("recipe-title").value = "";
+                document.getElementById("recipe-steps").value = "";
+                document.getElementById("recipe-time").value = "";
+                currentRecipeIngredients = [];
+                updateIngredientsUI();
+
+                alert("Przepis dodany pomyślnie!");
+                switchTab('catalog');
+            } catch (error) {
+                alert("Błąd zapisu: " + error.message);
+            }
+        });
+
+        window.activeTimers = {};
+        window.startTimer = function(uniqueId, minutes) {
+            let secondsLeft = minutes * 60;
+            const displayEl = document.getElementById(`timer-display-${uniqueId}`);
+            if (window.activeTimers[uniqueId]) clearInterval(window.activeTimers[uniqueId]);
+
+            window.activeTimers[uniqueId] = setInterval(() => {
+                if (secondsLeft <= 0) {
+                    clearInterval(window.activeTimers[uniqueId]);
+                    displayEl.textContent = "⏰ Czas minął!";
+                    alert("Czas minął! 🔔");
+                    return;
+                }
+                secondsLeft--;
+                const m = Math.floor(secondsLeft / 60);
+                const s = secondsLeft % 60;
+                displayEl.textContent = `⏳ Pozostało: ${m}:${s < 10 ? '0' : ''}${s}`;
+            }, 1000);
+        };
+
+        function renderRecipeCard(recipe, docId = Math.random().toString(36).substring(7)) {
+            const badge = recipe.isPublic ? "🌐 Publiczny" : "🔒 Prywatny";
+            const panHtml = recipe.panSize ? `<p style="color: #db2777; font-size: 13px; margin: 4px 0;">🍰 <strong>Foremka:</strong> ${escapeHtml(recipe.panSize)}</p>` : "";
+            
+            let ingredientsHtml = "<ul style='padding-left: 20px; color: #4a5568;'>";
+            if (Array.isArray(recipe.ingredients)) {
+                recipe.ingredients.forEach(ing => {
+                    ingredientsHtml += `<li>${escapeHtml(ing.name)} (${ing.weight}g) — ${ing.kcal} kcal (B: ${ing.protein}g, T: ${ing.fat}g, W: ${ing.carbs}g)</li>`;
+                });
+            }
+            ingredientsHtml += "</ul>";
+
+            let macrosHtml = "";
+            if (recipe.totalMacros) {
+                macrosHtml = `<div style="background: #fdf2f8; border: 1px solid #fbcfe8; padding: 8px 12px; border-radius: 10px; margin-bottom: 12px; font-size: 13px; color: #db2777;">
+                    <strong>Makro całego dania:</strong> ${recipe.totalMacros.kcal} kcal | B: ${recipe.totalMacros.protein}g | T: ${recipe.totalMacros.fat}g | W: ${recipe.totalMacros.carbs}g
+                </div>`;
+            }
+
+            let timeMinutes = 15;
+            if (recipe.time) {
+                const match = recipe.time.match(/\d+/);
+                if (match) timeMinutes = parseInt(match[0]);
+            }
+
+            const timeHtml = recipe.time ? `
+                <div style="display: flex; align-items: center; justify-content: space-between; background: #f8fafc; padding: 8px 12px; border-radius: 10px; margin-bottom: 12px;">
+                    <span style="color: #64748b; font-size: 14px;">⏱️ <strong>Czas:</strong> ${escapeHtml(recipe.time)}</span>
+                    <div>
+                        <button onclick="startTimer('${docId}', ${timeMinutes})" style="width: auto; padding: 6px 12px; font-size: 12px; margin-bottom: 0;">Start Stoper</button>
+                        <span id="timer-display-${docId}" style="margin-left: 8px; font-size: 13px; font-weight: 600; color: #3b82f6;"></span>
+                    </div>
+                </div>` : "";
+
+            return `
+                <div class="recipe-item">
+                    <h4 style="margin-top: 0; color: #1e293b; font-size: 18px;">${escapeHtml(recipe.title)} <small style="font-size: 12px; color: #94a3b8; font-weight: normal;">(${badge})</small></h4>
+                    ${panHtml}
+                    ${timeHtml}
+                    ${macrosHtml}
+                    <p style="font-weight: 600; color: #334155; margin-bottom: 4px;">Składniki:</p>
+                    ${ingredientsHtml}
+                    <p style="font-weight: 600; color: #334155; margin-bottom: 4px; margin-top: 12px;">Przygotowanie:</p>
+                    <p style="color: #4a5568; line-height: 1.5; margin-top: 0;">${escapeHtml(recipe.steps).replace(/\n/g, '<br>')}</p>
+                    
+                    <div style="margin-top: 15px; background: #faf5ff; padding: 10px; border-radius: 12px; border: 1px solid #f3e8ff;">
+                        <input type="text" id="recipe-ai-input-${docId}" placeholder="Zapytaj AI o ten przepis (np. Jak to zrobić w wersji fit?)" style="margin: 0 0 6px 0; font-size: 13px;">
+                        <button type="button" onclick="askRecipeAI('${docId}')" style="width: auto; padding: 6px 12px; font-size: 12px; margin-bottom: 0; background: #ec4899;">🤖 Zapytaj AI o przepis</button>
+                        <div id="recipe-ai-output-${docId}" style="margin-top: 8px; font-size: 13px; color: #4a5568; display: none; background: #fff; padding: 8px; border-radius: 8px;"></div>
+                    </div>
+
+                    <small style="color: #94a3b8; display: block; margin-top: 10px;">Autor: ${recipe.userEmail || 'Nieznany'}</small>
+                </div>
+            `;
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                authStatus.textContent = `Zalogowany jako: ${user.email || user.displayName}`;
+                authSection.classList.add("hidden");
+                logoutSection.classList.remove("hidden");
+                appTabs.classList.remove("hidden");
+                document.getElementById("profile-email").textContent = user.email || user.displayName;
+                document.getElementById("profile-uid").textContent = user.uid;
+
+                const savedKey = localStorage.getItem("gemini_api_key");
+                if (savedKey) document.getElementById("user-gemini-key").value = savedKey;
+
+                const myQuery = query(collection(db, "recipes"), where("userId", "==", user.uid));
+                onSnapshot(myQuery, (snapshot) => {
+                    let html = "";
+                    if (snapshot.empty) {
+                        document.getElementById("my-recipes-container").innerHTML = "<p style='color: #64748b;'>Nie dodano jeszcze żadnych przepisów.</p>";
+                        return;
+                    }
+                    snapshot.forEach((docSnap) => {
+                        html += renderRecipeCard(docSnap.data(), docSnap.id);
+                    });
+                    document.getElementById("my-recipes-container").innerHTML = html;
+                });
+            } else {
+                authStatus.textContent = "Nie jesteś zalogowany.";
+                authSection.classList.remove("hidden");
+                logoutSection.classList.add("hidden");
+                appTabs.classList.add("hidden");
+                document.getElementById("my-recipes-container").innerHTML = "<p style='color: #64748b;'>Musisz się zalogować.</p>";
+            }
+        });
+
+        const publicQuery = query(collection(db, "recipes"), where("isPublic", "==", true));
+        onSnapshot(publicQuery, (snapshot) => {
+            let html = "";
+            if (snapshot.empty) {
+                document.getElementById("catalog-container").innerHTML = "<p style='color: #64748b;'>Brak publicznych przepisów.</p>";
+                return;
+            }
+            snapshot.forEach((docSnap) => {
+                html += renderRecipeCard(docSnap.data(), docSnap.id);
+            });
+            document.getElementById("catalog-container").innerHTML = html;
+        });
+
+        document.getElementById("btn-register").addEventListener("click", async () => {
+            try {
+                await applyPersistence();
+                await createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
+                alert("Konto utworzone!");
+            } catch (error) { alert("Błąd: " + error.message); }
+        });
+
+        document.getElementById("btn-login").addEventListener("click", async () => {
+            try {
+                await applyPersistence();
+                await signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
+            } catch (error) { alert("Błąd: " + error.message); }
+        });
+
+        document.getElementById("btn-google").addEventListener("click", async () => {
+            try {
+                await setPersistence(auth, browserLocalPersistence);
+                await signInWithPopup(auth, googleProvider);
+            } catch (error) { alert("Błąd: " + error.message); }
+        });
+
+        document.getElementById("btn-logout").addEventListener("click", () => {
+            signOut(auth);
+            switchTab('catalog');
+        });
+
+        function escapeHtml(text) {
+            if (!text) return "";
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
     </script>
 </body>
