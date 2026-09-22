@@ -483,7 +483,7 @@
 
             const prompt = `Jesteś asystentem w książce kucharskiej. Pytanie użytkownika do przepisu: "${question}". Odpowiedz krótko i rzeczowo po polsku.`;
             const resultText = await callGeminiProxy(prompt);
-            outputBox.innerHTML = marked.parse(resultText;
+            outputBox.innerHTML = marked.parse(resultText);
         };
 
         document.getElementById("btn-add-recipe").addEventListener("click", async () => {
