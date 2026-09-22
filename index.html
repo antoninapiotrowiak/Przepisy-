@@ -85,7 +85,6 @@
             box-shadow: 0 8px 25px rgba(236, 72, 153, 0.35);
         }
 
-        /* Styl karty przepisu w katalogu (zwinięta / rozwinięta) */
         .recipe-item { 
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
@@ -302,7 +301,7 @@
         <div id="liquid-bubble" class="liquid-bubble"></div>
         <button class="tab-btn active" onclick="switchTab('catalog')" onmouseenter="moveBubble(0)" ontouchstart="moveBubble(0)">🌐 Katalog</button>
         <button class="tab-btn" onclick="switchTab('my-recipes')" onmouseenter="moveBubble(1)" ontouchstart="moveBubble(1)">📖 Moje</button>
-        <button class="tab-btn" onclick="switchTab('add-recipe')" onmouseenter="moveBubble(2)" ontouchstart="moveBubble(2)">➕ Dodaj</button>
+        <button class="tab-btn" onclick="switchTab('add-recipe')" onmouseenter="moveBubble(2)" ontouchstart="moveBubble(2)" id="tab-btn-add">➕ Dodaj</button>
         <button class="tab-btn" onclick="switchTab('ai-helper')" onmouseenter="moveBubble(3)" ontouchstart="moveBubble(3)">🤖 AI</button>
         <button class="tab-btn" onclick="switchTab('profile')" onmouseenter="moveBubble(4)" ontouchstart="moveBubble(4)">👤 Profil</button>
     </div>
@@ -330,10 +329,11 @@
         </div>
     </div>
 
-    <!-- ZAKŁADKA 3: Dodawanie przepisu -->
+    <!-- ZAKŁADKA 3: Dodawanie / Edycja przepisu -->
     <div id="section-add-recipe" class="tab-content">
         <div class="card" style="padding: 24px;">
-            <h3 style="margin-top:0; color: #db2777; font-weight: 700;">Stwórz nowy przepis 🍰</h3>
+            <h3 id="form-heading" style="margin-top:0; color: #db2777; font-weight: 700;">Stwórz nowy przepis 🍰</h3>
+            <input type="hidden" id="edit-recipe-id" value="">
             
             <input type="text" id="recipe-title" placeholder="Nazwa przepisu (np. Waniliowa owsianka)">
             
@@ -356,28 +356,55 @@
                 </div>
             </div>
 
-            <div style="background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); padding: 16px; border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.6);">
-                <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Składniki i makro (na 100g)</h4>
-
-                <input type="text" id="ingredient-name" placeholder="Nazwa składnika (np. Płatki owsiane)">
-                <div style="display: flex; gap: 8px;">
-                    <input type="text" id="ingredient-measure" placeholder="Miara domowa (np. 2 łyżki, 1 szt.)" style="margin-bottom: 8px;">
-                    <input type="number" id="ing-weight" placeholder="Waga w gramach (np. 50)" style="margin-bottom: 8px;">
-                </div>
-                <div style="display: flex; gap: 8px;">
-                    <input type="number" id="ing-kcal" placeholder="Kcal / 100g">
-                    <input type="number" id="ing-protein" placeholder="Białko / 100g">
-                </div>
-                <div style="display: flex; gap: 8px;">
-                    <input type="number" id="ing-fat" placeholder="Tłuszcz / 100g">
-                    <input type="number" id="ing-carbs" placeholder="Węgle / 100g">
-                </div>
-                
-                <button type="button" id="btn-add-ingredient" style="background: linear-gradient(135deg, #f472b6 0%, #38bdf8 100%); margin-top: 5px;">➕ Dodaj składnik</button>
+            <div style="margin-bottom: 16px;">
+                <label for="macro-mode" style="font-size: 13px; font-weight: 600; color: #4a5568; display: block; margin-bottom: 4px;">Sposób wprowadzania makro:</label>
+                <select id="macro-mode" onchange="toggleMacroMode()">
+                    <option value="ingredients">Makro dla każdego składnika (automatyczna suma)</option>
+                    <option value="manual">Makro zbiorcze na końcu (wpisz całość ręcznie)</option>
+                </select>
             </div>
 
-            <div id="ingredients-summary-container" style="margin-bottom: 15px; font-size: 14px;">
-                <p style="color: #64748b;"><em>Brak dodanych składników.</em></p>
+            <!-- Kontener składników -->
+            <div id="ingredients-section-wrapper">
+                <div style="background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); padding: 16px; border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.6);">
+                    <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Składniki i makro (na 100g)</h4>
+
+                    <input type="text" id="ingredient-name" placeholder="Nazwa składnika (np. Płatki owsiane)">
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" id="ingredient-measure" placeholder="Miara domowa (np. 2 łyżki, 1 szt.)" style="margin-bottom: 8px;">
+                        <input type="number" id="ing-weight" placeholder="Waga w gramach (np. 50)" style="margin-bottom: 8px;">
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="number" id="ing-kcal" placeholder="Kcal / 100g">
+                        <input type="number" id="ing-protein" placeholder="Białko / 100g">
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="number" id="ing-fat" placeholder="Tłuszcz / 100g">
+                        <input type="number" id="ing-carbs" placeholder="Węgle / 100g">
+                    </div>
+                    
+                    <button type="button" id="btn-add-ingredient" style="background: linear-gradient(135deg, #f472b6 0%, #38bdf8 100%); margin-top: 5px;">➕ Dodaj składnik</button>
+                </div>
+
+                <div id="ingredients-summary-container" style="margin-bottom: 15px; font-size: 14px;">
+                    <p style="color: #64748b;"><em>Brak dodanych składników.</em></p>
+                </div>
+            </div>
+
+            <!-- Kontener ręcznego makro -->
+            <div id="manual-macro-wrapper" class="hidden" style="background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); padding: 16px; border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.6);">
+                <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Lista składników (bez automatycznego liczenia)</h4>
+                <textarea id="manual-ingredients-text" rows="3" placeholder="Wpisz listę składników (np. 1. Płatki owsiane - 50g&#10;2. Banan - 1 szt.)" style="margin-bottom: 12px;"></textarea>
+
+                <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Makro całego przepisu (łącznie)</h4>
+                <div style="display: flex; gap: 8px;">
+                    <input type="number" id="manual-total-kcal" placeholder="Całkowite Kcal">
+                    <input type="number" id="manual-total-protein" placeholder="Całkowite Białko (g)">
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <input type="number" id="manual-total-fat" placeholder="Całkowity Tłuszcz (g)">
+                    <input type="number" id="manual-total-carbs" placeholder="Całkowite Węgle (g)">
+                </div>
             </div>
 
             <textarea id="recipe-steps" rows="4" placeholder="Krok po kroku (opis przygotowania)..."></textarea>
@@ -390,6 +417,7 @@
             </select>
             
             <button id="btn-add-recipe" style="margin-top: 15px;">Opublikuj cały przepis ✨</button>
+            <button id="btn-cancel-edit" type="button" class="hidden" style="background: #94a3b8; margin-top: 5px;" onclick="cancelEdit()">Anuluj edycję</button>
         </div>
     </div>
 
@@ -445,7 +473,10 @@
         import { 
             getFirestore, 
             collection, 
-            addDoc, 
+            addDoc,
+            doc,
+            updateDoc,
+            deleteDoc,
             query, 
             where,
             onSnapshot, 
@@ -528,6 +559,19 @@
             const persistenceType = rememberMeCheckbox.checked ? browserLocalPersistence : browserSessionPersistence;
             await setPersistence(auth, persistenceType);
         }
+
+        window.toggleMacroMode = function() {
+            const mode = document.getElementById("macro-mode").value;
+            const ingWrapper = document.getElementById("ingredients-section-wrapper");
+            const manualWrapper = document.getElementById("manual-macro-wrapper");
+            if (mode === 'manual') {
+                ingWrapper.classList.add('hidden');
+                manualWrapper.classList.remove('hidden');
+            } else {
+                ingWrapper.classList.remove('hidden');
+                manualWrapper.classList.add('hidden');
+            }
+        };
 
         document.getElementById("btn-add-ingredient").addEventListener("click", () => {
             const name = document.getElementById("ingredient-name").value.trim();
@@ -658,30 +702,50 @@
         };
 
         document.getElementById("btn-add-recipe").addEventListener("click", async () => {
+            const editId = document.getElementById("edit-recipe-id").value;
             const title = document.getElementById("recipe-title").value.trim();
             const panSize = document.getElementById("recipe-pan").value;
             const portions = parseInt(document.getElementById("recipe-portions").value) || 1;
             const steps = document.getElementById("recipe-steps").value.trim();
             const time = document.getElementById("recipe-time").value.trim();
             const visibility = document.getElementById("recipe-visibility").value;
+            const macroMode = document.getElementById("macro-mode").value;
             const user = auth.currentUser;
 
             if (!title) {
                 alert("Podaj nazwę przepisu!");
                 return;
             }
-            if (currentRecipeIngredients.length === 0) {
-                alert("Dodaj przynajmniej jeden składnik!");
-                return;
-            }
 
-            const totals = currentRecipeIngredients.reduce((acc, item) => {
-                acc.kcal += item.kcal;
-                acc.protein += item.protein;
-                acc.fat += item.fat;
-                acc.carbs += item.carbs;
-                return acc;
-            }, { kcal: 0, protein: 0, fat: 0, carbs: 0 });
+            let finalIngredients = [];
+            let totals = { kcal: 0, protein: 0, fat: 0, carbs: 0 };
+
+            if (macroMode === 'manual') {
+                const manualText = document.getElementById("manual-ingredients-text").value.trim();
+                if (!manualText) {
+                    alert("Wpisz listę składników!");
+                    return;
+                }
+                // Przekształcamy tekst na proste elementy
+                finalIngredients = manualText.split('\n').map(line => ({ name: line, measure: '', weight: 0, kcal: 0 }));
+                totals.kcal = parseFloat(document.getElementById("manual-total-kcal").value) || 0;
+                totals.protein = parseFloat(document.getElementById("manual-total-protein").value) || 0;
+                totals.fat = parseFloat(document.getElementById("manual-total-fat").value) || 0;
+                totals.carbs = parseFloat(document.getElementById("manual-total-carbs").value) || 0;
+            } else {
+                if (currentRecipeIngredients.length === 0) {
+                    alert("Dodaj przynajmniej jeden składnik!");
+                    return;
+                }
+                finalIngredients = currentRecipeIngredients;
+                totals = currentRecipeIngredients.reduce((acc, item) => {
+                    acc.kcal += item.kcal;
+                    acc.protein += item.protein;
+                    acc.fat += item.fat;
+                    acc.carbs += item.carbs;
+                    return acc;
+                }, { kcal: 0, protein: 0, fat: 0, carbs: 0 });
+            }
 
             const perPortion = {
                 kcal: Math.round(totals.kcal / portions),
@@ -690,40 +754,130 @@
                 carbs: parseFloat((totals.carbs / portions).toFixed(1))
             };
 
+            const recipePayload = {
+                title,
+                panSize,
+                portions,
+                ingredients: finalIngredients,
+                totalMacros: {
+                    kcal: totals.kcal,
+                    protein: parseFloat(totals.protein.toFixed(1)),
+                    fat: parseFloat(totals.fat.toFixed(1)),
+                    carbs: parseFloat(totals.carbs.toFixed(1))
+                },
+                perPortionMacros: perPortion,
+                steps,
+                time,
+                isPublic: visibility === "public",
+                userId: user.uid,
+                userEmail: user.email || user.displayName,
+                updatedAt: serverTimestamp()
+            };
+
             try {
-                await addDoc(collection(db, "recipes"), {
-                    title,
-                    panSize,
-                    portions,
-                    ingredients: currentRecipeIngredients,
-                    totalMacros: {
-                        kcal: totals.kcal,
-                        protein: parseFloat(totals.protein.toFixed(1)),
-                        fat: parseFloat(totals.fat.toFixed(1)),
-                        carbs: parseFloat(totals.carbs.toFixed(1))
-                    },
-                    perPortionMacros: perPortion,
-                    steps,
-                    time,
-                    isPublic: visibility === "public",
-                    userId: user.uid,
-                    userEmail: user.email || user.displayName,
-                    createdAt: serverTimestamp()
-                });
+                if (editId) {
+                    await updateDoc(doc(db, "recipes", editId), recipePayload);
+                    alert("Przepis zaktualizowany pomyślnie!");
+                    cancelEdit();
+                } else {
+                    recipePayload.createdAt = serverTimestamp();
+                    await addDoc(collection(db, "recipes"), recipePayload);
+                    alert("Przepis dodany pomyślnie!");
+                }
 
                 document.getElementById("recipe-title").value = "";
                 document.getElementById("recipe-steps").value = "";
                 document.getElementById("recipe-time").value = "";
                 document.getElementById("recipe-portions").value = "4";
+                document.getElementById("manual-ingredients-text").value = "";
+                document.getElementById("manual-total-kcal").value = "";
+                document.getElementById("manual-total-protein").value = "";
+                document.getElementById("manual-total-fat").value = "";
+                document.getElementById("manual-total-carbs").value = "";
                 currentRecipeIngredients = [];
                 updateIngredientsUI();
 
-                alert("Przepis dodany pomyślnie!");
-                switchTab('catalog');
+                switchTab('my-recipes');
             } catch (error) {
                 alert("Błąd zapisu: " + error.message);
             }
         });
+
+        window.editRecipe = function(docId, recipeJson) {
+            const recipe = JSON.parse(decodeURIComponent(recipeJson));
+            document.getElementById("edit-recipe-id").value = docId;
+            document.getElementById("recipe-title").value = recipe.title || "";
+            document.getElementById("recipe-pan").value = recipe.panSize || "Tortownica okrągła 22 cm";
+            document.getElementById("recipe-portions").value = recipe.portions || 4;
+            document.getElementById("recipe-steps").value = recipe.steps || "";
+            document.getElementById("recipe-time").value = recipe.time || "";
+            document.getElementById("recipe-visibility").value = recipe.isPublic ? "public" : "private";
+
+            // Sprawdzamy czy składniki były zapisane jako obiekty czy tekst
+            if (recipe.ingredients && recipe.ingredients.length > 0 && recipe.ingredients[0].weight !== undefined) {
+                document.getElementById("macro-mode").value = "ingredients";
+                currentRecipeIngredients = recipe.ingredients;
+                updateIngredientsUI();
+                toggleMacroMode();
+            } else {
+                document.getElementById("macro-mode").value = "manual";
+                toggleMacroMode();
+                if (recipe.ingredients) {
+                    document.getElementById("manual-ingredients-text").value = recipe.ingredients.map(i => i.name).join('\n');
+                }
+                if (recipe.totalMacros) {
+                    document.getElementById("manual-total-kcal").value = recipe.totalMacros.kcal || "";
+                    document.getElementById("manual-total-protein").value = recipe.totalMacros.protein || "";
+                    document.getElementById("manual-total-fat").value = recipe.totalMacros.fat || "";
+                    document.getElementById("manual-total-carbs").value = recipe.totalMacros.carbs || "";
+                }
+            }
+
+            document.getElementById("form-heading").textContent = "Edytuj przepis 📝";
+            document.getElementById("btn-add-recipe").textContent = "Zapisz zmiany ✨";
+            document.getElementById("btn-cancel-edit").classList.remove("hidden");
+            switchTab('add-recipe');
+        };
+
+        window.cancelEdit = function() {
+            document.getElementById("edit-recipe-id").value = "";
+            document.getElementById("recipe-title").value = "";
+            document.getElementById("recipe-steps").value = "";
+            document.getElementById("recipe-time").value = "";
+            document.getElementById("recipe-portions").value = "4";
+            document.getElementById("manual-ingredients-text").value = "";
+            document.getElementById("manual-total-kcal").value = "";
+            document.getElementById("manual-total-protein").value = "";
+            document.getElementById("manual-total-fat").value = "";
+            document.getElementById("manual-total-carbs").value = "";
+            currentRecipeIngredients = [];
+            updateIngredientsUI();
+
+            document.getElementById("form-heading").textContent = "Stwórz nowy przepis 🍰";
+            document.getElementById("btn-add-recipe").textContent = "Opublikuj cały przepis ✨";
+            document.getElementById("btn-cancel-edit").classList.add("hidden");
+        };
+
+        window.deleteRecipe = async function(docId) {
+            if (confirm("Czy na pewno chcesz bezpowrotnie usunąć ten przepis?")) {
+                try {
+                    await deleteDoc(doc(db, "recipes", docId));
+                    alert("Przepis został usunięty.");
+                } catch (error) {
+                    alert("Błąd podczas usuwania: " + error.message);
+                }
+            }
+        };
+
+        window.toggleVisibility = async function(docId, currentStatus) {
+            try {
+                await updateDoc(doc(db, "recipes", docId), {
+                    isPublic: !currentStatus
+                });
+            } catch (error) {
+                alert("Błąd zmiany statusu: " + error.message);
+            }
+        };
 
         window.activeTimers = {};
         window.startTimer = function(uniqueId, minutes) {
@@ -769,15 +923,19 @@
 
             let html = "";
             ingredients.forEach(ing => {
-                const scaledWeight = Math.round(ing.weight * ratio);
-                const measureText = ing.measure ? `(${ing.measure}, ${scaledWeight}g)` : `(${scaledWeight}g)`;
-                const scaledKcal = Math.round(ing.kcal * ratio);
-                html += `<li>${escapeHtml(ing.name)} ${measureText} — ${scaledKcal} kcal</li>`;
+                if (ing.weight !== undefined && ing.weight > 0) {
+                    const scaledWeight = Math.round(ing.weight * ratio);
+                    const measureText = ing.measure ? `(${ing.measure}, ${scaledWeight}g)` : `(${scaledWeight}g)`;
+                    const scaledKcal = Math.round(ing.kcal * ratio);
+                    html += `<li>${escapeHtml(ing.name)} ${measureText} — ${scaledKcal} kcal</li>`;
+                } else {
+                    html += `<li>${escapeHtml(ing.name)}</li>`;
+                }
             });
             ingredientsContainer.innerHTML = html;
         };
 
-        function renderRecipeCard(recipe, docId = Math.random().toString(36).substring(7)) {
+        function renderRecipeCard(recipe, docId, isOwnerView = false) {
             const badge = recipe.isPublic ? "🌐 Publiczny" : "🔒 Prywatny";
             const basePortions = recipe.portions || 1;
             const panHtml = recipe.panSize ? `<p style="color: #db2777; font-size: 13px; margin: 4px 0;">🍰 <strong>Foremka:</strong> ${escapeHtml(recipe.panSize)}</p>` : "";
@@ -804,8 +962,12 @@
             let initialIngredientsHtml = "";
             if (Array.isArray(recipe.ingredients)) {
                 recipe.ingredients.forEach(ing => {
-                    const measureText = ing.measure ? `(${ing.measure}, ${ing.weight}g)` : `(${ing.weight}g)`;
-                    initialIngredientsHtml += `<li>${escapeHtml(ing.name)} ${measureText} — ${ing.kcal} kcal</li>`;
+                    if (ing.weight !== undefined && ing.weight > 0) {
+                        const measureText = ing.measure ? `(${ing.measure}, ${ing.weight}g)` : `(${ing.weight}g)`;
+                        initialIngredientsHtml += `<li>${escapeHtml(ing.name)} ${measureText} — ${ing.kcal} kcal</li>`;
+                    } else {
+                        initialIngredientsHtml += `<li>${escapeHtml(ing.name)}</li>`;
+                    }
                 });
             }
 
@@ -824,7 +986,20 @@
                     </div>
                 </div>` : "";
 
-            const ingredientsString = JSON.stringify(recipe.ingredients).replace(/"/g, '&quot;');
+            const ingredientsString = encodeURIComponent(JSON.stringify(recipe.ingredients));
+            const recipeString = encodeURIComponent(JSON.stringify(recipe));
+
+            let ownerActionsHtml = "";
+            if (isOwnerView) {
+                const visibilityBtnText = recipe.isPublic ? "🔒 Zmień na prywatny" : "🌐 Upublicznij";
+                ownerActionsHtml = `
+                    <div style="margin-top: 15px; padding-top: 12px; border-top: 1px dashed rgba(0,0,0,0.1); display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button type="button" onclick="editRecipe('${docId}', '${recipeString}')" style="width: auto; padding: 6px 12px; font-size: 12px; background: #3b82f6; margin-bottom: 0;">Edytuj</button>
+                        <button type="button" onclick="toggleVisibility('${docId}', ${recipe.isPublic})" style="width: auto; padding: 6px 12px; font-size: 12px; background: #f59e0b; margin-bottom: 0;">${visibilityBtnText}</button>
+                        <button type="button" onclick="deleteRecipe('${docId}')" style="width: auto; padding: 6px 12px; font-size: 12px; background: #ef4444; margin-bottom: 0;">Usuń</button>
+                    </div>
+                `;
+            }
 
             return `
                 <div class="recipe-item" onclick="toggleRecipeCard(this, event)">
@@ -860,6 +1035,7 @@
                         </div>
 
                         <small style="color: #94a3b8; display: block; margin-top: 10px;">Autor: ${recipe.userEmail || 'Nieznany'}</small>
+                        ${ownerActionsHtml}
                     </div>
                 </div>
             `;
@@ -904,7 +1080,7 @@
 
             let html = "";
             filtered.forEach(item => {
-                html += renderRecipeCard(item.data, item.id);
+                html += renderRecipeCard(item.data, item.id, false);
             });
             container.innerHTML = html;
         }
@@ -931,7 +1107,7 @@
                         return;
                     }
                     snapshot.forEach((docSnap) => {
-                        html += renderRecipeCard(docSnap.data(), docSnap.id);
+                        html += renderRecipeCard(docSnap.data(), docSnap.id, true);
                     });
                     document.getElementById("my-recipes-container").innerHTML = html;
                 });
