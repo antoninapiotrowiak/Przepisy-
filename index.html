@@ -393,8 +393,8 @@
 
             <!-- Kontener ręcznego makro -->
             <div id="manual-macro-wrapper" class="hidden" style="background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); padding: 16px; border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.6);">
-                <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Lista składników (bez automatycznego liczenia)</h4>
-                <textarea id="manual-ingredients-text" rows="3" placeholder="Wpisz listę składników (np. 1. Płatki owsiane - 50g&#10;2. Banan - 1 szt.)" style="margin-bottom: 12px;"></textarea>
+                <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Lista składników (z automatycznym wykrywaniem gramów do kalkulatora)</h4>
+                <textarea id="manual-ingredients-text" rows="3" placeholder="Wpisz listę składników (np. Płatki owsiane - 50g&#10;Banan - 1 szt.)" style="margin-bottom: 12px;"></textarea>
 
                 <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Makro całego przepisu (łącznie)</h4>
                 <div style="display: flex; gap: 8px;">
@@ -701,6 +701,12 @@
             outputBox.innerHTML = marked.parse(resultText);
         };
 
+        // Pomocnicza funkcja do wyciągania liczby gramów z linii tekstu (np. "Płatki owsiane - 50g" -> 50)
+        function extractWeightFromText(text) {
+            const match = text.match(/(\d+)\s*g\b/i);
+            return match ? parseInt(match[1]) : 0;
+        }
+
         document.getElementById("btn-add-recipe").addEventListener("click", async () => {
             const editId = document.getElementById("edit-recipe-id").value;
             const title = document.getElementById("recipe-title").value.trim();
@@ -726,8 +732,11 @@
                     alert("Wpisz listę składników!");
                     return;
                 }
-                // Przekształcamy tekst na proste elementy
-                finalIngredients = manualText.split('\n').map(line => ({ name: line, measure: '', weight: 0, kcal: 0 }));
+                // Przekształcamy każdą linię na obiekt z wykrytą wagą (jeśli wpisano np. "50g")
+                finalIngredients = manualText.split('\n').map(line => {
+                    const w = extractWeightFromText(line);
+                    return { name: line, measure: '', weight: w, kcal: 0 };
+                });
                 totals.kcal = parseFloat(document.getElementById("manual-total-kcal").value) || 0;
                 totals.protein = parseFloat(document.getElementById("manual-total-protein").value) || 0;
                 totals.fat = parseFloat(document.getElementById("manual-total-fat").value) || 0;
@@ -813,8 +822,7 @@
             document.getElementById("recipe-time").value = recipe.time || "";
             document.getElementById("recipe-visibility").value = recipe.isPublic ? "public" : "private";
 
-            // Sprawdzamy czy składniki były zapisane jako obiekty czy tekst
-            if (recipe.ingredients && recipe.ingredients.length > 0 && recipe.ingredients[0].weight !== undefined) {
+            if (recipe.ingredients && recipe.ingredients.length > 0 && recipe.ingredients[0].weight !== undefined && recipe.ingredients[0].kcal !== undefined && recipe.ingredients[0].kcal > 0) {
                 document.getElementById("macro-mode").value = "ingredients";
                 currentRecipeIngredients = recipe.ingredients;
                 updateIngredientsUI();
@@ -925,9 +933,16 @@
             ingredients.forEach(ing => {
                 if (ing.weight !== undefined && ing.weight > 0) {
                     const scaledWeight = Math.round(ing.weight * ratio);
-                    const measureText = ing.measure ? `(${ing.measure}, ${scaledWeight}g)` : `(${scaledWeight}g)`;
-                    const scaledKcal = Math.round(ing.kcal * ratio);
-                    html += `<li>${escapeHtml(ing.name)} ${measureText} — ${scaledKcal} kcal</li>`;
+                    if (ing.kcal !== undefined && ing.kcal > 0) {
+                        // Standardowy składnik ze szczegółowym makro
+                        const measureText = ing.measure ? `(${ing.measure}, ${scaledWeight}g)` : `(${scaledWeight}g)`;
+                        const scaledKcal = Math.round(ing.kcal * ratio);
+                        html += `<li>${escapeHtml(ing.name)} ${measureText} — ${scaledKcal} kcal</li>`;
+                    } else {
+                        // Tryb ręczny: podmieniamy wykrytą wagę w tekście
+                        let updatedName = ing.name.replace(new RegExp(`${ing.weight}\\s*g`, 'i'), `${scaledWeight}g`);
+                        html += `<li>${escapeHtml(updatedName)}</li>`;
+                    }
                 } else {
                     html += `<li>${escapeHtml(ing.name)}</li>`;
                 }
@@ -962,7 +977,7 @@
             let initialIngredientsHtml = "";
             if (Array.isArray(recipe.ingredients)) {
                 recipe.ingredients.forEach(ing => {
-                    if (ing.weight !== undefined && ing.weight > 0) {
+                    if (ing.weight !== undefined && ing.weight > 0 && ing.kcal !== undefined && ing.kcal > 0) {
                         const measureText = ing.measure ? `(${ing.measure}, ${ing.weight}g)` : `(${ing.weight}g)`;
                         initialIngredientsHtml += `<li>${escapeHtml(ing.name)} ${measureText} — ${ing.kcal} kcal</li>`;
                     } else {
