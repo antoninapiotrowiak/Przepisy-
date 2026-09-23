@@ -359,21 +359,23 @@
             <div style="margin-bottom: 16px;">
                 <label for="macro-mode" style="font-size: 13px; font-weight: 600; color: #4a5568; display: block; margin-bottom: 4px;">Sposób wprowadzania makro:</label>
                 <select id="macro-mode" onchange="toggleMacroMode()">
-                    <option value="ingredients">Składniki z automatycznym makro</option>
-                    <option value="manual">Ręczne wpisanie makro na końcu</option>
+                    <option value="per-ingredient">Makro dla każdego składnika (automatyczne)</option>
+                    <option value="total-recipe">Makro całego dania na końcu (z internetu)</option>
                 </select>
             </div>
 
-            <!-- Kontener składników -->
-            <div id="ingredients-section-wrapper">
-                <div style="background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); padding: 16px; border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.6);">
-                    <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Składniki i makro (na 100g)</h4>
+            <!-- Wspólny formularz dodawania składnika -->
+            <div style="background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); padding: 16px; border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.6);">
+                <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Składniki</h4>
 
-                    <input type="text" id="ingredient-name" placeholder="Nazwa składnika (np. Płatki owsiane)">
-                    <div style="display: flex; gap: 8px;">
-                        <input type="text" id="ingredient-measure" placeholder="Miara domowa (np. 2 łyżki, 1 szt.)" style="margin-bottom: 8px;">
-                        <input type="number" id="ing-weight" placeholder="Waga w gramach (np. 50)" style="margin-bottom: 8px;">
-                    </div>
+                <input type="text" id="ingredient-name" placeholder="Nazwa składnika (np. Płatki owsiane)">
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="ingredient-measure" placeholder="Miara domowa (np. 2 łyżki, 1 szt.)" style="margin-bottom: 8px;">
+                    <input type="number" id="ing-weight" placeholder="Waga w gramach (np. 50)" style="margin-bottom: 8px;">
+                </div>
+
+                <!-- Pola makro widoczne TYLKO w trybie per-ingredient -->
+                <div id="ingredient-macro-section">
                     <div style="display: flex; gap: 8px;">
                         <input type="number" id="ing-kcal" placeholder="Kcal / 100g">
                         <input type="number" id="ing-protein" placeholder="Białko / 100g">
@@ -382,21 +384,18 @@
                         <input type="number" id="ing-fat" placeholder="Tłuszcz / 100g">
                         <input type="number" id="ing-carbs" placeholder="Węgle / 100g">
                     </div>
-                    
-                    <button type="button" id="btn-add-ingredient" style="background: linear-gradient(135deg, #f472b6 0%, #38bdf8 100%); margin-top: 5px;">➕ Dodaj składnik</button>
                 </div>
-
-                <div id="ingredients-summary-container" style="margin-bottom: 15px; font-size: 14px;">
-                    <p style="color: #64748b;"><em>Brak dodanych składników.</em></p>
-                </div>
+                
+                <button type="button" id="btn-add-ingredient" style="background: linear-gradient(135deg, #f472b6 0%, #38bdf8 100%); margin-top: 5px;">➕ Dodaj składnik</button>
             </div>
 
-            <!-- Kontener ręcznego makro -->
-            <div id="manual-macro-wrapper" class="hidden" style="background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); padding: 16px; border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.6);">
-                <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Lista składników (z automatycznym wykrywaniem gramów do kalkulatora)</h4>
-                <textarea id="manual-ingredients-text" rows="3" placeholder="Wpisz listę składników (np. Płatki owsiane - 50g&#10;Banan - 1 szt.)" style="margin-bottom: 12px;"></textarea>
+            <div id="ingredients-summary-container" style="margin-bottom: 15px; font-size: 14px;">
+                <p style="color: #64748b;"><em>Brak dodanych składników.</em></p>
+            </div>
 
-                <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Makro całego przepisu (łącznie)</h4>
+            <!-- Sekcja ręcznego makro całościowego widoczna TYLKO w trybie total-recipe -->
+            <div id="manual-macro-wrapper" class="hidden" style="background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); padding: 16px; border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.6);">
+                <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Makro całego przepisu (łącznie z internetu)</h4>
                 <div style="display: flex; gap: 8px;">
                     <input type="number" id="manual-total-kcal" placeholder="Całkowite Kcal">
                     <input type="number" id="manual-total-protein" placeholder="Całkowite Białko (g)">
@@ -562,13 +561,13 @@
 
         window.toggleMacroMode = function() {
             const mode = document.getElementById("macro-mode").value;
-            const ingWrapper = document.getElementById("ingredients-section-wrapper");
+            const ingMacroSection = document.getElementById("ingredient-macro-section");
             const manualWrapper = document.getElementById("manual-macro-wrapper");
-            if (mode === 'manual') {
-                ingWrapper.classList.add('hidden');
+            if (mode === 'total-recipe') {
+                ingMacroSection.classList.add('hidden');
                 manualWrapper.classList.remove('hidden');
             } else {
-                ingWrapper.classList.remove('hidden');
+                ingMacroSection.classList.remove('hidden');
                 manualWrapper.classList.add('hidden');
             }
         };
@@ -576,42 +575,53 @@
         document.getElementById("btn-add-ingredient").addEventListener("click", () => {
             const name = document.getElementById("ingredient-name").value.trim();
             const measure = document.getElementById("ingredient-measure").value.trim();
-            const kcal100 = parseFloat(document.getElementById("ing-kcal").value) || 0;
-            const protein100 = parseFloat(document.getElementById("ing-protein").value) || 0;
-            const fat100 = parseFloat(document.getElementById("ing-fat").value) || 0;
-            const carbs100 = parseFloat(document.getElementById("ing-carbs").value) || 0;
             const weight = parseFloat(document.getElementById("ing-weight").value) || 0;
+            const mode = document.getElementById("macro-mode").value;
 
             if (!name || weight <= 0) {
                 alert("Podaj nazwę składnika oraz wagę w gramach!");
                 return;
             }
 
-            const factor = weight / 100;
-            const ingredientData = {
+            let ingredientData = {
                 name,
                 measure,
                 weight,
-                kcal: Math.round(kcal100 * factor),
-                protein: parseFloat((protein100 * factor).toFixed(1)),
-                fat: parseFloat((fat100 * factor).toFixed(1)),
-                carbs: parseFloat((carbs100 * factor).toFixed(1))
+                kcal: 0,
+                protein: 0,
+                fat: 0,
+                carbs: 0
             };
+
+            if (mode === 'per-ingredient') {
+                const kcal100 = parseFloat(document.getElementById("ing-kcal").value) || 0;
+                const protein100 = parseFloat(document.getElementById("ing-protein").value) || 0;
+                const fat100 = parseFloat(document.getElementById("ing-fat").value) || 0;
+                const carbs100 = parseFloat(document.getElementById("ing-carbs").value) || 0;
+
+                const factor = weight / 100;
+                ingredientData.kcal = Math.round(kcal100 * factor);
+                ingredientData.protein = parseFloat((protein100 * factor).toFixed(1));
+                ingredientData.fat = parseFloat((fat100 * factor).toFixed(1));
+                ingredientData.carbs = parseFloat((carbs100 * factor).toFixed(1));
+            }
 
             currentRecipeIngredients.push(ingredientData);
             updateIngredientsUI();
 
             document.getElementById("ingredient-name").value = "";
             document.getElementById("ingredient-measure").value = "";
+            document.getElementById("ing-weight").value = "";
             document.getElementById("ing-kcal").value = "";
             document.getElementById("ing-protein").value = "";
             document.getElementById("ing-fat").value = "";
             document.getElementById("ing-carbs").value = "";
-            document.getElementById("ing-weight").value = "";
         });
 
         function updateIngredientsUI() {
             const container = document.getElementById("ingredients-summary-container");
+            const mode = document.getElementById("macro-mode").value;
+
             if (currentRecipeIngredients.length === 0) {
                 container.innerHTML = "<p style='color: #64748b;'><em>Brak dodanych składników.</em></p>";
                 return;
@@ -622,15 +632,23 @@
 
             currentRecipeIngredients.forEach((item, index) => {
                 const measureText = item.measure ? `(${item.measure}, ${item.weight}g)` : `(${item.weight}g)`;
-                html += `<li style="margin-bottom: 4px;">${escapeHtml(item.name)} ${measureText} — ${item.kcal} kcal | B: ${item.protein}g | T: ${item.fat}g | W: ${item.carbs}g 
-                         <button type="button" onclick="removeIngredient(${index})" style="width: auto; padding: 2px 6px; font-size: 11px; background: #ef4444; margin-left: 5px; border-radius: 6px; box-shadow: none;">Usuń</button></li>`;
-                totalKcal += item.kcal;
-                totalP += item.protein;
-                totalF += item.fat;
-                totalC += item.carbs;
+                if (mode === 'per-ingredient') {
+                    html += `<li style="margin-bottom: 4px;">${escapeHtml(item.name)} ${measureText} — ${item.kcal} kcal | B: ${item.protein}g | T: ${item.fat}g | W: ${item.carbs}g 
+                             <button type="button" onclick="removeIngredient(${index})" style="width: auto; padding: 2px 6px; font-size: 11px; background: #ef4444; margin-left: 5px; border-radius: 6px; box-shadow: none;">Usuń</button></li>`;
+                    totalKcal += item.kcal;
+                    totalP += item.protein;
+                    totalF += item.fat;
+                    totalC += item.carbs;
+                } else {
+                    html += `<li style="margin-bottom: 4px;">${escapeHtml(item.name)} ${measureText} 
+                             <button type="button" onclick="removeIngredient(${index})" style="width: auto; padding: 2px 6px; font-size: 11px; background: #ef4444; margin-left: 5px; border-radius: 6px; box-shadow: none;">Usuń</button></li>`;
+                }
             });
 
-            html += `</ul><div style="background: rgba(224, 242, 254, 0.8); padding: 10px; border-radius: 12px; color: #0369a1; font-weight: 500; margin-top: 10px;"><strong>Łącznie w daniu:</strong> ${totalKcal} kcal | B: ${totalP.toFixed(1)}g | T: ${totalF.toFixed(1)}g | W: ${totalC.toFixed(1)}g</div>`;
+            html += `</ul>`;
+            if (mode === 'per-ingredient') {
+                html += `<div style="background: rgba(224, 242, 254, 0.8); padding: 10px; border-radius: 12px; color: #0369a1; font-weight: 500; margin-top: 10px;"><strong>Łącznie w daniu:</strong> ${totalKcal} kcal | B: ${totalP.toFixed(1)}g | T: ${totalF.toFixed(1)}g | W: ${totalC.toFixed(1)}g</div>`;
+            }
             container.innerHTML = html;
         }
 
@@ -701,11 +719,6 @@
             outputBox.innerHTML = marked.parse(resultText);
         };
 
-        function extractWeightFromText(text) {
-            const match = text.match(/(\d+)\s*g\b/i);
-            return match ? parseInt(match[1]) : 0;
-        }
-
         document.getElementById("btn-add-recipe").addEventListener("click", async () => {
             const editId = document.getElementById("edit-recipe-id").value;
             const title = document.getElementById("recipe-title").value.trim();
@@ -722,29 +735,19 @@
                 return;
             }
 
-            let finalIngredients = [];
+            if (currentRecipeIngredients.length === 0) {
+                alert("Dodaj przynajmniej jeden składnik!");
+                return;
+            }
+
             let totals = { kcal: 0, protein: 0, fat: 0, carbs: 0 };
 
-            if (macroMode === 'manual') {
-                const manualText = document.getElementById("manual-ingredients-text").value.trim();
-                if (!manualText) {
-                    alert("Wpisz listę składników!");
-                    return;
-                }
-                finalIngredients = manualText.split('\n').map(line => {
-                    const w = extractWeightFromText(line);
-                    return { name: line, measure: '', weight: w, kcal: 0 };
-                });
+            if (macroMode === 'total-recipe') {
                 totals.kcal = parseFloat(document.getElementById("manual-total-kcal").value) || 0;
                 totals.protein = parseFloat(document.getElementById("manual-total-protein").value) || 0;
                 totals.fat = parseFloat(document.getElementById("manual-total-fat").value) || 0;
                 totals.carbs = parseFloat(document.getElementById("manual-total-carbs").value) || 0;
             } else {
-                if (currentRecipeIngredients.length === 0) {
-                    alert("Dodaj przynajmniej jeden składnik!");
-                    return;
-                }
-                finalIngredients = currentRecipeIngredients;
                 totals = currentRecipeIngredients.reduce((acc, item) => {
                     acc.kcal += item.kcal;
                     acc.protein += item.protein;
@@ -765,7 +768,7 @@
                 title,
                 panSize,
                 portions,
-                ingredients: finalIngredients,
+                ingredients: currentRecipeIngredients,
                 totalMacros: {
                     kcal: totals.kcal,
                     protein: parseFloat(totals.protein.toFixed(1)),
@@ -796,7 +799,6 @@
                 document.getElementById("recipe-steps").value = "";
                 document.getElementById("recipe-time").value = "";
                 document.getElementById("recipe-portions").value = "4";
-                document.getElementById("manual-ingredients-text").value = "";
                 document.getElementById("manual-total-kcal").value = "";
                 document.getElementById("manual-total-protein").value = "";
                 document.getElementById("manual-total-fat").value = "";
@@ -820,17 +822,13 @@
             document.getElementById("recipe-time").value = recipe.time || "";
             document.getElementById("recipe-visibility").value = recipe.isPublic ? "public" : "private";
 
-            if (recipe.ingredients && recipe.ingredients.length > 0 && recipe.ingredients[0].weight !== undefined && recipe.ingredients[0].kcal !== undefined && recipe.ingredients[0].kcal > 0) {
-                document.getElementById("macro-mode").value = "ingredients";
-                currentRecipeIngredients = recipe.ingredients;
-                updateIngredientsUI();
-                toggleMacroMode();
+            // Sprawdzamy czy składniki mają makro, żeby dobrać odpowiedni tryb
+            const hasPerIngredientMacro = recipe.ingredients && recipe.ingredients.length > 0 && recipe.ingredients[0].kcal > 0;
+            
+            if (hasPerIngredientMacro) {
+                document.getElementById("macro-mode").value = "per-ingredient";
             } else {
-                document.getElementById("macro-mode").value = "manual";
-                toggleMacroMode();
-                if (recipe.ingredients) {
-                    document.getElementById("manual-ingredients-text").value = recipe.ingredients.map(i => i.name).join('\n');
-                }
+                document.getElementById("macro-mode").value = "total-recipe";
                 if (recipe.totalMacros) {
                     document.getElementById("manual-total-kcal").value = recipe.totalMacros.kcal || "";
                     document.getElementById("manual-total-protein").value = recipe.totalMacros.protein || "";
@@ -838,6 +836,10 @@
                     document.getElementById("manual-total-carbs").value = recipe.totalMacros.carbs || "";
                 }
             }
+            toggleMacroMode();
+
+            currentRecipeIngredients = recipe.ingredients || [];
+            updateIngredientsUI();
 
             document.getElementById("form-heading").textContent = "Edytuj przepis 📝";
             document.getElementById("btn-add-recipe").textContent = "Zapisz zmiany ✨";
@@ -851,7 +853,6 @@
             document.getElementById("recipe-steps").value = "";
             document.getElementById("recipe-time").value = "";
             document.getElementById("recipe-portions").value = "4";
-            document.getElementById("manual-ingredients-text").value = "";
             document.getElementById("manual-total-kcal").value = "";
             document.getElementById("manual-total-protein").value = "";
             document.getElementById("manual-total-fat").value = "";
@@ -931,13 +932,12 @@
             ingredients.forEach(ing => {
                 if (ing.weight !== undefined && ing.weight > 0) {
                     const scaledWeight = Math.round(ing.weight * ratio);
+                    const measureText = ing.measure ? `(${ing.measure}, ${scaledWeight}g)` : `(${scaledWeight}g)`;
                     if (ing.kcal !== undefined && ing.kcal > 0) {
-                        const measureText = ing.measure ? `(${ing.measure}, ${scaledWeight}g)` : `(${scaledWeight}g)`;
                         const scaledKcal = Math.round(ing.kcal * ratio);
                         html += `<li>${escapeHtml(ing.name)} ${measureText} — ${scaledKcal} kcal</li>`;
                     } else {
-                        let updatedName = ing.name.replace(new RegExp(`${ing.weight}\\s*g`, 'i'), `${scaledWeight}g`);
-                        html += `<li>${escapeHtml(updatedName)}</li>`;
+                        html += `<li>${escapeHtml(ing.name)} ${measureText}</li>`;
                     }
                 } else {
                     html += `<li>${escapeHtml(ing.name)}</li>`;
@@ -973,11 +973,11 @@
             let initialIngredientsHtml = "";
             if (Array.isArray(recipe.ingredients)) {
                 recipe.ingredients.forEach(ing => {
-                    if (ing.weight !== undefined && ing.weight > 0 && ing.kcal !== undefined && ing.kcal > 0) {
-                        const measureText = ing.measure ? `(${ing.measure}, ${ing.weight}g)` : `(${ing.weight}g)`;
+                    const measureText = ing.measure ? `(${ing.measure}, ${ing.weight}g)` : `(${ing.weight}g)`;
+                    if (ing.kcal !== undefined && ing.kcal > 0) {
                         initialIngredientsHtml += `<li>${escapeHtml(ing.name)} ${measureText} — ${ing.kcal} kcal</li>`;
                     } else {
-                        initialIngredientsHtml += `<li>${escapeHtml(ing.name)}</li>`;
+                        initialIngredientsHtml += `<li>${escapeHtml(ing.name)} ${measureText}</li>`;
                     }
                 });
             }
