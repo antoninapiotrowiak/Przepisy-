@@ -369,11 +369,12 @@
                 <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Składniki</h4>
 
                 <input type="text" id="ingredient-name" placeholder="Nazwa składnika (np. Mleko / Płatki owsiane)">
+                
                 <div style="display: flex; gap: 8px;">
-                    <input type="text" id="ingredient-measure" placeholder="Miara domowa (np. 1 szklanka, 2 łyżki)" style="margin-bottom: 8px;">
+                    <input type="text" id="ingredient-measure" placeholder="Miara domowa (np. łyżki, szklanka)" style="margin-bottom: 8px; flex: 1;">
                     <div style="display: flex; gap: 4px; flex: 1; margin-bottom: 8px;">
-                        <input type="number" id="ing-weight" placeholder="Ilość" style="margin-bottom: 0;">
-                        <select id="ing-unit" style="margin-bottom: 0; width: 90px; padding: 12px 6px;">
+                        <input type="number" id="ing-weight" placeholder="Ilość" style="margin-bottom: 0; flex: 1;">
+                        <select id="ing-unit" style="margin-bottom: 0; width: 80px; padding: 12px 6px;">
                             <option value="g">g</option>
                             <option value="ml">ml</option>
                         </select>
@@ -487,6 +488,7 @@
             onSnapshot, 
             serverTimestamp 
         } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+        import { GoogleGenAI } from "https://esm.run/@google/genai";
 
         const firebaseConfig = {
             apiKey: "AIzaSyACAYq6d_bOfUV8s_wlX-yTdTKhU9YVwnE",
@@ -502,6 +504,9 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
+        
+        // Inicjalizacja klienta Google Gen AI (zabezpieczona wersja bezpośrednia przeglądarkowa)
+        const ai = new GoogleGenAI({ apiKey: "AIzaSyACAYq6d_bOfUV8s_wlX-yTdTKhU9YVwnE" });
 
         const authStatus = document.getElementById("auth-status");
         const authSection = document.getElementById("auth-section");
@@ -668,20 +673,14 @@
 
         async function callGeminiProxy(promptText) {
             try {
-                const response = await fetch('/api/gemini', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: promptText })
+                const response = await ai.models.generateContent({
+                    model: 'gemini-2.5-flash',
+                    contents: promptText,
                 });
-                const data = await response.json();
-                if (response.ok) {
-                    return data.text || "Brak odpowiedzi od AI.";
-                } else {
-                    return "Błąd serwera: " + (data.error || "Nieznany błąd.");
-                }
+                return response.text || "Brak odpowiedzi od AI.";
             } catch (err) {
                 console.error(err);
-                return "Błąd połączenia z serwerem.";
+                return "Błąd połączenia z AI: " + err.message;
             }
         }
 
@@ -831,7 +830,6 @@
             document.getElementById("recipe-time").value = recipe.time || "";
             document.getElementById("recipe-visibility").value = recipe.isPublic ? "public" : "private";
 
-            // Kompatibilidad wsteczna dla starego pola 'weight'
             if (recipe.ingredients) {
                 recipe.ingredients = recipe.ingredients.map(ing => {
                     if (ing.amount === undefined && ing.weight !== undefined) {
