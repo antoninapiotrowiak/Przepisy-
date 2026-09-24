@@ -368,21 +368,27 @@
             <div style="background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); padding: 16px; border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.6);">
                 <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Składniki</h4>
 
-                <input type="text" id="ingredient-name" placeholder="Nazwa składnika (np. Płatki owsiane)">
+                <input type="text" id="ingredient-name" placeholder="Nazwa składnika (np. Mleko / Płatki owsiane)">
                 <div style="display: flex; gap: 8px;">
-                    <input type="text" id="ingredient-measure" placeholder="Miara domowa (np. 2 łyżki, 1 szt.)" style="margin-bottom: 8px;">
-                    <input type="number" id="ing-weight" placeholder="Waga w gramach (np. 50)" style="margin-bottom: 8px;">
+                    <input type="text" id="ingredient-measure" placeholder="Miara domowa (np. 1 szklanka, 2 łyżki)" style="margin-bottom: 8px;">
+                    <div style="display: flex; gap: 4px; flex: 1; margin-bottom: 8px;">
+                        <input type="number" id="ing-weight" placeholder="Ilość" style="margin-bottom: 0;">
+                        <select id="ing-unit" style="margin-bottom: 0; width: 90px; padding: 12px 6px;">
+                            <option value="g">g</option>
+                            <option value="ml">ml</option>
+                        </select>
+                    </div>
                 </div>
 
                 <!-- Pola makro widoczne TYLKO w trybie per-ingredient -->
                 <div id="ingredient-macro-section">
                     <div style="display: flex; gap: 8px;">
-                        <input type="number" id="ing-kcal" placeholder="Kcal / 100g">
-                        <input type="number" id="ing-protein" placeholder="Białko / 100g">
+                        <input type="number" id="ing-kcal" placeholder="Kcal / 100g (lub 100ml)">
+                        <input type="number" id="ing-protein" placeholder="Białko / 100g (lub 100ml)">
                     </div>
                     <div style="display: flex; gap: 8px;">
-                        <input type="number" id="ing-fat" placeholder="Tłuszcz / 100g">
-                        <input type="number" id="ing-carbs" placeholder="Węgle / 100g">
+                        <input type="number" id="ing-fat" placeholder="Tłuszcz / 100g (lub 100ml)">
+                        <input type="number" id="ing-carbs" placeholder="Węgle / 100g (lub 100ml)">
                     </div>
                 </div>
                 
@@ -575,18 +581,20 @@
         document.getElementById("btn-add-ingredient").addEventListener("click", () => {
             const name = document.getElementById("ingredient-name").value.trim();
             const measure = document.getElementById("ingredient-measure").value.trim();
-            const weight = parseFloat(document.getElementById("ing-weight").value) || 0;
+            const amount = parseFloat(document.getElementById("ing-weight").value) || 0;
+            const unit = document.getElementById("ing-unit").value;
             const mode = document.getElementById("macro-mode").value;
 
-            if (!name || weight <= 0) {
-                alert("Podaj nazwę składnika oraz wagę w gramach!");
+            if (!name || amount <= 0) {
+                alert("Podaj nazwę składnika oraz jego ilość!");
                 return;
             }
 
             let ingredientData = {
                 name,
                 measure,
-                weight,
+                amount,
+                unit,
                 kcal: 0,
                 protein: 0,
                 fat: 0,
@@ -599,7 +607,7 @@
                 const fat100 = parseFloat(document.getElementById("ing-fat").value) || 0;
                 const carbs100 = parseFloat(document.getElementById("ing-carbs").value) || 0;
 
-                const factor = weight / 100;
+                const factor = amount / 100;
                 ingredientData.kcal = Math.round(kcal100 * factor);
                 ingredientData.protein = parseFloat((protein100 * factor).toFixed(1));
                 ingredientData.fat = parseFloat((fat100 * factor).toFixed(1));
@@ -631,7 +639,8 @@
             let totalKcal = 0, totalP = 0, totalF = 0, totalC = 0;
 
             currentRecipeIngredients.forEach((item, index) => {
-                const measureText = item.measure ? `(${item.measure}, ${item.weight}g)` : `(${item.weight}g)`;
+                const unitLabel = item.unit || 'g';
+                const measureText = item.measure ? `(${item.measure}, ${item.amount}${unitLabel})` : `(${item.amount}${unitLabel})`;
                 if (mode === 'per-ingredient') {
                     html += `<li style="margin-bottom: 4px;">${escapeHtml(item.name)} ${measureText} — ${item.kcal} kcal | B: ${item.protein}g | T: ${item.fat}g | W: ${item.carbs}g 
                              <button type="button" onclick="removeIngredient(${index})" style="width: auto; padding: 2px 6px; font-size: 11px; background: #ef4444; margin-left: 5px; border-radius: 6px; box-shadow: none;">Usuń</button></li>`;
@@ -687,7 +696,7 @@
             resBox.style.display = 'block';
             resBox.innerHTML = "⏳ Gemini wymyśla pyszny przepis...";
 
-            const prompt = `Jesteś szefem kuchni. Użytkownik ma w lodówce: "${fridge}". Ułóż z tego fajny, konkretny przepis kulinarny (podaj nazwę, składniki z gramaturą, makro na całość i krok po kroku). Odpowiedz po polsku.`;
+            const prompt = `Jesteś szefem kuchni. Użytkownik ma w lodówce: "${fridge}". Ułóż z tego fajny, konkretny przepis kulinarny (podaj nazwę, składniki z gramaturą/mililitrami, makro na całość i krok po kroku). Odpowiedz po polsku.`;
             const resultText = await callGeminiProxy(prompt);
             resBox.innerHTML = marked.parse(resultText);
         };
@@ -822,7 +831,17 @@
             document.getElementById("recipe-time").value = recipe.time || "";
             document.getElementById("recipe-visibility").value = recipe.isPublic ? "public" : "private";
 
-            // Sprawdzamy czy składniki mają makro, żeby dobrać odpowiedni tryb
+            // Kompatibilidad wsteczna dla starego pola 'weight'
+            if (recipe.ingredients) {
+                recipe.ingredients = recipe.ingredients.map(ing => {
+                    if (ing.amount === undefined && ing.weight !== undefined) {
+                        ing.amount = ing.weight;
+                        ing.unit = 'g';
+                    }
+                    return ing;
+                });
+            }
+
             const hasPerIngredientMacro = recipe.ingredients && recipe.ingredients.length > 0 && recipe.ingredients[0].kcal > 0;
             
             if (hasPerIngredientMacro) {
@@ -930,9 +949,11 @@
 
             let html = "";
             ingredients.forEach(ing => {
-                if (ing.weight !== undefined && ing.weight > 0) {
-                    const scaledWeight = Math.round(ing.weight * ratio);
-                    const measureText = ing.measure ? `(${ing.measure}, ${scaledWeight}g)` : `(${scaledWeight}g)`;
+                const amt = ing.amount !== undefined ? ing.amount : ing.weight;
+                const unit = ing.unit || 'g';
+                if (amt !== undefined && amt > 0) {
+                    const scaledAmount = Math.round(amt * ratio);
+                    const measureText = ing.measure ? `(${ing.measure}, ${scaledAmount}${unit})` : `(${scaledAmount}${unit})`;
                     if (ing.kcal !== undefined && ing.kcal > 0) {
                         const scaledKcal = Math.round(ing.kcal * ratio);
                         html += `<li>${escapeHtml(ing.name)} ${measureText} — ${scaledKcal} kcal</li>`;
@@ -973,7 +994,9 @@
             let initialIngredientsHtml = "";
             if (Array.isArray(recipe.ingredients)) {
                 recipe.ingredients.forEach(ing => {
-                    const measureText = ing.measure ? `(${ing.measure}, ${ing.weight}g)` : `(${ing.weight}g)`;
+                    const amt = ing.amount !== undefined ? ing.amount : ing.weight;
+                    const unit = ing.unit || 'g';
+                    const measureText = ing.measure ? `(${ing.measure}, ${amt}${unit})` : `(${amt}${unit})`;
                     if (ing.kcal !== undefined && ing.kcal > 0) {
                         initialIngredientsHtml += `<li>${escapeHtml(ing.name)} ${measureText} — ${ing.kcal} kcal</li>`;
                     } else {
