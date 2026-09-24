@@ -364,19 +364,36 @@
                 </select>
             </div>
 
-            <!-- Wspólny formularz dodawania składnika -->
+            <!-- Wspólny formularz dodawania składnika z poprawionymi listami rozwijanymi -->
             <div style="background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); padding: 16px; border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.6);">
                 <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Składniki</h4>
 
                 <input type="text" id="ingredient-name" placeholder="Nazwa składnika (np. Mleko / Płatki owsiane)">
                 
                 <div style="display: flex; gap: 8px;">
-                    <input type="text" id="ingredient-measure" placeholder="Miara domowa (np. łyżki, szklanka)" style="margin-bottom: 8px; flex: 1;">
-                    <div style="display: flex; gap: 4px; flex: 1; margin-bottom: 8px;">
-                        <input type="number" id="ing-weight" placeholder="Ilość" style="margin-bottom: 0; flex: 1;">
-                        <select id="ing-unit" style="margin-bottom: 0; width: 80px; padding: 12px 6px;">
+                    <div style="flex: 1.5;">
+                        <label style="font-size: 11px; font-weight: 600; color: #64748b; display: block; margin-bottom: 2px;">Miara domowa</label>
+                        <select id="ingredient-measure" style="margin-bottom: 8px;">
+                            <option value="g/ml">Waga / Pojemność (g / ml)</option>
+                            <option value="łyżka">łyżka</option>
+                            <option value="łyżeczka">łyżeczka</option>
+                            <option value="szklanka">szklanka</option>
+                            <option value="garść">garść</option>
+                            <option value="plaster">plaster</option>
+                            <option value="sztuka">sztuka</option>
+                            <option value="opakowanie">opakowanie</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="font-size: 11px; font-weight: 600; color: #64748b; display: block; margin-bottom: 2px;">Ilość</label>
+                        <input type="number" id="ing-weight" placeholder="np. 100" style="margin-bottom: 8px;">
+                    </div>
+                    <div style="flex: 0.8;">
+                        <label style="font-size: 11px; font-weight: 600; color: #64748b; display: block; margin-bottom: 2px;">Jednostka</label>
+                        <select id="ing-unit" style="margin-bottom: 0; padding: 12px 6px;">
                             <option value="g">g</option>
                             <option value="ml">ml</option>
+                            <option value="szt.">szt.</option>
                         </select>
                     </div>
                 </div>
@@ -400,7 +417,7 @@
                 <p style="color: #64748b;"><em>Brak dodanych składników.</em></p>
             </div>
 
-            <!-- Sekcja ręcznego makro całościowego widoczna TYLKO w trybie total-recipe -->
+            <!-- Sekcja ręcznego makro całościowego -->
             <div id="manual-macro-wrapper" class="hidden" style="background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); padding: 16px; border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.6);">
                 <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Makro całego przepisu (łącznie z internetu)</h4>
                 <div style="display: flex; gap: 8px;">
@@ -504,8 +521,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
-        
-        // Inicjalizacja klienta Google Gen AI (zabezpieczona wersja bezpośrednia przeglądarkowa)
         const ai = new GoogleGenAI({ apiKey: "AIzaSyACAYq6d_bOfUV8s_wlX-yTdTKhU9YVwnE" });
 
         const authStatus = document.getElementById("auth-status");
@@ -585,7 +600,7 @@
 
         document.getElementById("btn-add-ingredient").addEventListener("click", () => {
             const name = document.getElementById("ingredient-name").value.trim();
-            const measure = document.getElementById("ingredient-measure").value.trim();
+            const measure = document.getElementById("ingredient-measure").value;
             const amount = parseFloat(document.getElementById("ing-weight").value) || 0;
             const unit = document.getElementById("ing-unit").value;
             const mode = document.getElementById("macro-mode").value;
@@ -597,7 +612,7 @@
 
             let ingredientData = {
                 name,
-                measure,
+                measure: measure === 'g/ml' ? '' : measure,
                 amount,
                 unit,
                 kcal: 0,
@@ -612,7 +627,7 @@
                 const fat100 = parseFloat(document.getElementById("ing-fat").value) || 0;
                 const carbs100 = parseFloat(document.getElementById("ing-carbs").value) || 0;
 
-                const factor = amount / 100;
+                const factor = unit === 'g' || unit === 'ml' ? amount / 100 : amount;
                 ingredientData.kcal = Math.round(kcal100 * factor);
                 ingredientData.protein = parseFloat((protein100 * factor).toFixed(1));
                 ingredientData.fat = parseFloat((fat100 * factor).toFixed(1));
@@ -623,7 +638,6 @@
             updateIngredientsUI();
 
             document.getElementById("ingredient-name").value = "";
-            document.getElementById("ingredient-measure").value = "";
             document.getElementById("ing-weight").value = "";
             document.getElementById("ing-kcal").value = "";
             document.getElementById("ing-protein").value = "";
@@ -645,7 +659,7 @@
 
             currentRecipeIngredients.forEach((item, index) => {
                 const unitLabel = item.unit || 'g';
-                const measureText = item.measure ? `(${item.measure}, ${item.amount}${unitLabel})` : `(${item.amount}${unitLabel})`;
+                const measureText = item.measure ? `(${item.measure}: ${item.amount} ${unitLabel})` : `(${item.amount} ${unitLabel})`;
                 if (mode === 'per-ingredient') {
                     html += `<li style="margin-bottom: 4px;">${escapeHtml(item.name)} ${measureText} — ${item.kcal} kcal | B: ${item.protein}g | T: ${item.fat}g | W: ${item.carbs}g 
                              <button type="button" onclick="removeIngredient(${index})" style="width: auto; padding: 2px 6px; font-size: 11px; background: #ef4444; margin-left: 5px; border-radius: 6px; box-shadow: none;">Usuń</button></li>`;
@@ -951,7 +965,7 @@
                 const unit = ing.unit || 'g';
                 if (amt !== undefined && amt > 0) {
                     const scaledAmount = Math.round(amt * ratio);
-                    const measureText = ing.measure ? `(${ing.measure}, ${scaledAmount}${unit})` : `(${scaledAmount}${unit})`;
+                    const measureText = ing.measure ? `(${ing.measure}: ${scaledAmount} ${unit})` : `(${scaledAmount} ${unit})`;
                     if (ing.kcal !== undefined && ing.kcal > 0) {
                         const scaledKcal = Math.round(ing.kcal * ratio);
                         html += `<li>${escapeHtml(ing.name)} ${measureText} — ${scaledKcal} kcal</li>`;
@@ -994,7 +1008,7 @@
                 recipe.ingredients.forEach(ing => {
                     const amt = ing.amount !== undefined ? ing.amount : ing.weight;
                     const unit = ing.unit || 'g';
-                    const measureText = ing.measure ? `(${ing.measure}, ${amt}${unit})` : `(${amt}${unit})`;
+                    const measureText = ing.measure ? `(${ing.measure}: ${amt} ${unit})` : `(${amt} ${unit})`;
                     if (ing.kcal !== undefined && ing.kcal > 0) {
                         initialIngredientsHtml += `<li>${escapeHtml(ing.name)} ${measureText} — ${ing.kcal} kcal</li>`;
                     } else {
