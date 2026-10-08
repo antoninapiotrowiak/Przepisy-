@@ -647,6 +647,18 @@
             document.getElementById("ing-fat").value = "";
             document.getElementById("ing-carbs").value = "";
         });
+        function formatIngredientMeasure(item) {
+            const measure = (item.measure && item.measure !== 'brak') ? item.measure : '';
+            const unit = (item.unit && item.unit !== 'brak') ? item.unit : '';
+            const amount = item.amount !== undefined ? item.amount : (item.weight || '');
+
+            let parts = [];
+            if (measure) parts.push(measure);
+            if (amount !== '') parts.push(amount);
+            if (unit) parts.push(unit);
+
+            return parts.join(' ');
+        }
 
         function updateIngredientsUI() {
             const container = document.getElementById("ingredients-summary-container");
