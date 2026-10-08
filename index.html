@@ -672,9 +672,10 @@
             let html = "<strong style='color: #475569;'>Dodane składniki:</strong><ul style='padding-left: 20px; margin: 8px 0;'>";
             let totalKcal = 0, totalP = 0, totalF = 0, totalC = 0;
 
-            currentRecipeIngredients.forEach((item, index) => {
-                const unitLabel = item.unit || 'g';
-                const measureText = item.measure ? `(${item.measure}: ${item.amount} ${unitLabel})` : `(${item.amount} ${unitLabel})`;
+                        currentRecipeIngredients.forEach((item, index) => {
+                const formattedDesc = formatIngredientMeasure(item);
+                const descText = formattedDesc ? `(${formattedDesc})` : "";
+                
                 if (mode === 'per-ingredient') {
                     html += `<li style="margin-bottom: 4px;">${escapeHtml(item.name)} ${measureText} — ${item.kcal} kcal | B: ${item.protein}g | T: ${item.fat}g | W: ${item.carbs}g 
                              <button type="button" onclick="removeIngredient(${index})" style="width: auto; padding: 2px 6px; font-size: 11px; background: #ef4444; margin-left: 5px; border-radius: 6px; box-shadow: none;">Usuń</button></li>`;
