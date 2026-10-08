@@ -371,10 +371,11 @@
                 <input type="text" id="ingredient-name" placeholder="Nazwa składnika (np. Mleko / Płatki owsiane)">
                 
                 <div style="display: flex; gap: 8px;">
+                                   <div style="display: flex; gap: 8px;">
                     <div style="flex: 1.5;">
                         <label style="font-size: 11px; font-weight: 600; color: #64748b; display: block; margin-bottom: 2px;">Miara domowa</label>
                         <select id="ingredient-measure" style="margin-bottom: 8px;">
-                            <option value="g/ml">Waga / Pojemność (g / ml)</option>
+                            <option value="brak">brak</option>
                             <option value="łyżka">łyżka</option>
                             <option value="łyżeczka">łyżeczka</option>
                             <option value="szklanka">szklanka</option>
@@ -386,7 +387,7 @@
                     </div>
                     <div style="flex: 1;">
                         <label style="font-size: 11px; font-weight: 600; color: #64748b; display: block; margin-bottom: 2px;">Ilość</label>
-                        <input type="number" id="ing-weight" placeholder="np. 100" style="margin-bottom: 8px;">
+                        <input type="number" id="ing-weight" placeholder="np. 2" style="margin-bottom: 8px;">
                     </div>
                     <div style="flex: 0.8;">
                         <label style="font-size: 11px; font-weight: 600; color: #64748b; display: block; margin-bottom: 2px;">Jednostka</label>
@@ -394,9 +395,11 @@
                             <option value="g">g</option>
                             <option value="ml">ml</option>
                             <option value="szt.">szt.</option>
+                            <option value="brak">brak</option>
                         </select>
                     </div>
                 </div>
+
 
                 <!-- Pola makro widoczne TYLKO w trybie per-ingredient -->
                 <div id="ingredient-macro-section">
