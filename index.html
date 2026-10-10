@@ -1396,7 +1396,7 @@ to { opacity: 1; transform: translateY(0); }
 <div class="recipe-image-upload">
 <label for="recipe-image-file">Zdjęcie gotowego dania (opcjonalnie)</label>
 <input type="file" id="recipe-image-file" accept="image/*" aria-label="Wybierz zdjęcie przepisu">
-<p class="ingredient-helper-text">Jedno zdjęcie, maksymalnie 5 MB.</p>
+<p id="recipe-image-status" class="ingredient-helper-text">Wybierz zdjęcie do 5 MB; zostanie zmniejszone w tej przeglądarce.</p>
 <img id="recipe-image-preview" class="recipe-image-preview hidden" alt="Podgląd zdjęcia przepisu">
 </div>
 <div class="recipe-option-groups">
@@ -1601,7 +1601,6 @@ where,
 onSnapshot, 
 serverTimestamp 
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-storage.js";
 
 const firebaseConfig = {
 apiKey: "AIzaSyACAYq6d_bOfUV8s_wlX-yTdTKhU9YVwnE",
@@ -1616,7 +1615,6 @@ measurementId: "G-484BSEC9FE"
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
-const storage = getStorage(app);
 const googleProvider = new GoogleAuthProvider();
 
 const authStatus = document.getElementById("auth-status");
@@ -1638,7 +1636,7 @@ let favoritesOnly = false;
 let existingRecipeImageUrl = "";
 let currentDietFilter = "all";
 let currentExcludedAllergen = "all";
-let localImagePreviewUrl = "";
+let selectedImageCompressionPromise = null;
 
 const dietLabels = {
 wegetarianskie: "Wegetariańskie",
@@ -2004,12 +2002,12 @@ renderCatalog();
 function updateRecipeImagePreview(imageUrl) {
 existingRecipeImageUrl = imageUrl || "";
 const preview = document.getElementById("recipe-image-preview");
-if (localImagePreviewUrl) {
-URL.revokeObjectURL(localImagePreviewUrl);
-localImagePreviewUrl = "";
-}
+selectedImageCompressionPromise = null;
 preview.src = existingRecipeImageUrl;
 preview.classList.toggle("hidden", !existingRecipeImageUrl);
+document.getElementById("recipe-image-status").textContent = existingRecipeImageUrl
+? "Zapisane zdjęcie przepisu. Możesz wybrać nowe."
+: "Wybierz zdjęcie do 5 MB; zostanie zmniejszone w tej przeglądarce.";
 }
 
 document.getElementById("recipe-image-file").addEventListener("change", event => {
@@ -2018,24 +2016,53 @@ if (!file) return;
 if (!file.type.startsWith("image/") || file.size > 5 * 1024 * 1024) {
 alert("Wybierz zdjęcie o rozmiarze nie większym niż 5 MB.");
 event.target.value = "";
+selectedImageCompressionPromise = null;
 return;
 }
 const preview = document.getElementById("recipe-image-preview");
-if (localImagePreviewUrl) URL.revokeObjectURL(localImagePreviewUrl);
-localImagePreviewUrl = URL.createObjectURL(file);
-preview.src = localImagePreviewUrl;
+const status = document.getElementById("recipe-image-status");
+status.textContent = "Zmniejszam zdjęcie…";
+selectedImageCompressionPromise = compressRecipeImage(file).then(imageData => {
+preview.src = imageData;
 preview.classList.remove("hidden");
+status.textContent = `Gotowe do zapisu · około ${Math.round(imageData.length * 0.75 / 1024)} KB`;
+return imageData;
+}).catch(error => {
+status.textContent = error.message;
+return null;
+});
 });
 
-async function uploadRecipeImage(file, userId, recipeId) {
+async function compressRecipeImage(file) {
 if (!file) return existingRecipeImageUrl;
 if (!file.type.startsWith("image/") || file.size > 5 * 1024 * 1024) {
 throw new Error("Zdjęcie musi być plikiem graficznym do 5 MB.");
 }
-const extension = file.name.split(".").pop().replace(/[^a-z0-9]/gi, "").toLowerCase() || "jpg";
-const imageReference = storageRef(storage, `recipe-images/${userId}/${recipeId}/${Date.now()}.${extension}`);
-await uploadBytes(imageReference, file, { contentType: file.type });
-return getDownloadURL(imageReference);
+const imageBitmap = await createImageBitmap(file);
+try {
+const canvas = document.createElement("canvas");
+const context = canvas.getContext("2d", { alpha: false });
+let scale = Math.min(1, 1200 / Math.max(imageBitmap.width, imageBitmap.height));
+for (let resizeAttempt = 0; resizeAttempt < 5; resizeAttempt++) {
+canvas.width = Math.max(1, Math.round(imageBitmap.width * scale));
+canvas.height = Math.max(1, Math.round(imageBitmap.height * scale));
+context.drawImage(imageBitmap, 0, 0, canvas.width, canvas.height);
+for (const quality of [0.82, 0.72, 0.62, 0.52]) {
+const compressedBlob = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg", quality));
+if (!compressedBlob || compressedBlob.size > 240 * 1024) continue;
+return await new Promise((resolve, reject) => {
+const reader = new FileReader();
+reader.onload = () => resolve(reader.result);
+reader.onerror = () => reject(new Error("Nie udało się przygotować zdjęcia."));
+reader.readAsDataURL(compressedBlob);
+});
+}
+scale *= 0.8;
+}
+throw new Error("Nie udało się zmniejszyć zdjęcia do bezpiecznego rozmiaru.");
+} finally {
+imageBitmap.close();
+}
 }
 
 window.toggleFavoritesFilter = function() {
@@ -2376,7 +2403,11 @@ updatedAt: serverTimestamp()
 
 try {
 const recipeRef = editId ? doc(db, "recipes", editId) : doc(collection(db, "recipes"));
-recipePayload.imageUrl = await uploadRecipeImage(recipeImageFile, user.uid, recipeRef.id);
+const compressedImage = recipeImageFile
+? await (selectedImageCompressionPromise || compressRecipeImage(recipeImageFile))
+: existingRecipeImageUrl;
+if (recipeImageFile && !compressedImage) throw new Error("Nie udało się przygotować zdjęcia do zapisu.");
+recipePayload.imageUrl = compressedImage || "";
 if (editId) {
 await updateDoc(recipeRef, recipePayload);
 alert("Przepis zaktualizowany pomyślnie!");
@@ -2412,7 +2443,9 @@ alert("Błąd zapisu: " + error.message);
 });
 
 window.editRecipe = function(docId, recipeJson) {
-const recipe = JSON.parse(decodeURIComponent(recipeJson));
+const cachedRecipe = rawMyRecipes.find(item => item.id === docId)?.data || rawPublicRecipes.find(item => item.id === docId)?.data;
+const recipe = recipeJson ? JSON.parse(decodeURIComponent(recipeJson)) : cachedRecipe;
+if (!recipe) return;
 document.getElementById("edit-recipe-id").value = docId;
 document.getElementById("recipe-title").value = recipe.title || "";
 document.getElementById("recipe-pan").value = recipe.panSize || "Tortownica okrągła 22 cm";
@@ -2618,14 +2651,13 @@ const timeHtml = recipe.time ? `
                </div>` : "";
 
 const ingredientsString = encodeURIComponent(JSON.stringify(recipe.ingredients));
-const recipeString = encodeURIComponent(JSON.stringify(recipe));
 
 let ownerActionsHtml = "";
 if (isOwnerView) {
 const visibilityBtnText = recipe.isPublic ? "🔒 Zmień na prywatny" : "🌐 Upublicznij";
 ownerActionsHtml = `
                    <div style="margin-top: 15px; padding-top: 12px; border-top: 1px dashed rgba(0,0,0,0.1); display: flex; gap: 8px; flex-wrap: wrap;">
-                       <button type="button" onclick="editRecipe('${docId}', '${recipeString}')" style="width: auto; padding: 6px 12px; font-size: 12px; background: #3b82f6; margin-bottom: 0;">Edytuj</button>
+                       <button type="button" onclick="editRecipe('${docId}')" style="width: auto; padding: 6px 12px; font-size: 12px; background: #3b82f6; margin-bottom: 0;">Edytuj</button>
                        <button type="button" onclick="toggleVisibility('${docId}', ${recipe.isPublic})" style="width: auto; padding: 6px 12px; font-size: 12px; background: #f59e0b; margin-bottom: 0;">${visibilityBtnText}</button>
                        <button type="button" onclick="deleteRecipe('${docId}')" style="width: auto; padding: 6px 12px; font-size: 12px; background: #ef4444; margin-bottom: 0;">Usuń</button>
                    </div>
