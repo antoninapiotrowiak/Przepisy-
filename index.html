@@ -33,6 +33,128 @@
             font-size: 28px;
         }
 
+        .food-hero {
+            position: relative;
+            min-height: 300px;
+            overflow: hidden;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            background: #314638;
+            color: #fff;
+            isolation: isolate;
+        }
+
+        .food-hero > img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+
+        .food-hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, rgba(20, 36, 25, 0.82), rgba(20, 36, 25, 0.12));
+            z-index: -1;
+        }
+
+        .food-hero-content {
+            max-width: 430px;
+            padding: 34px 28px;
+        }
+
+        .food-hero .eyebrow {
+            display: block;
+            margin-bottom: 10px;
+            color: #f9d889;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .food-hero h1 {
+            margin: 0 0 10px;
+            color: #fff;
+            text-align: left;
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 32px;
+            line-height: 1.15;
+        }
+
+        .food-hero p {
+            max-width: 330px;
+            margin: 0 0 18px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .food-hero .hero-cta {
+            width: auto;
+            margin: 0;
+            padding: 10px 16px;
+            color: #263b2c;
+            background: #f9d889;
+            box-shadow: none;
+        }
+
+        .inspiration-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin: 4px 0 22px;
+        }
+
+        .inspiration-tile {
+            position: relative;
+            aspect-ratio: 1.05;
+            overflow: hidden;
+            padding: 0;
+            border-radius: 6px;
+            background: #314638;
+            box-shadow: none;
+            text-align: left;
+        }
+
+        .inspiration-tile img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.35s ease;
+        }
+
+        .inspiration-tile::after {
+            content: "";
+            position: absolute;
+            inset: 35% 0 0;
+            background: linear-gradient(transparent, rgba(16, 27, 18, 0.78));
+        }
+
+        .inspiration-tile span {
+            position: absolute;
+            z-index: 1;
+            right: 8px;
+            bottom: 9px;
+            left: 8px;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 700;
+            line-height: 1.25;
+        }
+
+        .inspiration-tile:hover img { transform: scale(1.06); }
+
+        @media (max-width: 480px) {
+            .food-hero { min-height: 270px; }
+            .food-hero-content { padding: 28px 20px; }
+            .food-hero h1 { font-size: 28px; }
+            .inspiration-grid { gap: 7px; }
+            .inspiration-tile span { font-size: 11px; }
+        }
+
         .card { 
             background: var(--card-bg); 
             backdrop-filter: blur(16px);
@@ -277,7 +399,15 @@
         </div>
     </div>
 
-    <h1>🌸 Moja Książka Przepisów 🌸</h1>
+    <header class="food-hero">
+        <img src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=1400&q=85" alt="Kolorowe świeże składniki przygotowane do gotowania" fetchpriority="high">
+        <div class="food-hero-content">
+            <span class="eyebrow">Smaki warte zapamiętania</span>
+            <h1>Moja Książka Przepisów</h1>
+            <p>Zapisuj ulubione dania, odkrywaj nowe pomysły i dziel się tym, co pyszne.</p>
+            <button class="hero-cta" type="button" onclick="openRecipeIdea()">＋ Dodaj swój przepis</button>
+        </div>
+    </header>
     
     <div id="auth-status">Sprawdzanie stanu logowania...</div>
 
@@ -310,6 +440,21 @@
     <div id="section-catalog" class="tab-content active">
         <div class="card">
             <h3 style="margin-top:0; color: #db2777;">Przepisy społeczności 🧁</h3>
+
+            <div class="inspiration-grid" aria-label="Pomysły na nowy przepis">
+                <button class="inspiration-tile" type="button" onclick="openRecipeIdea('Cynamonowe placuszki')" aria-label="Stwórz przepis na cynamonowe placuszki">
+                    <img src="https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&w=500&q=80" alt="Złociste placuszki z owocami" loading="lazy">
+                    <span>Słodki początek dnia</span>
+                </button>
+                <button class="inspiration-tile" type="button" onclick="openRecipeIdea('Makaron z warzywami')" aria-label="Stwórz przepis na makaron z warzywami">
+                    <img src="https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=500&q=80" alt="Makaron z ziołami i świeżymi warzywami" loading="lazy">
+                    <span>Obiad pełen smaku</span>
+                </button>
+                <button class="inspiration-tile" type="button" onclick="openRecipeIdea('Kolorowa miska warzyw')" aria-label="Stwórz przepis na kolorową miskę warzyw">
+                    <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=500&q=80" alt="Kolorowa sałatka z sezonowych warzyw" loading="lazy">
+                    <span>Kolorowo i lekko</span>
+                </button>
+            </div>
             
             <div class="filter-chips">
                 <div class="chip active" onclick="setCatalogFilter('all', this)">Wszystkie</div>
@@ -508,7 +653,6 @@
             onSnapshot, 
             serverTimestamp 
         } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
-        import { GoogleGenAI } from "https://esm.run/@google/genai";
 
         const firebaseConfig = {
             apiKey: "AIzaSyACAYq6d_bOfUV8s_wlX-yTdTKhU9YVwnE",
@@ -524,7 +668,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
-        const ai = new GoogleGenAI({ apiKey: "AIzaSyACAYq6d_bOfUV8s_wlX-yTdTKhU9YVwnE" });
 
         const authStatus = document.getElementById("auth-status");
         const authSection = document.getElementById("auth-section");
@@ -581,6 +724,16 @@
                 targetBtn.classList.add('active');
             }
             moveBubble(targetIndex);
+        };
+
+        window.openRecipeIdea = function(title = "") {
+            if (!auth.currentUser) {
+                document.getElementById("auth-section").scrollIntoView({ behavior: "smooth", block: "center" });
+                return;
+            }
+            window.switchTab("add-recipe");
+            if (title) document.getElementById("recipe-title").value = title;
+            document.getElementById("section-add-recipe").scrollIntoView({ behavior: "smooth", block: "start" });
         };
 
         async function applyPersistence() {
@@ -677,14 +830,14 @@
                 const descText = formattedDesc ? `(${formattedDesc})` : "";
                 
                 if (mode === 'per-ingredient') {
-                    html += `<li style="margin-bottom: 4px;">${escapeHtml(item.name)} ${measureText} — ${item.kcal} kcal | B: ${item.protein}g | T: ${item.fat}g | W: ${item.carbs}g 
+                    html += `<li style="margin-bottom: 4px;">${escapeHtml(item.name)} ${descText} — ${item.kcal} kcal | B: ${item.protein}g | T: ${item.fat}g | W: ${item.carbs}g
                              <button type="button" onclick="removeIngredient(${index})" style="width: auto; padding: 2px 6px; font-size: 11px; background: #ef4444; margin-left: 5px; border-radius: 6px; box-shadow: none;">Usuń</button></li>`;
                     totalKcal += item.kcal;
                     totalP += item.protein;
                     totalF += item.fat;
                     totalC += item.carbs;
                 } else {
-                    html += `<li style="margin-bottom: 4px;">${escapeHtml(item.name)} ${measureText} 
+                    html += `<li style="margin-bottom: 4px;">${escapeHtml(item.name)} ${descText}
                              <button type="button" onclick="removeIngredient(${index})" style="width: auto; padding: 2px 6px; font-size: 11px; background: #ef4444; margin-left: 5px; border-radius: 6px; box-shadow: none;">Usuń</button></li>`;
                 }
             });
@@ -703,11 +856,25 @@
 
         async function callGeminiProxy(promptText) {
             try {
-                const response = await ai.models.generateContent({
-                    model: 'gemini-2.5-flash',
-                    contents: promptText,
+                const response = await fetch("/api/gemini", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ prompt: promptText })
                 });
-                return response.text || "Brak odpowiedzi od AI.";
+
+                if (!response.headers.get("content-type")?.includes("application/json")) {
+                    if (response.status === 404 || response.status === 501) {
+                        throw new Error("Serwer AI jest niedostępny. Uruchom aplikację na Cloudflare Pages z włączonym endpointem Functions.");
+                    }
+                    throw new Error(`Serwer AI zwrócił nieczytelną odpowiedź (HTTP ${response.status}).`);
+                }
+
+                const data = await response.json();
+                if (!response.ok) {
+                    throw new Error(data.error || `Błąd API (${response.status})`);
+                }
+
+                return data.text || "Brak odpowiedzi od AI.";
             } catch (err) {
                 console.error(err);
                 return "Błąd połączenia z AI: " + err.message;
