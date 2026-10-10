@@ -33,6 +33,578 @@ margin-bottom: 25px;
 font-size: 28px;
 }
 
+.inspiration-gallery {
+display: grid;
+grid-template-columns: 1.2fr 1fr 1fr;
+gap: 9px;
+margin: 0 0 18px;
+}
+
+.inspiration-tile {
+position: relative;
+height: 142px;
+min-width: 0;
+margin: 0;
+overflow: hidden;
+border: 1px solid rgba(255, 255, 255, 0.9);
+border-radius: 14px;
+background: #fce7f3;
+box-shadow: 0 8px 20px rgba(90, 45, 52, 0.1);
+}
+
+.inspiration-tile::after {
+position: absolute;
+inset: 25% 0 0;
+background: linear-gradient(180deg, transparent, rgba(24, 24, 24, 0.68));
+content: "";
+}
+
+.inspiration-tile img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+transition: transform 0.35s ease;
+}
+
+.inspiration-tile:hover img {
+transform: scale(1.04);
+}
+
+.inspiration-tile figcaption {
+position: absolute;
+z-index: 1;
+right: 9px;
+bottom: 9px;
+left: 9px;
+color: #fff;
+font-size: 12px;
+font-weight: 700;
+line-height: 1.25;
+text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+.catalog-inspiration {
+display: grid;
+grid-template-columns: minmax(100px, 0.85fr) minmax(0, 1.5fr);
+align-items: center;
+gap: 14px;
+margin: 0 0 20px;
+padding: 10px;
+border: 1px solid rgba(255, 255, 255, 0.9);
+border-radius: 14px;
+background: rgba(255, 255, 255, 0.55);
+}
+
+.catalog-inspiration img {
+display: block;
+width: 100%;
+height: 106px;
+object-fit: cover;
+border-radius: 10px;
+animation: imageDrift 18s ease-in-out infinite alternate;
+}
+
+.catalog-inspiration-copy h4 {
+margin: 0 0 4px;
+color: #166534;
+font-size: 15px;
+}
+
+.catalog-inspiration-copy p {
+margin: 0 0 9px;
+color: #52615b;
+font-size: 12px;
+line-height: 1.45;
+}
+
+.catalog-inspiration-button {
+width: auto;
+margin: 0;
+padding: 8px 11px;
+border-radius: 9px;
+background: #166534;
+box-shadow: 0 4px 12px rgba(22, 101, 52, 0.15);
+font-size: 12px;
+}
+
+.cooking-checklist {
+display: grid;
+gap: 7px;
+margin: 10px 0 14px;
+padding: 0;
+list-style: none;
+}
+
+.cooking-checklist-item {
+display: grid;
+grid-template-columns: 22px minmax(0, 1fr);
+align-items: start;
+gap: 8px;
+padding: 9px 10px;
+border: 1px solid #e5e7eb;
+border-radius: 9px;
+background: rgba(255, 255, 255, 0.85);
+animation: checklistIn 0.28s ease-out both;
+}
+
+.cooking-checklist-item:nth-child(2) { animation-delay: 35ms; }
+.cooking-checklist-item:nth-child(3) { animation-delay: 70ms; }
+.cooking-checklist-item:nth-child(4) { animation-delay: 105ms; }
+.cooking-checklist-item:nth-child(5) { animation-delay: 140ms; }
+
+.cooking-checklist-item input {
+width: 18px;
+height: 18px;
+margin: 1px 0 0;
+accent-color: #16a34a;
+}
+
+.cooking-checklist-item label {
+color: #334155;
+font-size: 13px;
+line-height: 1.45;
+cursor: pointer;
+}
+
+.cooking-checklist-item.is-checked {
+border-color: #bbf7d0;
+background: #f0fdf4;
+}
+
+.cooking-checklist-item.is-checked label {
+color: #64748b;
+text-decoration: line-through;
+}
+
+.recipe-item.expanded .recipe-details {
+animation: fadeIn 0.24s ease-out;
+}
+
+@keyframes checklistIn {
+from { opacity: 0; transform: translateY(5px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes imageDrift {
+from { transform: scale(1); }
+to { transform: scale(1.04); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+.catalog-inspiration img,
+.cooking-checklist-item,
+.recipe-item.expanded .recipe-details {
+animation: none;
+}
+}
+
+.ingredient-editor {
+padding: 16px;
+margin: 10px 0 14px;
+border: 1px solid #f1d8e4;
+border-left: 4px solid #ec4899;
+border-radius: 14px;
+background: linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(255, 248, 251, 0.82));
+}
+
+.ingredient-editor-titlebar {
+display: flex;
+align-items: center;
+gap: 10px;
+margin-bottom: 14px;
+}
+
+.ingredient-step-mark {
+display: grid;
+width: 34px;
+height: 34px;
+flex: 0 0 34px;
+place-items: center;
+border-radius: 11px;
+background: linear-gradient(145deg, #ec4899, #fb7185);
+color: #fff;
+font-size: 11px;
+font-weight: 800;
+box-shadow: 0 4px 10px rgba(236, 72, 153, 0.2);
+}
+
+.recipe-step {
+margin: 18px 0;
+}
+
+.recipe-step-heading {
+display: flex;
+align-items: center;
+gap: 10px;
+margin: 0 0 12px;
+color: #9d174d;
+font-size: 15px;
+}
+
+.recipe-step-heading .ingredient-step-mark {
+width: 30px;
+height: 30px;
+flex-basis: 30px;
+border-radius: 10px;
+}
+
+.recipe-final-options {
+display: grid;
+grid-template-columns: minmax(0, 1.4fr) minmax(110px, 0.8fr);
+gap: 12px;
+}
+
+.recipe-final-options label {
+display: block;
+margin-bottom: 4px;
+color: #475569;
+font-size: 13px;
+font-weight: 600;
+}
+
+.recipe-category-fields {
+display: grid;
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 10px;
+}
+
+.recipe-category-fields label {
+display: block;
+margin-bottom: 4px;
+color: #475569;
+font-size: 12px;
+font-weight: 700;
+}
+
+.recipe-category-fields select {
+margin-top: 3px;
+}
+
+.category-navigation {
+margin: 0 -4px 18px;
+padding: 12px 4px 10px;
+border-top: 1px solid rgba(236, 72, 153, 0.12);
+border-bottom: 1px solid rgba(236, 72, 153, 0.12);
+}
+
+.category-navigation-label {
+margin: 0 0 8px 2px;
+color: #9d174d;
+font-size: 10px;
+font-weight: 800;
+}
+
+.category-tabs,
+.subcategory-tabs {
+display: flex;
+gap: 5px;
+overflow-x: auto;
+scrollbar-width: none;
+overscroll-behavior-inline: contain;
+}
+
+.category-tabs::-webkit-scrollbar,
+.subcategory-tabs::-webkit-scrollbar {
+display: none;
+}
+
+.category-tab {
+display: flex;
+width: auto;
+min-width: 74px;
+min-height: 58px;
+flex: 1 0 74px;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 4px;
+margin: 0;
+padding: 7px 5px;
+border: 1px solid transparent;
+border-radius: 10px 10px 6px 6px;
+background: transparent;
+color: #64748b;
+box-shadow: none;
+font-size: 10px;
+line-height: 1.15;
+white-space: nowrap;
+}
+
+.category-tab:hover {
+transform: translateY(-1px);
+background: rgba(255, 255, 255, 0.75);
+color: #9d174d;
+box-shadow: none;
+}
+
+.category-tab[aria-pressed="true"] {
+border-color: #fbcfe8;
+background: #fff1f7;
+color: #be185d;
+box-shadow: inset 0 -2px 0 #ec4899;
+}
+
+.category-tab-icon {
+font-size: 18px;
+line-height: 1;
+}
+
+.subcategory-tabs {
+min-height: 29px;
+margin-top: 8px;
+padding: 2px 0;
+}
+
+.subcategory-tab {
+width: auto;
+flex: 0 0 auto;
+margin: 0;
+padding: 6px 10px;
+border: 1px solid #e2e8f0;
+border-radius: 9999px;
+background: rgba(255, 255, 255, 0.68);
+color: #64748b;
+box-shadow: none;
+font-size: 11px;
+}
+
+.subcategory-tab:hover,
+.subcategory-tab[aria-pressed="true"] {
+border-color: #a7f3d0;
+background: #ecfdf5;
+color: #047857;
+box-shadow: none;
+transform: none;
+}
+
+.recipe-category-badge {
+display: inline-flex;
+align-items: center;
+gap: 5px;
+margin: 5px 0 8px;
+padding: 5px 9px;
+border: 1px solid #a7f3d0;
+border-radius: 9999px;
+background: #ecfdf5;
+color: #047857;
+font-size: 11px;
+font-weight: 700;
+}
+
+@media (max-width: 480px) {
+.recipe-category-fields {
+grid-template-columns: minmax(0, 1fr);
+gap: 0;
+}
+
+.category-tab {
+min-width: 72px;
+flex-basis: 72px;
+}
+}
+
+.ingredient-editor-heading {
+margin: 0;
+color: #9d174d;
+font-size: 15px;
+}
+
+.ingredient-field-grid {
+display: grid;
+grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(90px, 0.7fr);
+gap: 10px;
+}
+
+.home-measure-inputs {
+display: flex;
+gap: 6px;
+}
+
+.home-measure-inputs input {
+min-width: 0;
+flex: 0.7;
+}
+
+.home-measure-inputs select {
+min-width: 0;
+flex: 1.3;
+margin: 3px 0 10px;
+padding: 10px 8px;
+background: #fff;
+}
+
+.ingredient-field label,
+.ingredient-macros-title {
+display: block;
+margin-bottom: 3px;
+color: #475569;
+font-size: 12px;
+font-weight: 700;
+}
+
+.ingredient-editor input {
+margin: 3px 0 10px;
+background: #fff;
+}
+
+.ingredient-macros {
+display: grid;
+grid-template-columns: repeat(4, minmax(0, 1fr));
+gap: 8px;
+padding: 10px;
+border: 1px solid #f1d8e4;
+border-radius: 12px;
+background: rgba(255, 255, 255, 0.65);
+}
+
+.ingredient-macros-title {
+grid-column: 1 / -1;
+margin: 0;
+}
+
+.macro-field {
+min-width: 0;
+padding: 8px;
+border: 1px solid #e5e7eb;
+border-radius: 10px;
+background: #fff;
+}
+
+.macro-field span {
+display: block;
+font-size: 11px;
+font-weight: 700;
+}
+
+.macro-field input {
+margin: 5px 0 0;
+padding: 9px 8px;
+border-width: 1px;
+border-color: #e5e7eb;
+}
+
+.macro-field:nth-child(2) span { color: #be123c; }
+.macro-field:nth-child(3) span { color: #1d4ed8; }
+.macro-field:nth-child(4) span { color: #a16207; }
+.macro-field:nth-child(5) span { color: #15803d; }
+
+.macro-field:nth-child(2) input:focus { border-color: #fb7185; }
+.macro-field:nth-child(3) input:focus { border-color: #60a5fa; }
+.macro-field:nth-child(4) input:focus { border-color: #fbbf24; }
+.macro-field:nth-child(5) input:focus { border-color: #4ade80; }
+
+.ingredient-helper-text {
+padding-left: 9px;
+border-left: 2px solid #f9a8d4;
+}
+
+.ingredient-helper-text {
+margin: -2px 0 10px;
+color: #64748b;
+font-size: 12px;
+line-height: 1.4;
+}
+
+.ingredient-add-button {
+margin: 8px 0 0;
+}
+
+.ingredient-list {
+display: grid;
+gap: 7px;
+margin: 10px 0 14px;
+padding: 0;
+list-style: none;
+}
+
+.ingredient-list-item {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 10px;
+padding: 10px 12px;
+border: 1px solid #e5e7eb;
+border-left: 3px solid #86efac;
+border-radius: 10px;
+background: linear-gradient(100deg, #fff, rgba(240, 253, 244, 0.72));
+transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.ingredient-list-item:hover {
+border-color: #bbf7d0;
+box-shadow: 0 4px 12px rgba(22, 101, 52, 0.06);
+}
+
+.ingredient-list-item strong {
+color: #334155;
+font-size: 14px;
+}
+
+.ingredient-list-item span {
+display: block;
+margin-top: 2px;
+color: #64748b;
+font-size: 12px;
+}
+
+.ingredient-remove-button {
+flex: 0 0 auto;
+width: 32px;
+height: 32px;
+margin: 0;
+padding: 0;
+border: 1px solid #fecaca;
+border-radius: 8px;
+background: #fff1f2;
+color: #be123c;
+box-shadow: none;
+font-size: 18px;
+line-height: 1;
+}
+
+.ingredient-total {
+padding: 10px 12px;
+border-left: 3px solid #06b6d4;
+border-radius: 10px;
+background: linear-gradient(100deg, #cffafe, #ecfeff);
+color: #155e75;
+font-size: 13px;
+font-weight: 600;
+}
+
+@media (max-width: 480px) {
+.ingredient-field-grid {
+grid-template-columns: minmax(0, 1fr) minmax(82px, 0.65fr);
+gap: 8px;
+}
+
+.ingredient-field:first-child {
+grid-column: 1 / -1;
+}
+
+.ingredient-macros {
+grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+}
+
+@media (max-width: 480px) {
+.inspiration-gallery {
+gap: 6px;
+}
+
+.inspiration-tile {
+height: 108px;
+border-radius: 11px;
+}
+
+.inspiration-tile figcaption {
+right: 6px;
+bottom: 7px;
+left: 6px;
+font-size: 10px;
+}
+}
+
 .card { 
 background: var(--card-bg); 
 backdrop-filter: blur(16px);
@@ -152,32 +724,60 @@ box-shadow: 0 2px 6px rgba(0,0,0,0.02);
 .badge-carbs { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
 
 .filter-chips {
-display: flex;
-gap: 8px;
+display: grid;
+grid-template-columns: repeat(3, minmax(0, 1fr));
+gap: 5px;
 margin-bottom: 20px;
-overflow-x: auto;
-padding-bottom: 4px;
+padding: 4px;
+border: 1px solid rgba(148, 163, 184, 0.2);
+border-radius: 12px;
+background: rgba(255, 255, 255, 0.52);
 }
 
 .chip {
-background: rgba(255, 255, 255, 0.6);
-border: 1px solid #f3e8ff;
-padding: 8px 16px;
-border-radius: 9999px;
-font-size: 13px;
-font-weight: 600;
-color: #64748b;
+display: flex;
+width: 100%;
+min-width: 0;
+min-height: 44px;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 2px;
+margin: 0;
+padding: 6px 4px;
+border: 1px solid transparent;
+border-radius: 9px;
+background: transparent;
+color: #475569;
+box-shadow: none;
+font-size: 12px;
+font-weight: 700;
+line-height: 1.15;
 cursor: pointer;
-white-space: nowrap;
-transition: all 0.2s ease;
+transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
 }
 
-.chip.active, .chip:hover {
-background: var(--primary-pink);
-color: white;
-border-color: var(--primary-pink);
-box-shadow: 0 4px 12px rgba(236, 72, 153, 0.2);
+.chip small {
+color: #64748b;
+font-size: 10px;
+font-weight: 500;
 }
+
+.chip:hover {
+background: rgba(255, 255, 255, 0.8);
+border-color: #dbeafe;
+box-shadow: none;
+transform: none;
+}
+
+.chip.active {
+background: #e0f2fe;
+border-color: #7dd3fc;
+color: #075985;
+box-shadow: inset 0 -2px 0 #0284c7;
+}
+
+.chip.active small { color: #0369a1; }
 
 .empty-state {
 text-align: center;
@@ -279,6 +879,21 @@ to { opacity: 1; transform: translateY(0); }
 
 <h1>🌸 Moja Książka Przepisów 🌸</h1>
 
+<div class="inspiration-gallery" aria-label="Kulinarne inspiracje">
+<figure class="inspiration-tile">
+<img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&amp;fit=crop&amp;w=900&amp;q=82" alt="Kolorowa miska świeżej sałatki" fetchpriority="high">
+<figcaption>Kolorowo i świeżo</figcaption>
+</figure>
+<figure class="inspiration-tile">
+<img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&amp;fit=crop&amp;w=700&amp;q=82" alt="Zdrowy posiłek z warzywami i owocami" loading="eager">
+<figcaption>Na dobry początek</figcaption>
+</figure>
+<figure class="inspiration-tile">
+<img src="https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&amp;fit=crop&amp;w=700&amp;q=82" alt="Deser z owocami i jogurtem" loading="eager">
+<figcaption>Mała słodka chwila</figcaption>
+</figure>
+</div>
+
 <div id="auth-status">Sprawdzanie stanu logowania...</div>
 
 <div id="auth-section" class="card">
@@ -311,10 +926,32 @@ to { opacity: 1; transform: translateY(0); }
 <div class="card">
 <h3 style="margin-top:0; color: #db2777;">Przepisy społeczności 🧁</h3>
 
-<div class="filter-chips">
-<div class="chip active" onclick="setCatalogFilter('all', this)">Wszystkie</div>
-<div class="chip" onclick="setCatalogFilter('quick', this)">Szybkie (do 20 min)</div>
-<div class="chip" onclick="setCatalogFilter('fit', this)">Lekkie (do 350 kcal/porcja)</div>
+<nav class="category-navigation" aria-label="Kategorie przepisów">
+<p class="category-navigation-label">PRZEGLĄDAJ PO KATEGORII</p>
+<div class="category-tabs" role="group" aria-label="Główne kategorie">
+<button type="button" class="category-tab" aria-pressed="true" onclick="setCatalogCategoryFilter('all', this)"><span class="category-tab-icon" aria-hidden="true">🍽️</span><span>Wszystkie</span></button>
+<button type="button" class="category-tab" aria-pressed="false" onclick="setCatalogCategoryFilter('obiadowe', this)"><span class="category-tab-icon" aria-hidden="true">🍲</span><span>Obiadowe</span></button>
+<button type="button" class="category-tab" aria-pressed="false" onclick="setCatalogCategoryFilter('desery', this)"><span class="category-tab-icon" aria-hidden="true">🍰</span><span>Desery</span></button>
+<button type="button" class="category-tab" aria-pressed="false" onclick="setCatalogCategoryFilter('sniadania', this)"><span class="category-tab-icon" aria-hidden="true">🍳</span><span>Śniadania</span></button>
+<button type="button" class="category-tab" aria-pressed="false" onclick="setCatalogCategoryFilter('przekaski', this)"><span class="category-tab-icon" aria-hidden="true">🥨</span><span>Przekąski</span></button>
+<button type="button" class="category-tab" aria-pressed="false" onclick="setCatalogCategoryFilter('dodatki', this)"><span class="category-tab-icon" aria-hidden="true">🫙</span><span>Dodatki</span></button>
+</div>
+<div id="catalog-subcategory-tabs" class="subcategory-tabs hidden" role="group" aria-label="Podkategorie"></div>
+</nav>
+
+<section class="catalog-inspiration" aria-label="Inspiracja kulinarna">
+<img src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&amp;fit=crop&amp;w=700&amp;q=82" alt="Świeże warzywa i składniki do gotowania" loading="eager">
+<div class="catalog-inspiration-copy">
+<h4>Co dziś ugotujemy?</h4>
+<p>Podaj składniki, które masz pod ręką, a AI podsunie pomysł na danie.</p>
+<button type="button" class="catalog-inspiration-button" onclick="switchTab('ai-helper')">Znajdź inspirację</button>
+</div>
+</section>
+
+<div class="filter-chips" role="group" aria-label="Filtruj przepisy">
+<button type="button" class="chip active" aria-pressed="true" onclick="setCatalogFilter('all', this)"><span>Wszystkie</span><small>przepisy</small></button>
+<button type="button" class="chip" aria-pressed="false" onclick="setCatalogFilter('quick', this)"><span>Szybkie</span><small>do 20 min</small></button>
+<button type="button" class="chip" aria-pressed="false" onclick="setCatalogFilter('fit', this)"><span>Lekkie</span><small>do 350 kcal</small></button>
 </div>
 
 <div id="catalog-container">Ładowanie przepisów...</div>
@@ -335,56 +972,82 @@ to { opacity: 1; transform: translateY(0); }
 <h3 id="form-heading" style="margin-top:0; color: #db2777; font-weight: 700;">Stwórz nowy przepis 🍰</h3>
 <input type="hidden" id="edit-recipe-id" value="">
 
+<section class="recipe-step">
+<h4 class="recipe-step-heading"><span class="ingredient-step-mark" aria-hidden="true">01</span>Nazwa przepisu</h4>
 <input type="text" id="recipe-title" placeholder="Nazwa przepisu (np. Waniliowa owsianka)">
-
-<div style="display: flex; gap: 10px;">
-<div style="flex: 2;">
-<label for="recipe-pan" style="font-size: 13px; font-weight: 600; color: #4a5568; display: block; margin-bottom: 4px;">Naczynie / foremka:</label>
-<select id="recipe-pan">
-<option value="Tortownica okrągła 22 cm">Tortownica (22 cm)</option>
-<option value="Tortownica okrągła 24 cm">Tortownica (24 cm)</option>
-<option value="Blacha prostokątna 20x30 cm">Blacha 20x30 cm</option>
-<option value="Blacha prostokątna 25x35 cm">Blacha 25x35 cm</option>
-<option value="Keksówka 30 cm">Keksówka 30 cm</option>
-<option value="Foremka do muffinek (12 szt.)">Muffinki (12 szt.)</option>
-<option value="Inne">Inne</option>
+<div class="recipe-category-fields">
+<div>
+<label for="recipe-category">Kategoria</label>
+<select id="recipe-category" onchange="updateRecipeSubcategoryOptions()">
+<option value="">Wybierz kategorię</option>
+<option value="obiadowe">Dania obiadowe</option>
+<option value="desery">Desery</option>
+<option value="sniadania">Śniadania</option>
+<option value="przekaski">Przekąski</option>
+<option value="dodatki">Dodatki i przetwory</option>
 </select>
 </div>
-<div style="flex: 1;">
-<label for="recipe-portions" style="font-size: 13px; font-weight: 600; color: #4a5568; display: block; margin-bottom: 4px;">Liczba porcji:</label>
-<input type="number" id="recipe-portions" value="4" min="1" style="margin-top: 0;">
+<div>
+<label for="recipe-subcategory">Podkategoria</label>
+<select id="recipe-subcategory" disabled>
+<option value="">Najpierw wybierz kategorię</option>
+</select>
 </div>
 </div>
+</section>
 
+<section class="recipe-step">
+<h4 class="recipe-step-heading"><span class="ingredient-step-mark" aria-hidden="true">02</span>Składniki</h4>
 <div style="margin-bottom: 16px;">
 <label for="macro-mode" style="font-size: 13px; font-weight: 600; color: #4a5568; display: block; margin-bottom: 4px;">Sposób wprowadzania makro:</label>
 <select id="macro-mode" onchange="toggleMacroMode()">
-                    <option value="ingredients">Składniki z automatycznym makro</option>
-                    <option value="manual">Ręczne wpisanie makro na końcu</option>
-                    <option value="per-ingredient">Makro dla każdego składnika (automatyczne)</option>
-                    <option value="total-recipe">Makro całego dania na końcu (z internetu)</option>
+<option value="per-ingredient">Wpisuję makro każdego składnika</option>
+<option value="total-recipe">Wpisuję makro całego dania</option>
+<option value="manual">Wklejam listę i wpisuję makro dania</option>
 </select>
+<p id="macro-mode-help" class="ingredient-helper-text">Przy każdym składniku wpisz wartości z etykiety na 100 g.</p>
 </div>
 
             <div id="ingredients-section-wrapper">
-                <div style="background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); padding: 16px; border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.6);">
-                    <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Składniki</h4>
-                    <input type="text" id="ingredient-name" placeholder="Nazwa składnika (np. Płatki owsiane)">
-                    <div style="display: flex; gap: 8px;">
-                        <input type="text" id="ingredient-measure" placeholder="Miara domowa (np. 2 łyżki, 1 szt.)" style="margin-bottom: 8px;">
-                        <input type="number" id="ing-weight" placeholder="Waga w gramach (np. 50)" style="margin-bottom: 8px;">
+                <div class="ingredient-editor">
+                    <div class="ingredient-editor-titlebar">
+                        <h4 class="ingredient-editor-heading">Dodaj składnik</h4>
                     </div>
-                    <div id="ingredient-macro-section">
-                        <div style="display: flex; gap: 8px;">
-                            <input type="number" id="ing-kcal" placeholder="Kcal / 100g">
-                            <input type="number" id="ing-protein" placeholder="Białko / 100g">
+                    <div class="ingredient-field-grid">
+                        <div class="ingredient-field">
+                            <label for="ingredient-name">Składnik</label>
+                            <input type="text" id="ingredient-name" placeholder="np. Płatki owsiane">
                         </div>
-                        <div style="display: flex; gap: 8px;">
-                            <input type="number" id="ing-fat" placeholder="Tłuszcz / 100g">
-                            <input type="number" id="ing-carbs" placeholder="Węgle / 100g">
+                        <div class="ingredient-field">
+                            <label for="ingredient-measure">Miara (opcjonalnie)</label>
+                            <div class="home-measure-inputs">
+                                <input type="number" id="ingredient-measure-amount" min="0" step="0.25" placeholder="2" aria-label="Ilość miary domowej">
+                                <select id="ingredient-measure-unit" aria-label="Jednostka miary domowej">
+                                    <option value="">brak</option>
+                                    <option value="łyżeczka">łyżeczka</option>
+                                    <option value="łyżka">łyżka</option>
+                                    <option value="szklanka">szklanka</option>
+                                    <option value="sztuka">sztuka</option>
+                                    <option value="garść">garść</option>
+                                    <option value="plaster">plaster</option>
+                                    <option value="opakowanie">opakowanie</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="ingredient-field">
+                            <label for="ing-weight">Ilość w gramach</label>
+                            <input type="number" id="ing-weight" min="0" placeholder="50">
                         </div>
                     </div>
-                    <button type="button" id="btn-add-ingredient" style="background: linear-gradient(135deg, #f472b6 0%, #38bdf8 100%); margin-top: 5px;">➕ Dodaj składnik</button>
+                    <div id="ingredient-macro-section" class="ingredient-macros">
+                        <span class="ingredient-macros-title">Wartości na 100 g</span>
+                        <label class="macro-field"><span>Kcal</span><input type="number" id="ing-kcal" min="0" placeholder="0" aria-label="Kalorie na 100 gramów"></label>
+                        <label class="macro-field"><span>Białko</span><input type="number" id="ing-protein" min="0" step="0.1" placeholder="g" aria-label="Białko na 100 gramów"></label>
+                        <label class="macro-field"><span>Tłuszcz</span><input type="number" id="ing-fat" min="0" step="0.1" placeholder="g" aria-label="Tłuszcz na 100 gramów"></label>
+                        <label class="macro-field"><span>Węglowodany</span><input type="number" id="ing-carbs" min="0" step="0.1" placeholder="g" aria-label="Węglowodany na 100 gramów"></label>
+                    </div>
+                    <p class="ingredient-helper-text">Wpisz dane z etykiety. Ilość makro w przepisie zostanie przeliczona na podaną gramaturę.</p>
+                    <button type="button" id="btn-add-ingredient" class="ingredient-add-button">＋ Dodaj do listy</button>
                 </div>
                 <div id="ingredients-summary-container" style="margin-bottom: 15px; font-size: 14px;">
                     <p style="color: #64748b;"><em>Brak dodanych składników.</em></p>
@@ -394,7 +1057,7 @@ to { opacity: 1; transform: translateY(0); }
             <!-- Kontener ręcznego makro -->
             <!-- Sekcja ręcznego makro całościowego widoczna TYLKO w trybie total-recipe -->
 <div id="manual-macro-wrapper" class="hidden" style="background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); padding: 16px; border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.6);">
-                <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Lista składników (z automatycznym wykrywaniem gramów do kalkulatora)</h4>
+                <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Wklej składniki, każdy w osobnym wierszu</h4>
                 <textarea id="manual-ingredients-text" rows="3" placeholder="Wpisz listę składników (np. Płatki owsiane - 50g&#10;Banan - 1 szt.)" style="margin-bottom: 12px;"></textarea>
 
                 <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Makro całego przepisu (łącznie z internetu)</h4>
@@ -407,7 +1070,10 @@ to { opacity: 1; transform: translateY(0); }
 <input type="number" id="manual-total-carbs" placeholder="Całkowite Węgle (g)">
 </div>
 </div>
+</section>
 
+<section class="recipe-step">
+<h4 class="recipe-step-heading"><span class="ingredient-step-mark" aria-hidden="true">03</span>Przygotowanie</h4>
 <textarea id="recipe-steps" rows="4" placeholder="Krok po kroku (opis przygotowania)..."></textarea>
 <input type="text" id="recipe-time" placeholder="Czas przygotowania / pieczenia (np. 25 minut)">
 
@@ -416,6 +1082,29 @@ to { opacity: 1; transform: translateY(0); }
 <option value="public">Publiczny (widoczny w katalogu)</option>
 <option value="private">Prywatny (tylko dla mnie)</option>
 </select>
+</section>
+
+<section class="recipe-step">
+<h4 class="recipe-step-heading"><span class="ingredient-step-mark" aria-hidden="true">04</span>Foremka i liczba porcji</h4>
+<div class="recipe-final-options">
+<div>
+<label for="recipe-pan">Naczynie / foremka</label>
+<select id="recipe-pan">
+<option value="Tortownica okrągła 22 cm">Tortownica (22 cm)</option>
+<option value="Tortownica okrągła 24 cm">Tortownica (24 cm)</option>
+<option value="Blacha prostokątna 20x30 cm">Blacha 20x30 cm</option>
+<option value="Blacha prostokątna 25x35 cm">Blacha 25x35 cm</option>
+<option value="Keksówka 30 cm">Keksówka 30 cm</option>
+<option value="Foremka do muffinek (12 szt.)">Muffinki (12 szt.)</option>
+<option value="Inne">Inne</option>
+</select>
+</div>
+<div>
+<label for="recipe-portions">Liczba osób</label>
+<input type="number" id="recipe-portions" value="4" min="1">
+</div>
+</div>
+</section>
 
 <button id="btn-add-recipe" style="margin-top: 15px;">Opublikuj cały przepis ✨</button>
 <button id="btn-cancel-edit" type="button" class="hidden" style="background: #94a3b8; margin-top: 5px;" onclick="cancelEdit()">Anuluj edycję</button>
@@ -509,6 +1198,59 @@ const rememberMeCheckbox = document.getElementById("remember-me");
 let currentRecipeIngredients = [];
 let currentCatalogFilter = 'all';
 let rawPublicRecipes = [];
+let currentCatalogCategory = 'all';
+let currentCatalogSubcategory = 'all';
+
+const recipeCategories = {
+obiadowe: {
+label: "Dania obiadowe",
+subcategories: [
+{ value: "slone", label: "Słone i wytrawne" },
+{ value: "zupy", label: "Zupy" },
+{ value: "salatki", label: "Sałatki" },
+{ value: "makarony", label: "Makarony" },
+{ value: "miesne", label: "Dania mięsne" },
+{ value: "wegetarianskie", label: "Wegetariańskie" }
+]
+},
+desery: {
+label: "Desery",
+subcategories: [
+{ value: "ciasta", label: "Ciasta" },
+{ value: "ciastka", label: "Ciastka" },
+{ value: "na-zimno", label: "Desery na zimno" },
+{ value: "lody", label: "Lody" },
+{ value: "kremy", label: "Kremy i musy" },
+{ value: "inne", label: "Inne desery" }
+]
+},
+sniadania: {
+label: "Śniadania",
+subcategories: [
+{ value: "slodkie", label: "Na słodko" },
+{ value: "slone", label: "Na słono" },
+{ value: "owsianki", label: "Owsianki" },
+{ value: "jajeczne", label: "Jajeczne" }
+]
+},
+przekaski: {
+label: "Przekąski",
+subcategories: [
+{ value: "slone", label: "Słone" },
+{ value: "slodkie", label: "Słodkie" },
+{ value: "dipy", label: "Dipy i pasty" }
+]
+},
+dodatki: {
+label: "Dodatki i przetwory",
+subcategories: [
+{ value: "sosy", label: "Sosy" },
+{ value: "surowki", label: "Surówki" },
+{ value: "pieczywo", label: "Pieczywo" },
+{ value: "przetwory", label: "Przetwory" }
+]
+}
+};
 
 window.moveBubble = function(index) {
 const bubble = document.getElementById("liquid-bubble");
@@ -561,19 +1303,142 @@ const persistenceType = rememberMeCheckbox.checked ? browserLocalPersistence : b
 await setPersistence(auth, persistenceType);
 }
 
+function populateSubcategorySelect(select, category, placeholder, selectedValue = "") {
+select.replaceChildren(new Option(placeholder, ""));
+const subcategories = recipeCategories[category]?.subcategories || [];
+select.disabled = subcategories.length === 0;
+subcategories.forEach(subcategory => {
+select.add(new Option(subcategory.label, subcategory.value));
+});
+if (subcategories.some(subcategory => subcategory.value === selectedValue)) {
+select.value = selectedValue;
+}
+}
+
+window.updateRecipeSubcategoryOptions = function(selectedValue = "") {
+const category = document.getElementById("recipe-category").value;
+populateSubcategorySelect(
+document.getElementById("recipe-subcategory"),
+category,
+category ? "Wybierz podkategorię" : "Najpierw wybierz kategorię",
+selectedValue
+);
+};
+
+function renderCatalogSubcategoryTabs(category) {
+const container = document.getElementById("catalog-subcategory-tabs");
+const subcategories = recipeCategories[category]?.subcategories || [];
+if (subcategories.length === 0) {
+container.innerHTML = "";
+container.classList.add("hidden");
+return;
+}
+container.innerHTML = `<button type="button" class="subcategory-tab" aria-pressed="true" onclick="setCatalogSubcategoryFilter('all', this)">Wszystkie</button>${subcategories.map(item => `<button type="button" class="subcategory-tab" aria-pressed="false" onclick="setCatalogSubcategoryFilter('${item.value}', this)">${item.label}</button>`).join("")}`;
+container.classList.remove("hidden");
+}
+
+window.setCatalogCategoryFilter = function(category, button) {
+currentCatalogCategory = category;
+currentCatalogSubcategory = "all";
+document.querySelectorAll(".category-tab").forEach(tab => {
+const isSelected = tab === button;
+tab.classList.toggle("active", isSelected);
+tab.setAttribute("aria-pressed", String(isSelected));
+});
+renderCatalogSubcategoryTabs(category);
+renderCatalog();
+};
+
+window.setCatalogSubcategoryFilter = function(subcategory, button) {
+currentCatalogSubcategory = subcategory;
+document.querySelectorAll(".subcategory-tab").forEach(tab => {
+tab.setAttribute("aria-pressed", String(tab === button));
+});
+renderCatalog();
+};
+
+function formatHouseholdUnit(amount, unit) {
+const unitForms = {
+"łyżeczka": ["łyżeczka", "łyżeczki", "łyżeczek"],
+"łyżka": ["łyżka", "łyżki", "łyżek"],
+"szklanka": ["szklanka", "szklanki", "szklanek"],
+"sztuka": ["sztuka", "sztuki", "sztuk"],
+"garść": ["garść", "garście", "garści"],
+"plaster": ["plaster", "plastry", "plastrów"],
+"opakowanie": ["opakowanie", "opakowania", "opakowań"]
+};
+const forms = unitForms[unit];
+if (!forms) return unit;
+if (!Number.isInteger(amount)) return forms[1];
+const remainder100 = amount % 100;
+if (amount === 1) return forms[0];
+if (amount % 10 >= 2 && amount % 10 <= 4 && (remainder100 < 12 || remainder100 > 14)) return forms[1];
+return forms[2];
+}
+
+function formatHouseholdMeasure(ingredient, portionRatio = 1) {
+let measureAmount = Number(ingredient.measureAmount);
+let measureUnit = ingredient.measureUnit;
+if ((!measureAmount || !measureUnit) && ingredient.measure) {
+const legacyMatch = ingredient.measure.trim().match(/^(\d+(?:[.,]\d+)?)\s+(.+)$/);
+if (legacyMatch) {
+const legacyUnit = legacyMatch[2].toLowerCase();
+const unitForms = {
+"łyżeczka": ["łyżeczka", "łyżeczki", "łyżeczek"],
+"łyżka": ["łyżka", "łyżki", "łyżek"],
+"szklanka": ["szklanka", "szklanki", "szklanek"],
+"sztuka": ["sztuka", "sztuki", "sztuk"],
+"garść": ["garść", "garście", "garści"],
+"plaster": ["plaster", "plastry", "plastrów"],
+"opakowanie": ["opakowanie", "opakowania", "opakowań"]
+};
+const matchingUnit = Object.entries(unitForms).find(([, forms]) => forms.includes(legacyUnit));
+if (matchingUnit) {
+measureAmount = parseFloat(legacyMatch[1].replace(",", "."));
+measureUnit = matchingUnit[0];
+}
+}
+}
+if (measureAmount > 0 && measureUnit) {
+const scaledAmount = Math.round(measureAmount * portionRatio * 4) / 4;
+const amountText = new Intl.NumberFormat("pl-PL", { maximumFractionDigits: 2 }).format(scaledAmount);
+return `${amountText} ${formatHouseholdUnit(scaledAmount, measureUnit)}`;
+}
+return ingredient.measure || "";
+}
+
+function formatIngredientQuantity(ingredient, portionRatio = 1) {
+const originalWeight = Number(ingredient.weight ?? ingredient.amount);
+const scaledWeight = originalWeight > 0 ? Math.round(originalWeight * portionRatio) : 0;
+const householdMeasure = formatHouseholdMeasure(ingredient, portionRatio);
+const embeddedWeight = !householdMeasure && originalWeight > 0 && new RegExp(`${originalWeight}\\s*g\\b`, "i").test(ingredient.name);
+const name = embeddedWeight
+? ingredient.name.replace(new RegExp(`${originalWeight}\\s*g\\b`, "i"), `${scaledWeight}g`)
+: ingredient.name;
+const quantity = [householdMeasure, scaledWeight > 0 && !embeddedWeight ? `${scaledWeight} g` : ""].filter(Boolean).join(" · ");
+return { name, quantity, scaledWeight };
+}
+
 window.toggleMacroMode = function() {
 const mode = document.getElementById("macro-mode").value;
 const ingWrapper = document.getElementById("ingredients-section-wrapper");
 const ingMacroSection = document.getElementById("ingredient-macro-section");
 const manualWrapper = document.getElementById("manual-macro-wrapper");
+const helpText = document.getElementById("macro-mode-help");
 ingWrapper.classList.toggle('hidden', mode === 'manual');
 ingMacroSection.classList.toggle('hidden', mode !== 'ingredients' && mode !== 'per-ingredient');
 manualWrapper.classList.toggle('hidden', mode !== 'manual' && mode !== 'total-recipe');
+helpText.textContent = mode === 'per-ingredient' || mode === 'ingredients'
+? "Przy każdym składniku wpisz wartości z etykiety na 100 g."
+: mode === 'total-recipe'
+? "Dodaj składniki po kolei, a łączne makro przepisu wpisz poniżej."
+: "Wklej listę składników po jednym w wierszu i wpisz łączne makro przepisu.";
 };
 
 document.getElementById("btn-add-ingredient").addEventListener("click", () => {
 const name = document.getElementById("ingredient-name").value.trim();
-const measure = document.getElementById("ingredient-measure").value.trim();
+const measureAmount = parseFloat(document.getElementById("ingredient-measure-amount").value) || 0;
+const measureUnit = document.getElementById("ingredient-measure-unit").value;
 const weight = parseFloat(document.getElementById("ing-weight").value) || 0;
 const mode = document.getElementById("macro-mode").value;
 
@@ -584,7 +1449,8 @@ return;
 
 const ingredientData = {
 name,
-measure,
+measureAmount: measureAmount > 0 && measureUnit ? measureAmount : null,
+measureUnit: measureAmount > 0 ? measureUnit : "",
 weight,
 kcal: 0,
 protein: 0,
@@ -608,7 +1474,8 @@ currentRecipeIngredients.push(ingredientData);
 updateIngredientsUI();
 
 document.getElementById("ingredient-name").value = "";
-document.getElementById("ingredient-measure").value = "";
+document.getElementById("ingredient-measure-amount").value = "";
+document.getElementById("ingredient-measure-unit").value = "";
 document.getElementById("ing-weight").value = "";
 document.getElementById("ing-kcal").value = "";
 document.getElementById("ing-protein").value = "";
@@ -621,29 +1488,30 @@ const container = document.getElementById("ingredients-summary-container");
 const mode = document.getElementById("macro-mode").value;
 
 if (currentRecipeIngredients.length === 0) {
-container.innerHTML = "<p style='color: #64748b;'><em>Brak dodanych składników.</em></p>";
+container.innerHTML = "<p class='ingredient-helper-text'>Dodane składniki pojawią się tutaj.</p>";
 return;
 }
 
-let html = "<strong style='color: #475569;'>Dodane składniki:</strong><ul style='padding-left: 20px; margin: 8px 0;'>";
+let html = "<strong style='color: #475569;'>Składniki w przepisie</strong><ul class='ingredient-list'>";
 let totalKcal = 0, totalP = 0, totalF = 0, totalC = 0;
 
 currentRecipeIngredients.forEach((item, index) => {
-const measureText = item.measure ? `(${item.measure}, ${item.weight}g)` : `(${item.weight}g)`;
+const measureText = formatIngredientQuantity(item).quantity;
+const macroText = mode === 'per-ingredient' || mode === 'ingredients'
+? `${item.kcal || 0} kcal · B ${item.protein || 0} g · T ${item.fat || 0} g · W ${item.carbs || 0} g`
+: "Makro całego dania wpiszesz poniżej";
+html += `<li class="ingredient-list-item"><div><strong>${escapeHtml(item.name)}</strong><span>${escapeHtml(measureText)}${measureText ? " · " : ""}${macroText}</span></div><button type="button" class="ingredient-remove-button" onclick="removeIngredient(${index})" aria-label="Usuń ${escapeHtml(item.name)}" title="Usuń składnik">×</button></li>`;
 if (mode === 'per-ingredient' || mode === 'ingredients') {
-html += `<li style="margin-bottom: 4px;">${escapeHtml(item.name)} ${measureText} — ${item.kcal} kcal | B: ${item.protein}g | T: ${item.fat}g | W: ${item.carbs}g <button type="button" onclick="removeIngredient(${index})" style="width: auto; padding: 2px 6px; font-size: 11px; background: #ef4444; margin-left: 5px; border-radius: 6px; box-shadow: none;">Usuń</button></li>`;
 totalKcal += item.kcal;
 totalP += item.protein;
 totalF += item.fat;
 totalC += item.carbs;
-} else {
-html += `<li style="margin-bottom: 4px;">${escapeHtml(item.name)} ${measureText} <button type="button" onclick="removeIngredient(${index})" style="width: auto; padding: 2px 6px; font-size: 11px; background: #ef4444; margin-left: 5px; border-radius: 6px; box-shadow: none;">Usuń</button></li>`;
 }
 });
 
 html += `</ul>`;
 if (mode === 'per-ingredient' || mode === 'ingredients') {
-html += `<div style="background: rgba(224, 242, 254, 0.8); padding: 10px; border-radius: 12px; color: #0369a1; font-weight: 500; margin-top: 10px;"><strong>Łącznie w daniu:</strong> ${totalKcal} kcal | B: ${totalP.toFixed(1)}g | T: ${totalF.toFixed(1)}g | W: ${totalC.toFixed(1)}g</div>`;
+html += `<div class="ingredient-total">Razem: ${totalKcal} kcal · B ${totalP.toFixed(1)} g · T ${totalF.toFixed(1)} g · W ${totalC.toFixed(1)} g</div>`;
 }
 container.innerHTML = html;
 }
@@ -729,6 +1597,8 @@ const steps = document.getElementById("recipe-steps").value.trim();
 const time = document.getElementById("recipe-time").value.trim();
 const visibility = document.getElementById("recipe-visibility").value;
 const macroMode = document.getElementById("macro-mode").value;
+const category = document.getElementById("recipe-category").value;
+const subcategory = document.getElementById("recipe-subcategory").value;
 const user = auth.currentUser;
 
 if (!title) {
@@ -786,6 +1656,8 @@ carbs: parseFloat((totals.carbs / portions).toFixed(1))
 
 const recipePayload = {
 title,
+category,
+subcategory,
 panSize,
 portions,
 ingredients: finalIngredients,
@@ -817,6 +1689,8 @@ alert("Przepis dodany pomyślnie!");
 }
 
 document.getElementById("recipe-title").value = "";
+document.getElementById("recipe-category").value = "";
+updateRecipeSubcategoryOptions();
 document.getElementById("recipe-steps").value = "";
 document.getElementById("recipe-time").value = "";
 document.getElementById("recipe-portions").value = "4";
@@ -843,8 +1717,11 @@ document.getElementById("recipe-portions").value = recipe.portions || 4;
 document.getElementById("recipe-steps").value = recipe.steps || "";
 document.getElementById("recipe-time").value = recipe.time || "";
 document.getElementById("recipe-visibility").value = recipe.isPublic ? "public" : "private";
+document.getElementById("recipe-category").value = recipe.category || "";
+updateRecipeSubcategoryOptions(recipe.subcategory || "");
 const hasIngredientMacros = recipe.ingredients?.some(ingredient => ingredient.kcal > 0);
-const macroMode = recipe.macroMode || (hasIngredientMacros ? "per-ingredient" : "total-recipe");
+const savedMacroMode = recipe.macroMode || (hasIngredientMacros ? "per-ingredient" : "total-recipe");
+const macroMode = savedMacroMode === "ingredients" ? "per-ingredient" : savedMacroMode;
 document.getElementById("macro-mode").value = macroMode;
 document.getElementById("manual-ingredients-text").value = macroMode === "manual"
 ? (recipe.ingredients || []).map(ingredient => ingredient.name).join('\n')
@@ -868,6 +1745,8 @@ switchTab('add-recipe');
 window.cancelEdit = function() {
 document.getElementById("edit-recipe-id").value = "";
 document.getElementById("recipe-title").value = "";
+document.getElementById("recipe-category").value = "";
+updateRecipeSubcategoryOptions();
 document.getElementById("recipe-steps").value = "";
 document.getElementById("recipe-time").value = "";
 document.getElementById("recipe-portions").value = "4";
@@ -927,8 +1806,11 @@ displayEl.textContent = `⏳ Pozostało: ${m}:${s < 10 ? '0' : ''}${s}`;
 
 window.setCatalogFilter = function(filterType, el) {
 currentCatalogFilter = filterType;
-document.querySelectorAll('.filter-chips .chip').forEach(c => c.classList.remove('active'));
-el.classList.add('active');
+document.querySelectorAll('.filter-chips .chip').forEach(chip => {
+const isSelected = chip === el;
+chip.classList.toggle('active', isSelected);
+chip.setAttribute('aria-pressed', String(isSelected));
+});
 renderCatalog();
 };
 
@@ -939,6 +1821,29 @@ return;
 cardEl.classList.toggle('expanded');
 };
 
+const cookingChecklist = new Map();
+
+window.toggleCookingIngredient = function(docId, ingredientIndex, isChecked) {
+if (!cookingChecklist.has(docId)) cookingChecklist.set(docId, new Set());
+const checkedIngredients = cookingChecklist.get(docId);
+if (isChecked) checkedIngredients.add(ingredientIndex);
+else checkedIngredients.delete(ingredientIndex);
+const checkbox = document.getElementById(`cooking-check-${docId}-${ingredientIndex}`);
+if (checkbox) checkbox.closest('.cooking-checklist-item').classList.toggle('is-checked', isChecked);
+};
+
+function renderCookingChecklist(ingredients, docId, ratio = 1) {
+if (!cookingChecklist.has(docId)) cookingChecklist.set(docId, new Set());
+const checkedIngredients = cookingChecklist.get(docId);
+return ingredients.map((ingredient, index) => {
+const quantity = formatIngredientQuantity(ingredient, ratio);
+const measureText = quantity.quantity ? ` (${escapeHtml(quantity.quantity)})` : "";
+const macroText = ingredient.kcal > 0 ? ` — ${Math.round(ingredient.kcal * ratio)} kcal` : "";
+const isChecked = checkedIngredients.has(index);
+return `<li class="cooking-checklist-item${isChecked ? " is-checked" : ""}"><input type="checkbox" id="cooking-check-${docId}-${index}" aria-label="Oznacz składnik jako użyty" ${isChecked ? "checked" : ""} onchange="toggleCookingIngredient('${docId}', ${index}, this.checked)"><label for="cooking-check-${docId}-${index}">${escapeHtml(quantity.name)}${measureText}${macroText}</label></li>`;
+}).join("");
+}
+
 window.updatePortionMultiplier = function(docId, basePortions, ingredientsJson) {
 const multiplierInput = document.getElementById(`portion-input-${docId}`);
 const selectedPortions = parseFloat(multiplierInput.value) || 1;
@@ -947,24 +1852,7 @@ const ratio = selectedPortions / basePortions;
 const ingredientsContainer = document.getElementById(`scaled-ingredients-${docId}`);
 const ingredients = JSON.parse(ingredientsJson);
 
-let html = "";
-ingredients.forEach(ing => {
-if (ing.weight !== undefined && ing.weight > 0) {
-const scaledWeight = Math.round(ing.weight * ratio);
-                    const measureText = ing.measure ? `(${ing.measure}, ${scaledWeight}g)` : `(${scaledWeight}g)`;
-if (ing.kcal !== undefined && ing.kcal > 0) {
-                        const measureText = ing.measure ? `(${ing.measure}, ${scaledWeight}g)` : `(${scaledWeight}g)`;
-const scaledKcal = Math.round(ing.kcal * ratio);
-html += `<li>${escapeHtml(ing.name)} ${measureText} — ${scaledKcal} kcal</li>`;
-} else {
-                        let updatedName = ing.name.replace(new RegExp(`${ing.weight}\\s*g`, 'i'), `${scaledWeight}g`);
-                        html += `<li>${escapeHtml(updatedName)}</li>`;
-                        html += `<li>${escapeHtml(ing.name)} ${measureText}</li>`;
-}
-} else {
-html += `<li>${escapeHtml(ing.name)}</li>`;
-}
-});
+const html = renderCookingChecklist(ingredients, docId, ratio);
 ingredientsContainer.innerHTML = html;
 };
 
@@ -972,6 +1860,9 @@ function renderRecipeCard(recipe, docId, isOwnerView = false) {
 const badge = recipe.isPublic ? "🌐 Publiczny" : "🔒 Prywatny";
 const basePortions = recipe.portions || 1;
 const panHtml = recipe.panSize ? `<p style="color: #db2777; font-size: 13px; margin: 4px 0;">🍰 <strong>Foremka:</strong> ${escapeHtml(recipe.panSize)}</p>` : "";
+const categoryInfo = recipeCategories[recipe.category];
+const subcategoryInfo = categoryInfo?.subcategories.find(item => item.value === recipe.subcategory);
+const categoryHtml = categoryInfo ? `<span class="recipe-category-badge">${escapeHtml(categoryInfo.label)}${subcategoryInfo ? ` · ${escapeHtml(subcategoryInfo.label)}` : ""}</span>` : "";
 
 let macrosHtml = "";
 let portionMacro = recipe.perPortionMacros || (recipe.totalMacros ? {
@@ -992,17 +1883,7 @@ macrosHtml = `
                `;
 }
 
-let initialIngredientsHtml = "";
-if (Array.isArray(recipe.ingredients)) {
-recipe.ingredients.forEach(ing => {
-const measureText = ing.weight ? (ing.measure ? `(${ing.measure}, ${ing.weight}g)` : `(${ing.weight}g)`) : "";
-if (ing.kcal !== undefined && ing.kcal > 0) {
-initialIngredientsHtml += `<li>${escapeHtml(ing.name)} ${measureText} — ${ing.kcal} kcal</li>`;
-} else {
-initialIngredientsHtml += `<li>${escapeHtml(ing.name)} ${measureText}</li>`;
-}
-});
-}
+const initialIngredientsHtml = renderCookingChecklist(recipe.ingredients || [], docId);
 
 let timeMinutes = 15;
 if (recipe.time) {
@@ -1041,6 +1922,7 @@ return `
                        <span style="font-size: 13px; color: var(--primary-pink); font-weight: 600;">👥 ${basePortions} porcje ▼</span>
                    </h4>
                    ${panHtml}
+                   ${categoryHtml}
                    <p style="font-size: 13px; color: #64748b; margin: 4px 0;">Kliknij kartę, aby zobaczyć cały przepis i składniki</p>
                    ${macrosHtml}
 
@@ -1053,8 +1935,8 @@ return `
                            <span style="font-size: 13px; color: #64748b;">porcji</span>
                        </div>
 
-                       <p style="font-weight: 600; color: #334155; margin-bottom: 4px;">Składniki (przeliczone):</p>
-                       <ul id="scaled-ingredients-${docId}" style="padding-left: 20px; color: #4a5568;">
+                       <p style="font-weight: 600; color: #334155; margin-bottom: 4px;">Składniki do odhaczenia:</p>
+                       <ul id="scaled-ingredients-${docId}" class="cooking-checklist">
                            ${initialIngredientsHtml}
                        </ul>
 
@@ -1088,6 +1970,8 @@ return;
 
 let filtered = rawPublicRecipes.filter(item => {
 const data = item.data;
+if (currentCatalogCategory !== 'all' && data.category !== currentCatalogCategory) return false;
+if (currentCatalogSubcategory !== 'all' && data.subcategory !== currentCatalogSubcategory) return false;
 if (currentCatalogFilter === 'quick') {
 if (!data.time) return false;
 const match = data.time.match(/\d+/);
