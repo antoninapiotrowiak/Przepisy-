@@ -297,10 +297,63 @@ font-weight: 800;
 .category-tabs,
 .subcategory-tabs {
 display: flex;
+min-width: 0;
+flex: 1;
 gap: 5px;
 overflow-x: auto;
 scrollbar-width: none;
 overscroll-behavior-inline: contain;
+}
+
+.category-rail,
+.subcategory-rail {
+display: flex;
+align-items: center;
+gap: 5px;
+}
+
+.subcategory-rail {
+margin-top: 8px;
+}
+
+.category-scroll-button {
+display: none;
+width: 28px;
+height: 32px;
+flex: 0 0 28px;
+align-items: center;
+justify-content: center;
+margin: 0;
+padding: 0;
+border: 1px solid #fbcfe8;
+border-radius: 8px;
+background: rgba(255, 255, 255, 0.8);
+color: #9d174d;
+box-shadow: none;
+font-size: 19px;
+line-height: 1;
+}
+
+.category-scroll-button:hover {
+transform: none;
+background: #fff1f7;
+box-shadow: none;
+}
+
+.category-scroll-button:disabled,
+.category-scroll-button:disabled:hover {
+border-color: transparent;
+background: transparent;
+color: #cbd5e1;
+box-shadow: none;
+cursor: default;
+transform: none;
+}
+
+@media (min-width: 600px) {
+.category-scroll-button {
+display: inline-flex;
+}
 }
 
 .category-tabs::-webkit-scrollbar,
@@ -311,9 +364,9 @@ display: none;
 .category-tab {
 display: flex;
 width: auto;
-min-width: 74px;
+min-width: 90px;
 min-height: 58px;
-flex: 1 0 74px;
+flex: 0 0 90px;
 flex-direction: column;
 align-items: center;
 justify-content: center;
@@ -349,9 +402,40 @@ font-size: 18px;
 line-height: 1;
 }
 
+.category-tab-icon.jar-icon {
+position: relative;
+display: block;
+width: 18px;
+height: 19px;
+font-size: 0;
+}
+
+.category-tab-icon.jar-icon::before {
+position: absolute;
+top: 2px;
+left: 4px;
+width: 10px;
+height: 3px;
+border-radius: 2px;
+background: #92400e;
+content: "";
+}
+
+.category-tab-icon.jar-icon::after {
+position: absolute;
+top: 6px;
+left: 3px;
+width: 12px;
+height: 10px;
+border: 1.5px solid #b45309;
+border-radius: 3px 3px 5px 5px;
+background: linear-gradient(135deg, #fef3c7, #f59e0b);
+box-shadow: inset 0 -3px rgba(180, 83, 9, 0.2);
+content: "";
+}
+
 .subcategory-tabs {
 min-height: 29px;
-margin-top: 8px;
 padding: 2px 0;
 }
 
@@ -359,7 +443,7 @@ padding: 2px 0;
 width: auto;
 flex: 0 0 auto;
 margin: 0;
-padding: 6px 10px;
+padding: 6px 7px;
 border: 1px solid #e2e8f0;
 border-radius: 9999px;
 background: rgba(255, 255, 255, 0.68);
@@ -398,8 +482,8 @@ gap: 0;
 }
 
 .category-tab {
-min-width: 72px;
-flex-basis: 72px;
+min-width: 62px;
+flex-basis: 62px;
 }
 }
 
@@ -928,15 +1012,23 @@ to { opacity: 1; transform: translateY(0); }
 
 <nav class="category-navigation" aria-label="Kategorie przepisów">
 <p class="category-navigation-label">PRZEGLĄDAJ PO KATEGORII</p>
-<div class="category-tabs" role="group" aria-label="Główne kategorie">
+<div class="category-rail">
+<button type="button" class="category-scroll-button" aria-label="Przewiń kategorie w lewo" onclick="scrollCategoryRail('category-tabs', -1)">‹</button>
+<div id="category-tabs" class="category-tabs" role="group" aria-label="Główne kategorie">
 <button type="button" class="category-tab" aria-pressed="true" onclick="setCatalogCategoryFilter('all', this)"><span class="category-tab-icon" aria-hidden="true">🍽️</span><span>Wszystkie</span></button>
 <button type="button" class="category-tab" aria-pressed="false" onclick="setCatalogCategoryFilter('obiadowe', this)"><span class="category-tab-icon" aria-hidden="true">🍲</span><span>Obiadowe</span></button>
 <button type="button" class="category-tab" aria-pressed="false" onclick="setCatalogCategoryFilter('desery', this)"><span class="category-tab-icon" aria-hidden="true">🍰</span><span>Desery</span></button>
 <button type="button" class="category-tab" aria-pressed="false" onclick="setCatalogCategoryFilter('sniadania', this)"><span class="category-tab-icon" aria-hidden="true">🍳</span><span>Śniadania</span></button>
 <button type="button" class="category-tab" aria-pressed="false" onclick="setCatalogCategoryFilter('przekaski', this)"><span class="category-tab-icon" aria-hidden="true">🥨</span><span>Przekąski</span></button>
-<button type="button" class="category-tab" aria-pressed="false" onclick="setCatalogCategoryFilter('dodatki', this)"><span class="category-tab-icon" aria-hidden="true">🫙</span><span>Dodatki</span></button>
+<button type="button" class="category-tab" aria-pressed="false" onclick="setCatalogCategoryFilter('dodatki', this)"><span class="category-tab-icon jar-icon" aria-hidden="true"></span><span>Dodatki</span></button>
 </div>
-<div id="catalog-subcategory-tabs" class="subcategory-tabs hidden" role="group" aria-label="Podkategorie"></div>
+<button type="button" class="category-scroll-button" aria-label="Przewiń kategorie w prawo" onclick="scrollCategoryRail('category-tabs', 1)">›</button>
+</div>
+<div id="catalog-subcategory-rail" class="subcategory-rail hidden">
+<button type="button" class="category-scroll-button" aria-label="Przewiń podkategorie w lewo" onclick="scrollCategoryRail('catalog-subcategory-tabs', -1)">‹</button>
+<div id="catalog-subcategory-tabs" class="subcategory-tabs" role="group" aria-label="Podkategorie"></div>
+<button type="button" class="category-scroll-button" aria-label="Przewiń podkategorie w prawo" onclick="scrollCategoryRail('catalog-subcategory-tabs', 1)">›</button>
+</div>
 </nav>
 
 <section class="catalog-inspiration" aria-label="Inspiracja kulinarna">
@@ -1229,7 +1321,7 @@ label: "Śniadania",
 subcategories: [
 { value: "slodkie", label: "Na słodko" },
 { value: "slone", label: "Na słono" },
-{ value: "owsianki", label: "Owsianki" },
+{ value: "owsianki", label: "Owsiane" },
 { value: "jajeczne", label: "Jajeczne" }
 ]
 },
@@ -1327,15 +1419,42 @@ selectedValue
 
 function renderCatalogSubcategoryTabs(category) {
 const container = document.getElementById("catalog-subcategory-tabs");
+const rail = document.getElementById("catalog-subcategory-rail");
 const subcategories = recipeCategories[category]?.subcategories || [];
 if (subcategories.length === 0) {
 container.innerHTML = "";
-container.classList.add("hidden");
+rail.classList.add("hidden");
 return;
 }
 container.innerHTML = `<button type="button" class="subcategory-tab" aria-pressed="true" onclick="setCatalogSubcategoryFilter('all', this)">Wszystkie</button>${subcategories.map(item => `<button type="button" class="subcategory-tab" aria-pressed="false" onclick="setCatalogSubcategoryFilter('${item.value}', this)">${item.label}</button>`).join("")}`;
-container.classList.remove("hidden");
+rail.classList.remove("hidden");
+updateCategoryRailControls(container);
 }
+
+function updateCategoryRailControls(rail) {
+const controls = rail.parentElement.querySelectorAll(".category-scroll-button");
+const maxScroll = rail.scrollWidth - rail.clientWidth;
+controls[0].disabled = maxScroll <= 1 || rail.scrollLeft <= 1;
+controls[1].disabled = maxScroll <= 1 || rail.scrollLeft >= maxScroll - 1;
+}
+
+window.scrollCategoryRail = function(railId, direction) {
+const rail = document.getElementById(railId);
+if (!rail) return;
+const maxScroll = rail.scrollWidth - rail.clientWidth;
+const distance = Math.max(160, rail.clientWidth * 0.75);
+rail.scrollLeft = Math.max(0, Math.min(maxScroll, rail.scrollLeft + direction * distance));
+updateCategoryRailControls(rail);
+};
+
+document.querySelectorAll(".category-tabs, .subcategory-tabs").forEach(rail => {
+rail.addEventListener("scroll", () => updateCategoryRailControls(rail), { passive: true });
+updateCategoryRailControls(rail);
+});
+
+window.addEventListener("resize", () => {
+document.querySelectorAll(".category-tabs, .subcategory-tabs").forEach(updateCategoryRailControls);
+});
 
 window.setCatalogCategoryFilter = function(category, button) {
 currentCatalogCategory = category;
