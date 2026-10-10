@@ -475,10 +475,276 @@ font-size: 11px;
 font-weight: 700;
 }
 
+.recipe-list-toolbar {
+display: grid;
+grid-template-columns: minmax(0, 1fr) auto;
+gap: 8px;
+margin: 10px 0 16px;
+}
+
+.recipe-search-input {
+min-width: 0;
+margin: 0;
+background: rgba(255, 255, 255, 0.85);
+}
+
+.recipe-safety-filters {
+display: grid;
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 8px;
+margin: -6px 0 16px;
+}
+
+.recipe-safety-filters label {
+display: block;
+min-width: 0;
+color: #475569;
+font-size: 11px;
+font-weight: 700;
+}
+
+.recipe-safety-filters select {
+margin: 4px 0 0;
+padding: 9px 10px;
+border-width: 1px;
+background: rgba(255, 255, 255, 0.82);
+font-size: 12px;
+}
+
+.allergen-filter-note {
+grid-column: 1 / -1;
+margin: -2px 0 0;
+color: #9a3412;
+font-size: 11px;
+}
+
+.favorites-filter {
+width: auto;
+margin: 0;
+padding: 10px 12px;
+border: 1px solid #fbcfe8;
+border-radius: 11px;
+background: #fff;
+color: #9d174d;
+box-shadow: none;
+font-size: 13px;
+white-space: nowrap;
+}
+
+.favorites-filter[aria-pressed="true"] {
+border-color: #f9a8d4;
+background: #fdf2f8;
+color: #be185d;
+}
+
+.recipe-card-topline {
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.recipe-favorite-button {
+width: 34px;
+height: 34px;
+flex: 0 0 34px;
+margin: 0;
+padding: 0;
+border: 1px solid #fbcfe8;
+border-radius: 9px;
+background: #fff;
+color: #be185d;
+box-shadow: none;
+font-size: 20px;
+}
+
+.recipe-favorite-button[aria-pressed="true"] { background: #fce7f3; }
+
+.recipe-image-preview {
+display: block;
+width: min(100%, 320px);
+max-height: 220px;
+margin: 8px 0;
+object-fit: cover;
+border-radius: 10px;
+}
+
+.recipe-card-image {
+display: block;
+width: 100%;
+max-height: 250px;
+margin: 8px 0 12px;
+object-fit: cover;
+border-radius: 12px;
+}
+
+.recipe-image-upload input {
+margin: 4px 0 10px;
+padding: 8px;
+background: rgba(255, 255, 255, 0.8);
+}
+
+.recipe-option-groups {
+display: grid;
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 10px;
+margin: 12px 0;
+}
+
+.recipe-option-group {
+min-width: 0;
+margin: 0;
+
+.recipe-safety-filters {
+grid-template-columns: minmax(0, 1fr);
+}
+padding: 10px;
+border: 1px solid #e2e8f0;
+border-radius: 10px;
+}
+
+.recipe-option-group legend {
+padding: 0 4px;
+color: #475569;
+font-size: 12px;
+font-weight: 700;
+}
+
+.recipe-option-list {
+display: flex;
+flex-wrap: wrap;
+gap: 6px;
+}
+
+.recipe-option-list label {
+display: inline-flex;
+align-items: center;
+gap: 5px;
+padding: 5px 7px;
+border: 1px solid #e2e8f0;
+border-radius: 8px;
+background: #fff;
+color: #475569;
+font-size: 11px;
+}
+
+.recipe-option-list input {
+width: auto;
+margin: 0;
+accent-color: #ec4899;
+}
+
+.recipe-diet-badges {
+display: flex;
+flex-wrap: wrap;
+gap: 5px;
+margin: 6px 0;
+}
+
+.recipe-diet-badge,
+.recipe-allergen-note {
+padding: 4px 8px;
+border-radius: 9999px;
+font-size: 11px;
+font-weight: 600;
+}
+
+.recipe-diet-badge {
+border: 1px solid #bbf7d0;
+background: #f0fdf4;
+color: #166534;
+}
+
+.recipe-allergen-note {
+display: inline-block;
+margin: 5px 0;
+border: 1px solid #fed7aa;
+background: #fff7ed;
+color: #9a3412;
+}
+
+.shopping-list-panel {
+margin: 12px 0 18px;
+padding: 12px 0;
+border-top: 1px solid #fbcfe8;
+border-bottom: 1px solid #fbcfe8;
+}
+
+.shopping-list-heading {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 8px;
+margin-bottom: 8px;
+}
+
+.shopping-list-heading h4 {
+margin: 0;
+color: #9d174d;
+font-size: 15px;
+}
+
+.shopping-clear-button {
+width: auto;
+margin: 0;
+padding: 6px 9px;
+border: 1px solid #e2e8f0;
+border-radius: 8px;
+background: #fff;
+color: #64748b;
+box-shadow: none;
+font-size: 11px;
+}
+
+.shopping-list-items {
+display: grid;
+gap: 5px;
+margin: 0;
+padding: 0;
+list-style: none;
+}
+
+.shopping-list-item {
+display: flex;
+align-items: center;
+gap: 8px;
+padding: 7px 9px;
+border-radius: 8px;
+background: rgba(255, 255, 255, 0.72);
+font-size: 13px;
+}
+
+.shopping-list-item input {
+width: 17px;
+height: 17px;
+margin: 0;
+accent-color: #16a34a;
+}
+
+.shopping-list-item.is-checked span {
+color: #94a3b8;
+text-decoration: line-through;
+}
+
+.shopping-add-recipe-button {
+width: auto;
+margin: 0 0 12px;
+padding: 8px 10px;
+border: 1px solid #a7f3d0;
+border-radius: 9px;
+background: #ecfdf5;
+color: #047857;
+box-shadow: none;
+font-size: 12px;
+}
+
 @media (max-width: 480px) {
 .recipe-category-fields {
 grid-template-columns: minmax(0, 1fr);
 gap: 0;
+}
+
+.recipe-option-groups {
+grid-template-columns: minmax(0, 1fr);
 }
 
 .category-tab {
@@ -1046,6 +1312,36 @@ to { opacity: 1; transform: translateY(0); }
 <button type="button" class="chip" aria-pressed="false" onclick="setCatalogFilter('fit', this)"><span>Lekkie</span><small>do 350 kcal</small></button>
 </div>
 
+<div class="recipe-list-toolbar">
+<input type="search" id="catalog-search" class="recipe-search-input" placeholder="Szukaj przepisu lub składnika" aria-label="Szukaj przepisów" oninput="setCatalogSearch(this.value)">
+<button type="button" id="catalog-favorites-filter" class="favorites-filter" aria-pressed="false" onclick="toggleFavoritesFilter()">♡ Ulubione</button>
+</div>
+
+<div class="recipe-safety-filters">
+<label>Dieta
+<select id="catalog-diet-filter" onchange="setDietFilter(this.value)">
+<option value="all">Każda dieta</option>
+<option value="wegetarianskie">Wegetariańskie</option>
+<option value="weganskie">Wegańskie</option>
+<option value="bez-glutenu">Bez glutenu</option>
+<option value="bez-nabialu">Bez nabiału</option>
+<option value="bez-cukru">Bez cukru</option>
+</select>
+</label>
+<label>Wyklucz alergen
+<select id="catalog-allergen-filter" onchange="setAllergenFilter(this.value)">
+<option value="all">Nie wykluczaj</option>
+<option value="gluten">Gluten</option>
+<option value="mleko">Mleko</option>
+<option value="jajka">Jajka</option>
+<option value="orzechy">Orzechy</option>
+<option value="soja">Soja</option>
+<option value="sezam">Sezam</option>
+</select>
+</label>
+<p class="allergen-filter-note">Przepisy bez oznaczeń alergenów są pomijane przy tym filtrze.</p>
+</div>
+
 <div id="catalog-container">Ładowanie przepisów...</div>
 </div>
 </div>
@@ -1054,6 +1350,17 @@ to { opacity: 1; transform: translateY(0); }
 <div id="section-my-recipes" class="tab-content">
 <div class="card">
 <h3 style="margin-top:0; color: #db2777;">Twoja kolekcja 📖</h3>
+<div class="recipe-list-toolbar">
+<input type="search" id="my-recipes-search" class="recipe-search-input" placeholder="Szukaj w moich przepisach" aria-label="Szukaj w moich przepisach" oninput="setMyRecipesSearch(this.value)">
+<button type="button" id="my-favorites-filter" class="favorites-filter" aria-pressed="false" onclick="toggleFavoritesFilter()">♡ Ulubione</button>
+</div>
+<section class="shopping-list-panel" aria-labelledby="shopping-list-title">
+<div class="shopping-list-heading">
+<h4 id="shopping-list-title">Lista zakupów</h4>
+<button type="button" class="shopping-clear-button" onclick="clearShoppingList()">Wyczyść</button>
+</div>
+<div id="shopping-list-container">Lista jest pusta. Dodaj składniki z przepisu.</div>
+</section>
 <div id="my-recipes-container">Ładowanie Twoich przepisów...</div>
 </div>
 </div>
@@ -1085,6 +1392,36 @@ to { opacity: 1; transform: translateY(0); }
 <option value="">Najpierw wybierz kategorię</option>
 </select>
 </div>
+</div>
+<div class="recipe-image-upload">
+<label for="recipe-image-file">Zdjęcie gotowego dania (opcjonalnie)</label>
+<input type="file" id="recipe-image-file" accept="image/*" aria-label="Wybierz zdjęcie przepisu">
+<p class="ingredient-helper-text">Jedno zdjęcie, maksymalnie 5 MB.</p>
+<img id="recipe-image-preview" class="recipe-image-preview hidden" alt="Podgląd zdjęcia przepisu">
+</div>
+<div class="recipe-option-groups">
+<fieldset class="recipe-option-group">
+<legend>Dieta</legend>
+<div class="recipe-option-list">
+<label><input type="checkbox" name="recipe-diet" value="wegetarianskie">Wegetariańskie</label>
+<label><input type="checkbox" name="recipe-diet" value="weganskie">Wegańskie</label>
+<label><input type="checkbox" name="recipe-diet" value="bez-glutenu">Bez glutenu</label>
+<label><input type="checkbox" name="recipe-diet" value="bez-nabialu">Bez nabiału</label>
+<label><input type="checkbox" name="recipe-diet" value="bez-cukru">Bez cukru</label>
+</div>
+</fieldset>
+<fieldset class="recipe-option-group">
+<legend>Zawiera alergeny</legend>
+<div class="recipe-option-list">
+<label><input type="checkbox" name="recipe-allergen" value="gluten">Gluten</label>
+<label><input type="checkbox" name="recipe-allergen" value="mleko">Mleko</label>
+<label><input type="checkbox" name="recipe-allergen" value="jajka">Jajka</label>
+<label><input type="checkbox" name="recipe-allergen" value="orzechy">Orzechy</label>
+<label><input type="checkbox" name="recipe-allergen" value="soja">Soja</label>
+<label><input type="checkbox" name="recipe-allergen" value="sezam">Sezam</label>
+<label><input type="checkbox" id="recipe-allergens-verified">Sprawdzono skład</label>
+</div>
+</fieldset>
 </div>
 </section>
 
@@ -1255,15 +1592,16 @@ onAuthStateChanged
 import { 
 getFirestore, 
 collection, 
-addDoc,
 doc,
 updateDoc,
 deleteDoc,
+setDoc,
 query, 
 where,
 onSnapshot, 
 serverTimestamp 
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-storage.js";
 
 const firebaseConfig = {
 apiKey: "AIzaSyACAYq6d_bOfUV8s_wlX-yTdTKhU9YVwnE",
@@ -1278,6 +1616,7 @@ measurementId: "G-484BSEC9FE"
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+const storage = getStorage(app);
 const googleProvider = new GoogleAuthProvider();
 
 const authStatus = document.getElementById("auth-status");
@@ -1290,8 +1629,33 @@ const rememberMeCheckbox = document.getElementById("remember-me");
 let currentRecipeIngredients = [];
 let currentCatalogFilter = 'all';
 let rawPublicRecipes = [];
+let rawMyRecipes = [];
 let currentCatalogCategory = 'all';
 let currentCatalogSubcategory = 'all';
+let currentCatalogSearch = "";
+let currentMyRecipesSearch = "";
+let favoritesOnly = false;
+let existingRecipeImageUrl = "";
+let currentDietFilter = "all";
+let currentExcludedAllergen = "all";
+let localImagePreviewUrl = "";
+
+const dietLabels = {
+wegetarianskie: "Wegetariańskie",
+weganskie: "Wegańskie",
+"bez-glutenu": "Bez glutenu",
+"bez-nabialu": "Bez nabiału",
+"bez-cukru": "Bez cukru"
+};
+
+const allergenLabels = {
+gluten: "Gluten",
+mleko: "Mleko",
+jajka: "Jajka",
+orzechy: "Orzechy",
+soja: "Soja",
+sezam: "Sezam"
+};
 
 const recipeCategories = {
 obiadowe: {
@@ -1538,6 +1902,213 @@ const quantity = [householdMeasure, scaledWeight > 0 && !embeddedWeight ? `${sca
 return { name, quantity, scaledWeight };
 }
 
+function userStorageKey(kind) {
+return `recipe-book:${auth.currentUser?.uid || "guest"}:${kind}`;
+}
+
+function readUserList(kind) {
+try {
+const value = JSON.parse(localStorage.getItem(userStorageKey(kind)) || "[]");
+return Array.isArray(value) ? value : [];
+} catch (error) {
+console.error("Nie udało się odczytać danych lokalnych.", error);
+return [];
+}
+}
+
+function writeUserList(kind, value) {
+try {
+localStorage.setItem(userStorageKey(kind), JSON.stringify(value));
+return true;
+} catch (error) {
+console.error("Nie udało się zapisać danych lokalnych.", error);
+return false;
+}
+}
+
+function mergeShoppingItems(targetItems, incomingItems) {
+incomingItems.forEach(incomingItem => {
+const normalizedName = (incomingItem.name || "").trim().toLocaleLowerCase("pl-PL");
+if (!normalizedName) return;
+const existingItem = targetItems.find(item => item.name.trim().toLocaleLowerCase("pl-PL") === normalizedName);
+if (!existingItem) {
+targetItems.push({ ...incomingItem, checked: false });
+return;
+}
+existingItem.weight = (Number(existingItem.weight) || 0) + (Number(incomingItem.weight) || 0);
+if (incomingItem.measureUnit && incomingItem.measureUnit === existingItem.measureUnit) {
+existingItem.measureAmount = (Number(existingItem.measureAmount) || 0) + (Number(incomingItem.measureAmount) || 0);
+} else if (incomingItem.measureUnit && existingItem.measureUnit !== incomingItem.measureUnit) {
+existingItem.measureAmount = null;
+existingItem.measureUnit = "";
+existingItem.measure = "";
+}
+existingItem.checked = false;
+});
+return targetItems;
+}
+
+function migrateGuestDataToUser(userId) {
+["favorites", "shopping"].forEach(kind => {
+const guestKey = `recipe-book:guest:${kind}`;
+const userKey = `recipe-book:${userId}:${kind}`;
+try {
+const guestItems = JSON.parse(localStorage.getItem(guestKey) || "[]");
+if (!Array.isArray(guestItems) || guestItems.length === 0) return;
+const userItems = JSON.parse(localStorage.getItem(userKey) || "[]");
+const mergedItems = kind === "favorites"
+? [...new Set([...userItems, ...guestItems])]
+: mergeShoppingItems(userItems, guestItems);
+localStorage.setItem(userKey, JSON.stringify(mergedItems));
+localStorage.removeItem(guestKey);
+} catch (error) {
+console.error("Nie udało się przenieść danych gościa na konto.", error);
+}
+});
+}
+
+function isFavoriteRecipe(docId) {
+return readUserList("favorites").includes(docId);
+}
+
+function matchesRecipeSearch(recipe, queryText) {
+const normalizedQuery = queryText.trim().toLocaleLowerCase("pl-PL");
+if (!normalizedQuery) return true;
+const category = recipeCategories[recipe.category]?.label || "";
+const subcategory = recipeCategories[recipe.category]?.subcategories.find(item => item.value === recipe.subcategory)?.label || "";
+const ingredientNames = (recipe.ingredients || []).map(ingredient => ingredient.name || "").join(" ");
+const searchableText = [recipe.title, recipe.steps, category, subcategory, ingredientNames].join(" ").toLocaleLowerCase("pl-PL");
+return searchableText.includes(normalizedQuery);
+}
+
+window.setCatalogSearch = function(value) {
+currentCatalogSearch = value;
+renderCatalog();
+};
+
+window.setMyRecipesSearch = function(value) {
+currentMyRecipesSearch = value;
+renderMyRecipes();
+};
+
+window.setDietFilter = function(value) {
+currentDietFilter = value;
+renderCatalog();
+};
+
+window.setAllergenFilter = function(value) {
+currentExcludedAllergen = value;
+renderCatalog();
+};
+
+function updateRecipeImagePreview(imageUrl) {
+existingRecipeImageUrl = imageUrl || "";
+const preview = document.getElementById("recipe-image-preview");
+if (localImagePreviewUrl) {
+URL.revokeObjectURL(localImagePreviewUrl);
+localImagePreviewUrl = "";
+}
+preview.src = existingRecipeImageUrl;
+preview.classList.toggle("hidden", !existingRecipeImageUrl);
+}
+
+document.getElementById("recipe-image-file").addEventListener("change", event => {
+const file = event.target.files[0];
+if (!file) return;
+if (!file.type.startsWith("image/") || file.size > 5 * 1024 * 1024) {
+alert("Wybierz zdjęcie o rozmiarze nie większym niż 5 MB.");
+event.target.value = "";
+return;
+}
+const preview = document.getElementById("recipe-image-preview");
+if (localImagePreviewUrl) URL.revokeObjectURL(localImagePreviewUrl);
+localImagePreviewUrl = URL.createObjectURL(file);
+preview.src = localImagePreviewUrl;
+preview.classList.remove("hidden");
+});
+
+async function uploadRecipeImage(file, userId, recipeId) {
+if (!file) return existingRecipeImageUrl;
+if (!file.type.startsWith("image/") || file.size > 5 * 1024 * 1024) {
+throw new Error("Zdjęcie musi być plikiem graficznym do 5 MB.");
+}
+const extension = file.name.split(".").pop().replace(/[^a-z0-9]/gi, "").toLowerCase() || "jpg";
+const imageReference = storageRef(storage, `recipe-images/${userId}/${recipeId}/${Date.now()}.${extension}`);
+await uploadBytes(imageReference, file, { contentType: file.type });
+return getDownloadURL(imageReference);
+}
+
+window.toggleFavoritesFilter = function() {
+favoritesOnly = !favoritesOnly;
+document.querySelectorAll(".favorites-filter").forEach(button => {
+button.setAttribute("aria-pressed", String(favoritesOnly));
+button.innerHTML = `${favoritesOnly ? "♥" : "♡"} Ulubione`;
+});
+renderCatalog();
+renderMyRecipes();
+};
+
+window.toggleFavorite = function(docId) {
+const favoriteIds = readUserList("favorites");
+const nextFavoriteIds = favoriteIds.includes(docId)
+? favoriteIds.filter(favoriteId => favoriteId !== docId)
+: [...favoriteIds, docId];
+writeUserList("favorites", nextFavoriteIds);
+renderCatalog();
+renderMyRecipes();
+};
+
+function renderShoppingList() {
+const container = document.getElementById("shopping-list-container");
+const items = readUserList("shopping");
+if (items.length === 0) {
+container.innerHTML = "<p class='ingredient-helper-text'>Lista jest pusta. Dodaj składniki z przepisu.</p>";
+return;
+}
+container.innerHTML = `<ul class="shopping-list-items">${items.map((item, index) => {
+const formatted = formatIngredientQuantity(item);
+const quantityText = formatted.quantity ? ` · ${escapeHtml(formatted.quantity)}` : "";
+return `<li class="shopping-list-item${item.checked ? " is-checked" : ""}"><input type="checkbox" aria-label="Odhacz ${escapeHtml(item.name)}" ${item.checked ? "checked" : ""} onchange="toggleShoppingItem(${index}, this.checked)"><span>${escapeHtml(item.name)}${quantityText}</span></li>`;
+}).join("")}</ul>`;
+}
+
+window.addRecipeToShoppingList = function(ingredientsJson) {
+let ingredients;
+try {
+ingredients = JSON.parse(decodeURIComponent(ingredientsJson));
+} catch (error) {
+alert("Nie udało się odczytać składników tego przepisu.");
+return;
+}
+const shoppingItems = mergeShoppingItems(readUserList("shopping"), ingredients.map(ingredient => ({
+name: ingredient.name.trim(),
+weight: Number(ingredient.weight ?? ingredient.amount) || 0,
+measureAmount: Number(ingredient.measureAmount) || null,
+measureUnit: ingredient.measureUnit || "",
+measure: ingredient.measure || "",
+checked: false
+})));
+if (!writeUserList("shopping", shoppingItems)) {
+alert("Nie udało się zapisać listy zakupów w tej przeglądarce.");
+return;
+}
+renderShoppingList();
+switchTab("my-recipes");
+};
+
+window.toggleShoppingItem = function(index, checked) {
+const items = readUserList("shopping");
+if (!items[index]) return;
+items[index].checked = checked;
+writeUserList("shopping", items);
+renderShoppingList();
+};
+
+window.clearShoppingList = function() {
+writeUserList("shopping", []);
+renderShoppingList();
+};
+
 window.toggleMacroMode = function() {
 const mode = document.getElementById("macro-mode").value;
 const ingWrapper = document.getElementById("ingredients-section-wrapper");
@@ -1718,6 +2289,10 @@ const visibility = document.getElementById("recipe-visibility").value;
 const macroMode = document.getElementById("macro-mode").value;
 const category = document.getElementById("recipe-category").value;
 const subcategory = document.getElementById("recipe-subcategory").value;
+const dietTags = [...document.querySelectorAll('input[name="recipe-diet"]:checked')].map(input => input.value);
+const allergens = [...document.querySelectorAll('input[name="recipe-allergen"]:checked')].map(input => input.value);
+const allergensVerified = document.getElementById("recipe-allergens-verified").checked;
+const recipeImageFile = document.getElementById("recipe-image-file").files[0];
 const user = auth.currentUser;
 
 if (!title) {
@@ -1777,6 +2352,9 @@ const recipePayload = {
 title,
 category,
 subcategory,
+dietTags,
+allergens,
+allergensVerified,
 panSize,
 portions,
 ingredients: finalIngredients,
@@ -1797,19 +2375,25 @@ updatedAt: serverTimestamp()
 };
 
 try {
+const recipeRef = editId ? doc(db, "recipes", editId) : doc(collection(db, "recipes"));
+recipePayload.imageUrl = await uploadRecipeImage(recipeImageFile, user.uid, recipeRef.id);
 if (editId) {
-await updateDoc(doc(db, "recipes", editId), recipePayload);
+await updateDoc(recipeRef, recipePayload);
 alert("Przepis zaktualizowany pomyślnie!");
 cancelEdit();
 } else {
 recipePayload.createdAt = serverTimestamp();
-await addDoc(collection(db, "recipes"), recipePayload);
+await setDoc(recipeRef, recipePayload);
 alert("Przepis dodany pomyślnie!");
 }
 
 document.getElementById("recipe-title").value = "";
 document.getElementById("recipe-category").value = "";
 updateRecipeSubcategoryOptions();
+document.getElementById("recipe-image-file").value = "";
+updateRecipeImagePreview("");
+document.querySelectorAll('input[name="recipe-diet"], input[name="recipe-allergen"]').forEach(input => { input.checked = false; });
+document.getElementById("recipe-allergens-verified").checked = false;
 document.getElementById("recipe-steps").value = "";
 document.getElementById("recipe-time").value = "";
 document.getElementById("recipe-portions").value = "4";
@@ -1838,6 +2422,11 @@ document.getElementById("recipe-time").value = recipe.time || "";
 document.getElementById("recipe-visibility").value = recipe.isPublic ? "public" : "private";
 document.getElementById("recipe-category").value = recipe.category || "";
 updateRecipeSubcategoryOptions(recipe.subcategory || "");
+document.querySelectorAll('input[name="recipe-diet"]').forEach(input => { input.checked = (recipe.dietTags || []).includes(input.value); });
+document.querySelectorAll('input[name="recipe-allergen"]').forEach(input => { input.checked = (recipe.allergens || []).includes(input.value); });
+document.getElementById("recipe-allergens-verified").checked = Boolean(recipe.allergensVerified);
+document.getElementById("recipe-image-file").value = "";
+updateRecipeImagePreview(recipe.imageUrl || "");
 const hasIngredientMacros = recipe.ingredients?.some(ingredient => ingredient.kcal > 0);
 const savedMacroMode = recipe.macroMode || (hasIngredientMacros ? "per-ingredient" : "total-recipe");
 const macroMode = savedMacroMode === "ingredients" ? "per-ingredient" : savedMacroMode;
@@ -1866,6 +2455,10 @@ document.getElementById("edit-recipe-id").value = "";
 document.getElementById("recipe-title").value = "";
 document.getElementById("recipe-category").value = "";
 updateRecipeSubcategoryOptions();
+document.getElementById("recipe-image-file").value = "";
+updateRecipeImagePreview("");
+document.querySelectorAll('input[name="recipe-diet"], input[name="recipe-allergen"]').forEach(input => { input.checked = false; });
+document.getElementById("recipe-allergens-verified").checked = false;
 document.getElementById("recipe-steps").value = "";
 document.getElementById("recipe-time").value = "";
 document.getElementById("recipe-portions").value = "4";
@@ -1982,6 +2575,11 @@ const panHtml = recipe.panSize ? `<p style="color: #db2777; font-size: 13px; mar
 const categoryInfo = recipeCategories[recipe.category];
 const subcategoryInfo = categoryInfo?.subcategories.find(item => item.value === recipe.subcategory);
 const categoryHtml = categoryInfo ? `<span class="recipe-category-badge">${escapeHtml(categoryInfo.label)}${subcategoryInfo ? ` · ${escapeHtml(subcategoryInfo.label)}` : ""}</span>` : "";
+const photoHtml = recipe.imageUrl ? `<img class="recipe-card-image" src="${escapeAttribute(recipe.imageUrl)}" alt="Zdjęcie przepisu" loading="lazy">` : "";
+const dietHtml = (recipe.dietTags || []).length ? `<div class="recipe-diet-badges">${recipe.dietTags.map(tag => dietLabels[tag]).filter(Boolean).map(label => `<span class="recipe-diet-badge">${escapeHtml(label)}</span>`).join("")}</div>` : "";
+const declaredAllergens = (recipe.allergens || []).map(allergen => allergenLabels[allergen]).filter(Boolean);
+const allergenText = declaredAllergens.length ? `Zawiera: ${declaredAllergens.join(", ")}` : recipe.allergensVerified ? "Sprawdzono skład" : "Alergeny niezweryfikowane";
+const allergenHtml = `<small class="recipe-allergen-note">${escapeHtml(allergenText)}${declaredAllergens.length && !recipe.allergensVerified ? " · skład niezweryfikowany" : ""}</small>`;
 
 let macrosHtml = "";
 let portionMacro = recipe.perPortionMacros || (recipe.totalMacros ? {
@@ -2038,10 +2636,13 @@ return `
                <div class="recipe-item" onclick="toggleRecipeCard(this, event)">
                    <h4 style="margin-top: 0; color: #1e293b; font-size: 18px; display: flex; justify-content: space-between; align-items: center;">
                        <span>${escapeHtml(recipe.title)} <small style="font-size: 12px; color: #94a3b8; font-weight: normal;">(${badge})</small></span>
-                       <span style="font-size: 13px; color: var(--primary-pink); font-weight: 600;">👥 ${basePortions} porcje ▼</span>
+                       <span class="recipe-card-topline"><span style="font-size: 13px; color: var(--primary-pink); font-weight: 600;">👥 ${basePortions} porcje ▼</span><button type="button" class="recipe-favorite-button" aria-label="${isFavoriteRecipe(docId) ? "Usuń z ulubionych" : "Dodaj do ulubionych"}" aria-pressed="${isFavoriteRecipe(docId)}" onclick="toggleFavorite('${docId}')">${isFavoriteRecipe(docId) ? "♥" : "♡"}</button></span>
                    </h4>
+                   ${photoHtml}
                    ${panHtml}
                    ${categoryHtml}
+                   ${dietHtml}
+                   ${allergenHtml}
                    <p style="font-size: 13px; color: #64748b; margin: 4px 0;">Kliknij kartę, aby zobaczyć cały przepis i składniki</p>
                    ${macrosHtml}
 
@@ -2053,6 +2654,8 @@ return `
                            <input type="number" id="portion-input-${docId}" value="${basePortions}" min="1" style="width: 80px; margin: 0; padding: 6px 10px;" oninput="updatePortionMultiplier('${docId}', ${basePortions}, '${ingredientsString}')">
                            <span style="font-size: 13px; color: #64748b;">porcji</span>
                        </div>
+
+                       <button type="button" class="shopping-add-recipe-button" onclick="addRecipeToShoppingList('${ingredientsString}')">＋ Do listy zakupów</button>
 
                        <p style="font-weight: 600; color: #334155; margin-bottom: 4px;">Składniki do odhaczenia:</p>
                        <ul id="scaled-ingredients-${docId}" class="cooking-checklist">
@@ -2089,6 +2692,10 @@ return;
 
 let filtered = rawPublicRecipes.filter(item => {
 const data = item.data;
+if (!matchesRecipeSearch(data, currentCatalogSearch)) return false;
+if (favoritesOnly && !isFavoriteRecipe(item.id)) return false;
+if (currentDietFilter !== "all" && !(data.dietTags || []).includes(currentDietFilter)) return false;
+if (currentExcludedAllergen !== "all" && (!data.allergensVerified || (data.allergens || []).includes(currentExcludedAllergen))) return false;
 if (currentCatalogCategory !== 'all' && data.category !== currentCatalogCategory) return false;
 if (currentCatalogSubcategory !== 'all' && data.subcategory !== currentCatalogSubcategory) return false;
 if (currentCatalogFilter === 'quick') {
@@ -2121,6 +2728,20 @@ html += renderRecipeCard(item.data, item.id, false);
 container.innerHTML = html;
 }
 
+function renderMyRecipes() {
+const container = document.getElementById("my-recipes-container");
+if (rawMyRecipes.length === 0) {
+container.innerHTML = `<div class="empty-state"><span class="icon">📖</span><p style="font-weight: 600; margin: 0;">Nie masz jeszcze swoich przepisów</p><p style="font-size: 13px; color: #94a3b8; margin: 4px 0 0 0;">Przejdź do zakładki „Dodaj”, aby stworzyć pierwszy!</p></div>`;
+return;
+}
+const filtered = rawMyRecipes.filter(item => matchesRecipeSearch(item.data, currentMyRecipesSearch) && (!favoritesOnly || isFavoriteRecipe(item.id)));
+if (filtered.length === 0) {
+container.innerHTML = `<div class="empty-state"><span class="icon">🔍</span><p style="font-weight: 600; margin: 0;">Nie znaleziono przepisów</p><p style="font-size: 13px; color: #94a3b8; margin: 4px 0 0 0;">Zmień wyszukiwanie lub filtr ulubionych.</p></div>`;
+return;
+}
+container.innerHTML = filtered.map(item => renderRecipeCard(item.data, item.id, true)).join("");
+}
+
 onAuthStateChanged(auth, (user) => {
 if (user) {
 authStatus.textContent = `Zalogowany jako: ${user.email || user.displayName}`;
@@ -2129,25 +2750,17 @@ appTabs.classList.remove("hidden");
 document.getElementById("profile-email").textContent = user.email || user.displayName;
 document.getElementById("profile-uid").textContent = user.uid;
 moveBubble(0);
+migrateGuestDataToUser(user.uid);
 
 const myQuery = query(collection(db, "recipes"), where("userId", "==", user.uid));
 onSnapshot(myQuery, (snapshot) => {
-let html = "";
-if (snapshot.empty) {
-document.getElementById("my-recipes-container").innerHTML = `
-                           <div class="empty-state">
-                               <span class="icon">📖</span>
-                               <p style="font-weight: 600; margin: 0;">Nie masz jeszcze swoich przepisów</p>
-                               <p style="font-size: 13px; color: #94a3b8; margin: 4px 0 0 0;">Przejdź do zakładki „Dodaj”, aby stworzyć pierwszy!</p>
-                           </div>`;
-return;
-}
-snapshot.forEach((docSnap) => {
-html += renderRecipeCard(docSnap.data(), docSnap.id, true);
+rawMyRecipes = snapshot.docs.map(docSnap => ({ id: docSnap.id, data: docSnap.data() }));
+renderMyRecipes();
 });
-document.getElementById("my-recipes-container").innerHTML = html;
-});
+renderShoppingList();
 } else {
+rawMyRecipes = [];
+renderShoppingList();
 authStatus.textContent = "Nie jesteś zalogowany.";
 authSection.classList.remove("hidden");
 appTabs.classList.add("hidden");
@@ -2198,6 +2811,10 @@ switchTab('catalog');
 function escapeHtml(text) {
 if (!text) return "";
 return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function escapeAttribute(text) {
+return escapeHtml(String(text || "")).replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 }
 </script>
 </body>
