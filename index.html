@@ -1460,6 +1460,8 @@ to { opacity: 1; transform: translateY(0); }
                                     <option value="garść">garść</option>
                                     <option value="plaster">plaster</option>
                                     <option value="opakowanie">opakowanie</option>
+                                    <option value="ml">ml</option>
+                                    <option value="g">g</option>
                                 </select>
                             </div>
                         </div>
@@ -1846,7 +1848,9 @@ const unitForms = {
 "sztuka": ["sztuka", "sztuki", "sztuk"],
 "garść": ["garść", "garście", "garści"],
 "plaster": ["plaster", "plastry", "plastrów"],
-"opakowanie": ["opakowanie", "opakowania", "opakowań"]
+"opakowanie": ["opakowanie", "opakowania", "opakowań"],
+"ml": ["ml", "ml", "ml"],
+"g": ["g", "g", "g"]
 };
 const forms = unitForms[unit];
 if (!forms) return unit;
@@ -1871,7 +1875,9 @@ const unitForms = {
 "sztuka": ["sztuka", "sztuki", "sztuk"],
 "garść": ["garść", "garście", "garści"],
 "plaster": ["plaster", "plastry", "plastrów"],
-"opakowanie": ["opakowanie", "opakowania", "opakowań"]
+"opakowanie": ["opakowanie", "opakowania", "opakowań"],
+"ml": ["ml", "ml", "ml"],
+"g": ["g", "g", "g"]
 };
 const matchingUnit = Object.entries(unitForms).find(([, forms]) => forms.includes(legacyUnit));
 if (matchingUnit) {
@@ -2595,7 +2601,7 @@ const selectedPortions = parseFloat(multiplierInput.value) || 1;
 const ratio = selectedPortions / basePortions;
 
 const ingredientsContainer = document.getElementById(`scaled-ingredients-${docId}`);
-const ingredients = JSON.parse(ingredientsJson);
+const ingredients = JSON.parse(decodeURIComponent(ingredientsJson));
 
 const html = renderCookingChecklist(ingredients, docId, ratio);
 ingredientsContainer.innerHTML = html;
