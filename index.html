@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Moja Książka Przepisów</title>
+<title>Książka z Przepisami</title>
 <style>
 :root {
 --primary-pink: #ec4899;
 --primary-blue: #3b82f6;
---card-bg: rgba(255, 255, 255, 0.82);
+--card-bg: rgba(255, 255, 255, 0.75);
 --text-color: #2d3748;
 --border-color: rgba(255, 255, 255, 0.9);
 }
@@ -174,10 +174,6 @@ color: #64748b;
 text-decoration: line-through;
 }
 
-.recipe-item.expanded .recipe-details {
-display: block;
-}
-
 .ingredient-editor {
 padding: 16px;
 margin: 10px 0 14px;
@@ -185,27 +181,6 @@ border: 1px solid #f1d8e4;
 border-left: 4px solid #ec4899;
 border-radius: 14px;
 background: linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(255, 248, 251, 0.82));
-}
-
-.ingredient-editor-titlebar {
-display: flex;
-align-items: center;
-gap: 10px;
-margin-bottom: 14px;
-}
-
-.ingredient-step-mark {
-display: grid;
-width: 34px;
-height: 34px;
-flex: 0 0 34px;
-place-items: center;
-border-radius: 11px;
-background: linear-gradient(145deg, #ec4899, #fb7185);
-color: #fff;
-font-size: 11px;
-font-weight: 800;
-box-shadow: 0 4px 10px rgba(236, 72, 153, 0.2);
 }
 
 .recipe-step {
@@ -234,30 +209,10 @@ grid-template-columns: minmax(0, 1.4fr) minmax(110px, 0.8fr);
 gap: 12px;
 }
 
-.recipe-final-options label {
-display: block;
-margin-bottom: 4px;
-color: #475569;
-font-size: 13px;
-font-weight: 600;
-}
-
 .recipe-category-fields {
 display: grid;
 grid-template-columns: repeat(2, minmax(0, 1fr));
 gap: 10px;
-}
-
-.recipe-category-fields label {
-display: block;
-margin-bottom: 4px;
-color: #475569;
-font-size: 12px;
-font-weight: 700;
-}
-
-.recipe-category-fields select {
-margin-top: 3px;
 }
 
 .recipe-category-badge {
@@ -330,19 +285,6 @@ font-size: 13px;
 white-space: nowrap;
 }
 
-.favorites-filter[aria-pressed="true"] {
-border-color: #f9a8d4;
-background: #fdf2f8;
-color: #be185d;
-}
-
-.recipe-card-topline {
-display: flex;
-align-items: center;
-gap: 8px;
-}
-
-/* Styl menu z 3 kropkami (⋮) */
 .recipe-options-dropdown {
 position: relative;
 display: inline-block;
@@ -398,15 +340,12 @@ font-size: 13px;
 font-weight: 500;
 border-radius: 8px;
 margin-bottom: 2px;
-box-shadow: none;
 cursor: pointer;
 }
 
 .recipe-options-item:hover {
 background: #fdf2f8;
 color: #db2777;
-transform: none;
-box-shadow: none;
 }
 
 .recipe-image-preview {
@@ -427,87 +366,6 @@ object-fit: cover;
 border-radius: 12px;
 }
 
-.recipe-image-upload input {
-margin: 4px 0 10px;
-padding: 8px;
-background: rgba(255, 255, 255, 0.8);
-}
-
-.recipe-option-groups {
-display: grid;
-grid-template-columns: repeat(2, minmax(0, 1fr));
-gap: 10px;
-margin: 12px 0;
-}
-
-.recipe-option-group {
-min-width: 0;
-margin: 0;
-padding: 10px;
-border: 1px solid #e2e8f0;
-border-radius: 10px;
-}
-
-.recipe-option-group legend {
-padding: 0 4px;
-color: #475569;
-font-size: 12px;
-font-weight: 700;
-}
-
-.recipe-option-list {
-display: flex;
-flex-wrap: wrap;
-gap: 6px;
-}
-
-.recipe-option-list label {
-display: inline-flex;
-align-items: center;
-gap: 5px;
-padding: 5px 7px;
-border: 1px solid #e2e8f0;
-border-radius: 8px;
-background: #fff;
-color: #475569;
-font-size: 11px;
-}
-
-.recipe-option-list input {
-width: auto;
-margin: 0;
-accent-color: #ec4899;
-}
-
-.recipe-diet-badges {
-display: flex;
-flex-wrap: wrap;
-gap: 5px;
-margin: 6px 0;
-}
-
-.recipe-diet-badge,
-.recipe-allergen-note {
-padding: 4px 8px;
-border-radius: 9999px;
-font-size: 11px;
-font-weight: 600;
-}
-
-.recipe-diet-badge {
-border: 1px solid #bbf7d0;
-background: #f0fdf4;
-color: #166534;
-}
-
-.recipe-allergen-note {
-display: inline-block;
-margin: 5px 0;
-border: 1px solid #fed7aa;
-background: #fff7ed;
-color: #9a3412;
-}
-
 .shopping-list-panel {
 margin: 12px 0 18px;
 padding: 12px 0;
@@ -515,75 +373,6 @@ border-top: 1px solid #fbcfe8;
 border-bottom: 1px solid #fbcfe8;
 }
 
-.shopping-list-heading {
-display: flex;
-align-items: center;
-justify-content: space-between;
-gap: 8px;
-margin-bottom: 8px;
-}
-
-.shopping-list-heading h4 {
-margin: 0;
-color: #9d174d;
-font-size: 15px;
-}
-
-.shopping-clear-button {
-width: auto;
-margin: 0;
-padding: 6px 9px;
-border: 1px solid #e2e8f0;
-border-radius: 8px;
-background: #fff;
-color: #64748b;
-box-shadow: none;
-font-size: 11px;
-}
-
-.shopping-list-items {
-display: grid;
-gap: 5px;
-margin: 0;
-padding: 0;
-list-style: none;
-}
-
-.shopping-list-item {
-display: flex;
-align-items: center;
-gap: 8px;
-padding: 7px 9px;
-border-radius: 8px;
-background: rgba(255, 255, 255, 0.72);
-font-size: 13px;
-}
-
-.shopping-list-item input {
-width: 17px;
-height: 17px;
-margin: 0;
-accent-color: #16a34a;
-}
-
-.shopping-list-item.is-checked span {
-color: #94a3b8;
-text-decoration: line-through;
-}
-
-.shopping-add-recipe-button {
-width: auto;
-margin: 0 0 12px;
-padding: 8px 10px;
-border: 1px solid #a7f3d0;
-border-radius: 9px;
-background: #ecfdf5;
-color: #047857;
-box-shadow: none;
-font-size: 12px;
-}
-
-/* Style dla Plannera Tygodniowego w stylu Cookidoo */
 .planner-days-strip {
 display: flex;
 gap: 6px;
@@ -612,14 +401,6 @@ background: #db2777;
 color: #fff;
 border-color: #db2777;
 box-shadow: 0 4px 12px rgba(219,39,119,0.2);
-}
-
-.fridge-panel {
-background: rgba(255, 255, 255, 0.65);
-border: 1px solid #fbcfe8;
-border-radius: 14px;
-padding: 12px;
-margin-bottom: 16px;
 }
 
 .card { 
@@ -732,7 +513,6 @@ font-weight: 700;
 display: inline-flex;
 align-items: center;
 gap: 4px;
-box-shadow: 0 2px 6px rgba(0,0,0,0.02);
 }
 
 .badge-kcal { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
@@ -766,44 +546,17 @@ border: 1px solid transparent;
 border-radius: 9px;
 background: transparent;
 color: #475569;
-box-shadow: none;
 font-size: 12px;
 font-weight: 700;
-line-height: 1.15;
 cursor: pointer;
-}
-
-.chip small {
-color: #64748b;
-font-size: 10px;
-font-weight: 500;
-}
-
-.chip:hover {
-background: rgba(255, 255, 255, 0.8);
-border-color: #dbeafe;
 }
 
 .chip.active {
 background: #e0f2fe;
 border-color: #7dd3fc;
 color: #075985;
-box-shadow: inset 0 -2px 0 #0284c7;
 }
 
-.empty-state {
-text-align: center;
-padding: 40px 20px;
-color: #64748b;
-}
-
-.empty-state .icon {
-font-size: 48px;
-margin-bottom: 12px;
-display: block;
-}
-
-/* Nowy układ dolnego paska nawigacji (Dokładnie wg Twojego życzenia) */
 .floating-glass-nav {
 position: fixed !important;
 bottom: 20px !important;
@@ -851,15 +604,7 @@ font-weight: 600;
 color: #64748b; 
 text-align: center;
 white-space: nowrap;
-margin-bottom: 0;
-box-shadow: none;
 font-size: 11px;
-transition: color 0.2s ease, transform 0.2s ease;
-}
-
-.tab-btn:hover {
-color: var(--primary-pink);
-transform: scale(1.05);
 }
 
 .tab-btn.active { 
@@ -869,16 +614,12 @@ font-weight: 700;
 
 .tab-content { display: none; }
 .tab-content.active { display: block; }
-
-@keyframes fadeIn {
-from { opacity: 0; transform: translateY(10px); }
-to { opacity: 1; transform: translateY(0); }
-}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
 
+<!-- Ikona profilu w prawym górnym rogu -->
 <div style="position: absolute; top: 20px; right: 20px; z-index: 100;">
 <div id="profile-trigger" onclick="switchTab('profile')" style="width: 34px; height: 34px; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: var(--primary-pink); cursor: pointer; box-shadow: 0 4px 12px rgba(236, 72, 153, 0.1);">
 👤
@@ -908,6 +649,10 @@ to { opacity: 1; transform: translateY(0); }
 <h3 style="margin-top:0; color: #db2777;">Witaj ponownie! ✨</h3>
 <input type="email" id="email" placeholder="Twój e-mail">
 <input type="password" id="password" placeholder="Hasło (min. 6 znaków)">
+<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px; font-size: 14px; color: #4a5568;">
+<input type="checkbox" id="remember-me" style="width: auto; margin: 0; accent-color: #ec4899;">
+<label for="remember-me" style="cursor: pointer;">Zapamiętaj mnie na tym urządzeniu</label>
+</div>
 <button id="btn-login">Zaloguj się e-mailem</button>
 <button id="btn-register" style="background: linear-gradient(135deg, #60a5fa 100%, #3b82f6 0%);">Zarejestruj się</button>
 <hr style="margin: 15px 0; border: 0; border-top: 1px solid rgba(255,255,255,0.6);">
@@ -1044,12 +789,12 @@ to { opacity: 1; transform: translateY(0); }
 <section class="recipe-step">
 <h4 class="recipe-step-heading"><span class="ingredient-step-mark" aria-hidden="true">02</span>Składniki</h4>
 <div class="ingredient-editor">
-<div class="ingredient-field-grid">
+<div class="ingredient-field-grid" style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px;">
 <div class="ingredient-field"><label>Składnik</label><input type="text" id="ingredient-name" placeholder="np. Mleko"></div>
 <div class="ingredient-field"><label>Ilość</label><input type="number" id="ing-weight" min="0" placeholder="200"></div>
 <div class="ingredient-field"><label>Jednostka</label><input type="text" id="ing-weight-unit" value="g"></div>
 </div>
-<button type="button" id="btn-add-ingredient" class="ingredient-add-button">＋ Dodaj składnik</button>
+<button type="button" id="btn-add-ingredient" class="ingredient-add-button" style="margin-top: 10px;">＋ Dodaj składnik</button>
 </div>
 <div id="ingredients-summary-container" style="margin-bottom: 15px;"></div>
 </section>
@@ -1092,44 +837,42 @@ to { opacity: 1; transform: translateY(0); }
 </div>
 </div>
 
-<!-- Modal / Wybór daty do planera (w stylu Cookidoo) -->
-<div id="planner-modal" class="hidden" onclick="closePlannerModalOnBackdrop(event)" style="position: fixed; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(6px); z-index: 2000; padding: 20px; align-items: center; justify-content: center;">
-<div class="card" onclick="event.stopPropagation()" style="width: 100%; max-width: 400px; margin: 0; background: #ffffff; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.2);">
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-<h3 style="margin: 0; color: #db2777; font-size: 18px; font-weight: 800;">Zaplanuj na dany dzień 📅</h3>
-<button type="button" onclick="closePlannerModal()" style="width: 32px; height: 32px; padding: 0; margin: 0; background: #f1f5f9; color: #64748b; border-radius: 50%; box-shadow: none; font-size: 16px;">✕</button>
-</div>
-<div style="display: flex; align-items: center; gap: 12px; background: #fdf2f8; padding: 10px 14px; border-radius: 14px; border: 1px solid #fbcfe8; margin-bottom: 16px;">
-<span style="font-size: 24px;">🍲</span>
-<div style="min-width: 0;">
-<span style="display: block; font-size: 11px; color: #be185d; font-weight: 700; text-transform: uppercase;">Wybrany przepis</span>
-<strong id="planner-modal-recipe-title" style="font-size: 14px; color: #1e293b; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">-</strong>
-</div>
-</div>
-<input type="hidden" id="planner-modal-recipe-id" value="">
-<input type="hidden" id="planner-modal-recipe-title-text" value="">
-<label style="display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 4px;">Data posiłku</label>
-<input type="date" id="planner-date-select" style="margin-bottom: 14px; background: #fff;">
-<label style="display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 4px;">Pora posiłku</label>
-<select id="planner-slot-select" style="margin-bottom: 20px; background: #fff;">
-<option value="Śniadanie">🥣 Śniadanie</option>
-<option value="Obiad">🍲 Obiad</option>
-<option value="Kolacja">🥗 Kolacja</option>
-<option value="Przekąska / Deser">🍰 Przekąska / Deser</option>
-</select>
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-<button type="button" onclick="closePlannerModal()" style="background: #e2e8f0; color: #475569; box-shadow: none; margin: 0;">Anuluj</button>
-<button type="button" onclick="confirmAddToPlanner()" style="margin: 0;">Zapisz ✨</button>
-</div>
-</div>
-</div>
-
-<!-- ZAKŁADKA 6: Profil -->
+<!-- ZAKŁADKA 6: Profil i MOJE PRZEPISY (pod ikoną profilu) -->
 <div id="section-profile" class="tab-content">
 <div class="card">
 <h3 style="margin-top:0; color: #db2777;">Twój profil 👤</h3>
 <p><strong>E-mail:</strong> <span id="profile-email">-</span></p>
 <button id="btn-logout" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); margin-top: 10px;">Wyloguj się</button>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0; color: #db2777;">Moje przepisy 📖</h3>
+<div class="recipe-list-toolbar" style="margin-bottom: 12px;">
+<input type="search" id="my-recipes-search" class="recipe-search-input" placeholder="Szukaj w moich przepisach" oninput="setMyRecipesSearch(this.value)">
+</div>
+<div id="my-recipes-container">Ładowanie Twoich przepisów...</div>
+</div>
+</div>
+
+<!-- Modal / Wybór daty do planera -->
+<div id="planner-modal" class="hidden" onclick="closePlannerModalOnBackdrop(event)" style="position: fixed; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(6px); z-index: 2000; padding: 20px; align-items: center; justify-content: center;">
+<div class="card" onclick="event.stopPropagation()" style="width: 100%; max-width: 400px; margin: 0; background: #ffffff; border-radius: 24px;">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+<h3 style="margin: 0; color: #db2777; font-size: 18px; font-weight: 800;">Zaplanuj posiłek 📅</h3>
+<button type="button" onclick="closePlannerModal()" style="width: 32px; height: 32px; padding: 0; background: #f1f5f9; color: #64748b; border-radius: 50%;">✕</button>
+</div>
+<input type="hidden" id="planner-modal-recipe-id" value="">
+<input type="hidden" id="planner-modal-recipe-title-text" value="">
+<label style="display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 4px;">Data posiłku</label>
+<input type="date" id="planner-date-select" style="margin-bottom: 14px;">
+<label style="display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 4px;">Pora posiłku</label>
+<select id="planner-slot-select" style="margin-bottom: 20px;">
+<option value="Śniadanie">🥣 Śniadanie</option>
+<option value="Obiad">🍲 Obiad</option>
+<option value="Kolacja">🥗 Kolacja</option>
+<option value="Przekąska / Deser">🍰 Przekąska / Deser</option>
+</select>
+<button type="button" onclick="confirmAddToPlanner()">Zapisz ✨</button>
 </div>
 </div>
 <script type="module">
@@ -1157,12 +900,14 @@ const authSection = document.getElementById("auth-section");
 const appTabs = document.getElementById("app-tabs");
 const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
+const rememberMeCheckbox = document.getElementById("remember-me");
 
 let currentRecipeIngredients = [];
 let rawPublicRecipes = [];
 let rawMyRecipes = [];
 let currentCatalogCategory = 'all';
 let currentCatalogSearch = "";
+let currentMyRecipesSearch = "";
 let currentDietFilter = "all";
 let currentExcludedAllergen = "all";
 let currentCatalogFilter = 'all';
@@ -1199,7 +944,7 @@ window.switchTab = function(tabName) {
 document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
 document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
 
-let targetIndex = 0;
+let targetIndex = -1;
 if (tabName === 'catalog') {
 document.getElementById('section-catalog').classList.add('active');
 targetIndex = 0;
@@ -1221,14 +966,20 @@ renderShoppingList();
 targetIndex = 4;
 } else if (tabName === 'profile') {
 document.getElementById('section-profile').classList.add('active');
+renderMyRecipes();
 }
 
 const targetBtn = document.querySelector(`.tab-btn[onclick*="${tabName}"]`);
 if (targetBtn) {
 targetBtn.classList.add('active');
 }
-if (targetIndex >= 0 && tabName !== 'profile') moveBubble(targetIndex);
+if (targetIndex >= 0) moveBubble(targetIndex);
 };
+
+async function applyPersistence() {
+const persistenceType = rememberMeCheckbox?.checked ? browserLocalPersistence : browserSessionPersistence;
+await setPersistence(auth, persistenceType);
+}
 
 window.setCatalogCategoryFilter = function(category, cardEl) {
 currentCatalogCategory = category;
@@ -1252,6 +1003,11 @@ currentCatalogSearch = val;
 renderCatalog();
 };
 
+window.setMyRecipesSearch = function(val) {
+currentMyRecipesSearch = val;
+renderMyRecipes();
+};
+
 window.setDietFilter = function(val) {
 currentDietFilter = val;
 renderCatalog();
@@ -1262,7 +1018,6 @@ currentExcludedAllergen = val;
 renderCatalog();
 };
 
-// Obsługa menu 3 kropek (⋮)
 window.toggleRecipeMenu = function(event, docId) {
 event.stopPropagation();
 document.querySelectorAll('.recipe-options-menu').forEach(menu => {
@@ -1291,7 +1046,6 @@ localStorage.setItem(`recipe-book:${auth.currentUser?.uid || "guest"}:planner`, 
 window.openPlannerModal = function(recipeId, recipeTitle) {
 document.getElementById("planner-modal-recipe-id").value = recipeId;
 document.getElementById("planner-modal-recipe-title-text").value = recipeTitle;
-document.getElementById("planner-modal-recipe-title").textContent = recipeTitle;
 document.getElementById("planner-date-select").value = activePlannerDate;
 const modal = document.getElementById("planner-modal");
 modal.classList.remove("hidden");
@@ -1348,6 +1102,7 @@ renderPlannerDayDetails(activePlannerDate);
 
 function renderPlannerStrip() {
 const stripContainer = document.getElementById("planner-strip");
+if (!stripContainer) return;
 let html = "";
 const today = new Date();
 
@@ -1374,6 +1129,7 @@ renderPlannerDayDetails(dateStr);
 
 function renderPlannerDayDetails(dateStr) {
 const container = document.getElementById("planner-day-details-container");
+if (!container) return;
 const planner = readPlannerData();
 const dayMeals = planner[dateStr] || {};
 const slots = ["Śniadanie", "Obiad", "Kolacja", "Przekąska / Deser"];
@@ -1381,7 +1137,7 @@ const slots = ["Śniadanie", "Obiad", "Kolacja", "Przekąska / Deser"];
 let html = `<p style="font-weight: 700; color: #9d174d; margin-bottom: 10px;">Posiłki na dzień: ${dateStr}</p>`;
 
 if (Object.keys(dayMeals).length === 0) {
-container.innerHTML = html + `<p class="ingredient-helper-text">Brak zaplanowanych posiłków na ten dzień. Dodaj je z menu przepisu (⋮).</p>`;
+container.innerHTML = html + `<p class="ingredient-helper-text">Brak zaplanowanych posiłków na ten dzień.</p>`;
 return;
 }
 
@@ -1398,32 +1154,33 @@ html += `
 container.innerHTML = html;
 }
 
-// Lista zakupów
-function readShoppingList() {
+// Zakupy i Ulubione
+function readUserList(kind) {
 try {
-return JSON.parse(localStorage.getItem(`recipe-book:${auth.currentUser?.uid || "guest"}:shopping`) || "[]");
+return JSON.parse(localStorage.getItem(`recipe-book:${auth.currentUser?.uid || "guest"}:${kind}`) || "[]");
 } catch (e) { return []; }
 }
 
-function writeShoppingList(list) {
-localStorage.setItem(`recipe-book:${auth.currentUser?.uid || "guest"}:shopping`, JSON.stringify(list));
+function writeUserList(kind, list) {
+localStorage.setItem(`recipe-book:${auth.currentUser?.uid || "guest"}:${kind}`, JSON.stringify(list));
 }
 
 window.addRecipeToShoppingList = function(ingredientsJson) {
 try {
 const ingredients = JSON.parse(decodeURIComponent(ingredientsJson));
-const list = readShoppingList();
+const list = readUserList("shopping");
 ingredients.forEach(ing => {
 list.push({ name: ing.name, weight: ing.weight || 0, weightUnit: ing.weightUnit || 'g', checked: false });
 });
-writeShoppingList(list);
+writeUserList("shopping", list);
 alert("Dodano składniki do listy zakupów! 🛒");
 } catch (e) { alert("Błąd dodawania do zakupów."); }
 };
 
 window.renderShoppingList = function() {
 const container = document.getElementById("shopping-list-container");
-const list = readShoppingList();
+if (!container) return;
+const list = readUserList("shopping");
 if (list.length === 0) {
 container.innerHTML = "<p class='ingredient-helper-text'>Lista zakupów jest pusta.</p>";
 return;
@@ -1431,42 +1188,37 @@ return;
 container.innerHTML = `<ul class="shopping-list-items">${list.map((item, idx) => `
 <li class="shopping-list-item\${item.checked ? ' is-checked' : ''}">
 <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleShoppingItem(${idx}, this.checked)">
-<span>\${escapeHtml(item.name)} (${item.weight}${item.weightUnit})</span>
+<span>\${escapeHtml(item.name)} (${item.weight}${item.weightUnit || 'g'})</span>
 </li>`).join('')}</ul>`;
 };
 
 window.toggleShoppingItem = function(idx, checked) {
-const list = readShoppingList();
+const list = readUserList("shopping");
 if (list[idx]) {
 list[idx].checked = checked;
-writeShoppingList(list);
+writeUserList("shopping", list);
 renderShoppingList();
 }
 };
 
 window.clearShoppingList = function() {
-writeShoppingList([]);
+writeUserList("shopping", []);
 renderShoppingList();
 };
 
-// Ulubione
-function readFavorites() {
-try {
-return JSON.parse(localStorage.getItem(`recipe-book:${auth.currentUser?.uid || "guest"}:favorites`) || "[]");
-} catch (e) { return []; }
-}
-
 window.toggleFavorite = function(docId) {
-const favs = readFavorites();
+const favs = readUserList("favorites");
 const next = favs.includes(docId) ? favs.filter(id => id !== docId) : [...favs, docId];
-localStorage.setItem(`recipe-book:${auth.currentUser?.uid || "guest"}:favorites`, JSON.stringify(next));
+writeUserList("favorites", next);
 renderCatalog();
 renderFavoritesTab();
+renderMyRecipes();
 };
 
 function renderFavoritesTab() {
 const container = document.getElementById("favorites-container");
-const favs = readFavorites();
+if (!container) return;
+const favs = readUserList("favorites");
 const all = [...rawPublicRecipes, ...rawMyRecipes];
 const matched = all.filter(item => favs.includes(item.id));
 
@@ -1477,16 +1229,52 @@ return;
 container.innerHTML = matched.map(item => renderRecipeCard(item.data, item.id)).join("");
 }
 
-// Renderowanie przepisów z menu 3 kropek (⋮)
+// Składniki w formularzu dodawania
+document.getElementById("btn-add-ingredient").addEventListener("click", () => {
+const name = document.getElementById("ingredient-name").value.trim();
+const weight = parseFloat(document.getElementById("ing-weight").value) || 0;
+const weightUnit = document.getElementById("ing-weight-unit").value;
+
+if (!name || weight <= 0) {
+alert("Podaj nazwę składnika i ilość!");
+return;
+}
+
+currentRecipeIngredients.push({ name, weight, weightUnit, kcal: 0, protein: 0, fat: 0, carbs: 0 });
+updateIngredientsUI();
+
+document.getElementById("ingredient-name").value = "";
+document.getElementById("ing-weight").value = "";
+});
+
+function updateIngredientsUI() {
+const container = document.getElementById("ingredients-summary-container");
+if (!container) return;
+if (currentRecipeIngredients.length === 0) {
+container.innerHTML = "<p class='ingredient-helper-text'>Brak dodanych składników.</p>";
+return;
+}
+container.innerHTML = `<ul class="cooking-checklist">${currentRecipeIngredients.map((item, idx) => `
+<li class="cooking-checklist-item">
+<label>\${escapeHtml(item.name)} (${item.weight}${item.weightUnit})</label>
+<button type="button" onclick="removeIngredient(\${idx})" style="background:#ef4444; width:auto; padding:2px 6px; font-size:10px;">Usuń</button>
+</li>`).join('')}</ul>`;
+}
+
+window.removeIngredient = function(idx) {
+currentRecipeIngredients.splice(idx, 1);
+updateIngredientsUI();
+};
+
+// Renderowanie karty przepisu
 window.toggleRecipeCard = function(cardEl, event) {
 if (event.target.closest('button') || event.target.closest('input')) return;
 cardEl.classList.toggle('expanded');
 };
 
 function renderRecipeCard(recipe, docId) {
-const isFav = readFavorites().includes(docId);
+const isFav = readUserList("favorites").includes(docId);
 const photoHtml = recipe.imageUrl ? `<img class="recipe-card-image" src="${escapeAttribute(recipe.imageUrl)}" alt="Zdjęcie">` : "";
-const basePortions = recipe.portions || 1;
 const ingredientsJson = encodeURIComponent(JSON.stringify(recipe.ingredients || []));
 const escapedTitle = escapeAttribute(recipe.title);
 
@@ -1522,9 +1310,11 @@ ${(recipe.ingredients || []).map(ing => `<li class="cooking-checklist-item"><inp
 
 function renderCatalog() {
 const container = document.getElementById("catalog-container");
+if (!container) return;
 let filtered = rawPublicRecipes.filter(item => {
 const data = item.data;
 if (currentCatalogCategory !== 'all' && data.category !== currentCatalogCategory) return false;
+if (currentCatalogSearch && !data.title.toLowerCase().includes(currentCatalogSearch.toLowerCase())) return false;
 return true;
 });
 
@@ -1535,16 +1325,108 @@ return;
 container.innerHTML = filtered.map(item => renderRecipeCard(item.data, item.id)).join("");
 }
 
-// Nasłuch bazy i autoryzacji
+function renderMyRecipes() {
+const container = document.getElementById("my-recipes-container");
+if (!container) return;
+let filtered = rawMyRecipes.filter(item => {
+if (currentMyRecipesSearch && !item.data.title.toLowerCase().includes(currentMyRecipesSearch.toLowerCase())) return false;
+return true;
+});
+
+if (filtered.length === 0) {
+container.innerHTML = `<p class='ingredient-helper-text'>Nie masz jeszcze własnych przepisów.</p>`;
+return;
+}
+container.innerHTML = filtered.map(item => renderRecipeCard(item.data, item.id)).join("");
+}
+
+// Zapis nowego przepisu
+document.getElementById("btn-add-recipe").addEventListener("click", async () => {
+const editId = document.getElementById("edit-recipe-id").value;
+const title = document.getElementById("recipe-title").value.trim();
+const category = document.getElementById("recipe-category").value;
+const subcategory = document.getElementById("recipe-subcategory").value;
+const steps = document.getElementById("recipe-steps").value.trim();
+const time = document.getElementById("recipe-time").value.trim();
+const visibility = document.getElementById("recipe-visibility").value;
+const user = auth.currentUser;
+
+if (!title) { alert("Podaj nazwę przepisu!"); return; }
+if (currentRecipeIngredients.length === 0) { alert("Dodaj przynajmniej jeden składnik!"); return; }
+
+const recipePayload = {
+title,
+category,
+subcategory,
+ingredients: currentRecipeIngredients,
+steps,
+time,
+isPublic: visibility === "public",
+userId: user ? user.uid : "guest",
+userEmail: user ? user.email : "Gość",
+updatedAt: serverTimestamp()
+};
+
+try {
+const recipeRef = editId ? doc(db, "recipes", editId) : doc(collection(db, "recipes"));
+if (editId) {
+await updateDoc(recipeRef, recipePayload);
+alert("Zaktualizowano przepis!");
+} else {
+recipePayload.createdAt = serverTimestamp();
+await setDoc(recipeRef, recipePayload);
+alert("Dodano przepis pomyślnie!");
+}
+document.getElementById("recipe-title").value = "";
+document.getElementById("recipe-steps").value = "";
+currentRecipeIngredients = [];
+updateIngredientsUI();
+switchTab('profile');
+} catch (e) {
+alert("Błąd zapisu: " + e.message);
+}
+});
+
+window.deleteRecipe = async function(docId) {
+if (confirm("Usunąć przepis?")) {
+await deleteDoc(doc(db, "recipes", docId));
+}
+};
+
+window.editRecipe = function(docId) {
+const recipe = rawMyRecipes.find(item => item.id === docId)?.data;
+if (!recipe) return;
+document.getElementById("edit-recipe-id").value = docId;
+document.getElementById("recipe-title").value = recipe.title || "";
+document.getElementById("recipe-category").value = recipe.category || "";
+document.getElementById("recipe-subcategory").value = recipe.subcategory || "";
+document.getElementById("recipe-steps").value = recipe.steps || "";
+document.getElementById("recipe-time").value = recipe.time || "";
+currentRecipeIngredients = recipe.ingredients || [];
+updateIngredientsUI();
+switchTab('add-recipe');
+};
+
+// Autoryzacja i nasłuch bazy
 onAuthStateChanged(auth, (user) => {
 if (user) {
-authStatus.textContent = `Zalogowany: ${user.email}`;
+authStatus.textContent = `Zalogowany jako: ${user.email}`;
 authSection.classList.add("hidden");
 appTabs.classList.remove("hidden");
 document.getElementById("profile-email").textContent = user.email;
 moveBubble(0);
-const q = query(collection(db, "recipes"));
-onSnapshot(q, (snapshot) => {
+
+const qMy = query(collection(db, "recipes"), where("userId", "==", user.uid));
+onSnapshot(qMy, (snapshot) => {
+rawMyRecipes = [];
+snapshot.forEach(docSnap => {
+rawMyRecipes.push({ id: docSnap.id, data: docSnap.data() });
+});
+renderMyRecipes();
+});
+
+const qPublic = query(collection(db, "recipes"), where("isPublic", "==", true));
+onSnapshot(qPublic, (snapshot) => {
 rawPublicRecipes = [];
 snapshot.forEach(docSnap => {
 rawPublicRecipes.push({ id: docSnap.id, data: docSnap.data() });
@@ -1559,20 +1441,28 @@ appTabs.classList.add("hidden");
 });
 
 document.getElementById("btn-register").addEventListener("click", async () => {
-try { await createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value); alert("Konto utworzone!"); } catch (e) { alert(e.message); }
+try {
+if (rememberMeCheckbox.checked) await setPersistence(auth, browserLocalPersistence);
+await createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
+alert("Konto utworzone!");
+} catch (e) { alert(e.message); }
 });
-document.getElementById("btn-login").addEventListener("click", async () => {
-try { await signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value); } catch (e) { alert(e.message); }
-});
-document.getElementById("btn-google").addEventListener("click", async () => {
-try { await signInWithPopup(auth, googleProvider); } catch (e) { alert(e.message); }
-});
-document.getElementById("btn-logout").addEventListener("click", () => { signOut(auth); });
 
-window.editRecipe = function(docId) { alert("Edycja wkrótce!"); };
-window.deleteRecipe = async function(docId) {
-if (confirm("Usunąć przepis?")) { await deleteDoc(doc(db, "recipes", docId)); }
-};
+document.getElementById("btn-login").addEventListener("click", async () => {
+try {
+if (rememberMeCheckbox.checked) await setPersistence(auth, browserLocalPersistence);
+await signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
+} catch (e) { alert(e.message); }
+});
+
+document.getElementById("btn-google").addEventListener("click", async () => {
+try {
+await setPersistence(auth, browserLocalPersistence);
+await signInWithPopup(auth, googleProvider);
+} catch (e) { alert(e.message); }
+});
+
+document.getElementById("btn-logout").addEventListener("click", () => { signOut(auth); switchTab('catalog'); });
 
 function escapeHtml(t) { return t ? t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : ""; }
 function escapeAttribute(t) { return escapeHtml(String(t || "")).replace(/"/g, "&quot;"); }
