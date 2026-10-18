@@ -1437,37 +1437,39 @@ to { opacity: 1; transform: translateY(0); }
 <p id="macro-mode-help" class="ingredient-helper-text">Przy każdym składniku wpisz wartości z etykiety na 100 g.</p>
 </div>
 
-            <div id="ingredients-section-wrapper">
-                <div class="ingredient-editor">
-                    <div class="ingredient-editor-titlebar">
-                        <h4 class="ingredient-editor-heading">Dodaj składnik</h4>
-                    </div>
-                    <div class="ingredient-field-grid">
+            <div class="ingredient-field-grid" style="grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr); gap: 8px;">
                         <div class="ingredient-field">
-                            <label for="ingredient-name">Składnik</label>
-                            <input type="text" id="ingredient-name" placeholder="np. Płatki owsiane">
+                            <label for="ingredient-name" style="grid-column: 1 / -1;">Składnik</label>
+                            <input type="text" id="ingredient-name" placeholder="np. Mleko / Płatki owsiane">
                         </div>
                         <div class="ingredient-field">
-                            <label for="ingredient-measure">Miara (opcjonalnie)</label>
-                            <div class="home-measure-inputs">
-                                <input type="number" id="ingredient-measure-amount" min="0" step="0.25" placeholder="2" aria-label="Ilość miary domowej">
-                                <select id="ingredient-measure-unit" aria-label="Jednostka miary domowej">
-                                    <option value="">brak</option>
-                                    <option value="łyżeczka">łyżeczka</option>
-                                    <option value="łyżka">łyżka</option>
-                                    <option value="szklanka">szklanka</option>
-                                    <option value="sztuka">sztuka</option>
-                                    <option value="garść">garść</option>
-                                    <option value="plaster">plaster</option>
-                                    <option value="opakowanie">opakowanie</option>
-                                    <option value="ml">ml</option>
-                                    <option value="g">g</option>
-                                </select>
-                            </div>
+                            <label>Ilość miary</label>
+                            <input type="number" id="ingredient-measure-amount" min="0" step="0.25" placeholder="1">
                         </div>
                         <div class="ingredient-field">
-                            <label for="ing-weight">Ilość w gramach</label>
-                            <input type="number" id="ing-weight" min="0" placeholder="50">
+                            <label>Miara domowa</label>
+                            <select id="ingredient-measure-unit">
+                                <option value="">brak</option>
+                                <option value="szklanka">szklanka</option>
+                                <option value="łyżka">łyżka</option>
+                                <option value="łyżeczka">łyżeczka</option>
+                                <option value="sztuka">sztuka</option>
+                                <option value="garść">garść</option>
+                                <option value="plaster">plaster</option>
+                                <option value="opakowanie">opakowanie</option>
+                            </select>
+                        </div>
+                        <div class="ingredient-field">
+                            <label>Ilość</label>
+                            <input type="number" id="ing-weight" min="0" placeholder="200">
+                        </div>
+                        <div class="ingredient-field">
+                            <label>Jednostka</label>
+                            <select id="ing-weight-unit">
+                                <option value="g">g</option>
+                                <option value="ml">ml</option>
+                                <option value="">brak</option>
+                            </select>
                         </div>
                     </div>
                     <div id="ingredient-macro-section" class="ingredient-macros">
@@ -2162,6 +2164,7 @@ document.getElementById("btn-add-ingredient").addEventListener("click", () => {
 const name = document.getElementById("ingredient-name").value.trim();
 const measureAmount = parseFloat(document.getElementById("ingredient-measure-amount").value) || 0;
 const measureUnit = document.getElementById("ingredient-measure-unit").value;
+const weightUnit = document.getElementById("ing-weight-unit").value;
 const weight = parseFloat(document.getElementById("ing-weight").value) || 0;
 const mode = document.getElementById("macro-mode").value;
 
@@ -2175,6 +2178,7 @@ name,
 measureAmount: measureAmount > 0 && measureUnit ? measureAmount : null,
 measureUnit: measureAmount > 0 ? measureUnit : "",
 weight,
+weightUnit: wightUnit || "g"
 kcal: 0,
 protein: 0,
 fat: 0,
