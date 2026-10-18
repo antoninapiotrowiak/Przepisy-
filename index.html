@@ -733,21 +733,75 @@ box-shadow: none;
 font-size: 12px;
 }
 
+/* Style dla Plannera i Lodówki */
+.fridge-panel {
+background: rgba(255, 255, 255, 0.65);
+border: 1px solid #fbcfe8;
+border-radius: 14px;
+padding: 12px;
+margin-bottom: 16px;
+}
+
+.planner-day-card {
+background: rgba(255, 255, 255, 0.85);
+border: 1px solid #f3e8ff;
+border-radius: 14px;
+padding: 12px;
+margin-bottom: 10px;
+}
+
+.planner-day-title {
+color: #db2777;
+font-size: 14px;
+font-weight: 700;
+margin: 0 0 8px 0;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.planner-slots {
+display: grid;
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 6px;
+}
+
+.planner-slot {
+background: #fff;
+border: 1px solid #e2e8f0;
+border-radius: 10px;
+padding: 8px;
+font-size: 12px;
+}
+
+.planner-slot-label {
+color: #64748b;
+font-weight: 600;
+margin-bottom: 4px;
+font-size: 11px;
+}
+
+.planner-slot-content {
+color: #1e293b;
+font-weight: 500;
+word-break: break-word;
+}
+
 @media (max-width: 480px) {
+.planner-slots {
+grid-template-columns: minmax(0, 1fr);
+}
 .recipe-category-fields {
 grid-template-columns: minmax(0, 1fr);
 gap: 0;
 }
-
 .recipe-option-groups {
 grid-template-columns: minmax(0, 1fr);
 }
-
 .category-tab {
 min-width: 62px;
 flex-basis: 62px;
 }
-
 .recipe-safety-filters {
 grid-template-columns: minmax(0, 1fr);
 }
@@ -821,11 +875,6 @@ border-color: #e5e7eb;
 .macro-field:nth-child(3) span { color: #1d4ed8; }
 .macro-field:nth-child(4) span { color: #a16207; }
 .macro-field:nth-child(5) span { color: #15803d; }
-
-.macro-field:nth-child(2) input:focus { border-color: #fb7185; }
-.macro-field:nth-child(3) input:focus { border-color: #60a5fa; }
-.macro-field:nth-child(4) input:focus { border-color: #fbbf24; }
-.macro-field:nth-child(5) input:focus { border-color: #4ade80; }
 
 .ingredient-helper-text {
 padding-left: 9px;
@@ -1316,14 +1365,35 @@ to { opacity: 1; transform: translateY(0); }
 </div>
 </div>
 
-<!-- ZAKŁADKA 2: Moje przepisy -->
+<!-- ZAKŁADKA 2: Moje przepisy + Planner + Lodówka -->
 <div id="section-my-recipes" class="tab-content">
 <div class="card">
-<h3 style="margin-top:0; color: #db2777;">Twoja kolekcja 📖</h3>
+<h3 style="margin-top:0; color: #db2777;">Twoja kolekcja i Planer 📖</h3>
+
+<!-- Panel wyszukiwania po tym co mam w lodówce -->
+<section class="fridge-panel" aria-labelledby="fridge-search-title">
+<h4 id="fridge-search-title" style="margin: 0 0 6px 0; color: #db2777; font-size: 14px;">❄️ Co mam w lodówce? (w moich przepisach)</h4>
+<div style="display: flex; gap: 8px;">
+<input type="text" id="fridge-inventory-input" placeholder="np. jajka, banan, serek..." style="margin: 0; background: #fff;" oninput="setFridgeSearch(this.value)">
+<button type="button" style="width: auto; margin: 0; padding: 8px 12px; font-size: 12px;" onclick="clearFridgeSearch()">Wyczyść</button>
+</div>
+<p style="font-size: 11px; color: #64748b; margin: 4px 0 0 0;">Wpisz składniki po przecinku, a wyświetlimy tylko te Twoje przepisy, które je zawierają.</p>
+</section>
+
+<!-- Tygodniowy Planner Posiłków -->
+<section class="fridge-panel" aria-labelledby="meal-planner-title">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+<h4 id="meal-planner-title" style="margin: 0; color: #db2777; font-size: 14px;">📅 Tygodniowy Planner Posiłków</h4>
+<button type="button" class="shopping-clear-button" onclick="clearMealPlanner()">Wyczyść planer</button>
+</div>
+<div id="meal-planner-container">Planner jest pusty. Dodaj dania z przycisku „📅 Do planera” przy przepisach!</div>
+</section>
+
 <div class="recipe-list-toolbar">
 <input type="search" id="my-recipes-search" class="recipe-search-input" placeholder="Szukaj w moich przepisach" aria-label="Szukaj w moich przepisach" oninput="setMyRecipesSearch(this.value)">
 <button type="button" id="my-favorites-filter" class="favorites-filter" aria-pressed="false" onclick="toggleFavoritesFilter()">♡ Ulubione</button>
 </div>
+
 <section class="shopping-list-panel" aria-labelledby="shopping-list-title">
 <div class="shopping-list-heading">
 <h4 id="shopping-list-title">Lista zakupów</h4>
@@ -1331,7 +1401,40 @@ to { opacity: 1; transform: translateY(0); }
 </div>
 <div id="shopping-list-container">Lista jest pusta. Dodaj składniki z przepisu.</div>
 </section>
+
 <div id="my-recipes-container">Ładowanie Twoich przepisów...</div>
+</div>
+</div>
+
+<!-- Modal / Wybór dnia do planera (ukryty do kliknięcia) -->
+<div id="planner-modal" class="hidden" style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 20px;">
+<div class="card" style="width: 100%; max-width: 380px; margin: 0; background: #fff;">
+<h3 style="margin-top: 0; color: #db2777; font-size: 16px;">Zaplanuj posiłek 📅</h3>
+<p id="planner-modal-recipe-title" style="font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 12px;"></p>
+<input type="hidden" id="planner-modal-recipe-id" value="">
+<input type="hidden" id="planner-modal-recipe-title-text" value="">
+
+<label style="font-size: 12px; font-weight: 700; color: #475569;">Dzień tygodnia</label>
+<select id="planner-day-select">
+<option value="Poniedziałek">Poniedziałek</option>
+<option value="Wtorek">Wtorek</option>
+<option value="Środa">Środa</option>
+<option value="Czwartek">Czwartek</option>
+<option value="Piątek">Piątek</option>
+<option value="Sobota">Sobota</option>
+<option value="Niedziela">Niedziela</option>
+</select>
+
+<label style="font-size: 12px; font-weight: 700; color: #475569;">Pora posiłku</label>
+<select id="planner-slot-select">
+<option value="Śniadanie">Śniadanie</option>
+<option value="Obiad">Obiad</option>
+<option value="Kolacja">Kolacja</option>
+<option value="Przekąska / Deser">Przekąska / Deser</option>
+</select>
+
+<button type="button" onclick="confirmAddToPlanner()" style="margin-top: 10px;">Dodaj do planera ✨</button>
+<button type="button" onclick="closePlannerModal()" style="background: #94a3b8; margin-top: 4px;">Anuluj</button>
 </div>
 </div>
 
@@ -1608,6 +1711,7 @@ let currentCatalogCategory = 'all';
 let currentCatalogSubcategory = 'all';
 let currentCatalogSearch = "";
 let currentMyRecipesSearch = "";
+let currentFridgeSearch = "";
 let favoritesOnly = false;
 let existingRecipeImageUrl = "";
 let currentDietFilter = "all";
@@ -1928,16 +2032,21 @@ return targetItems;
 }
 
 function migrateGuestDataToUser(userId) {
-["favorites", "shopping"].forEach(kind => {
+["favorites", "shopping", "planner"].forEach(kind => {
 const guestKey = `recipe-book:guest:${kind}`;
 const userKey = `recipe-book:${userId}:${kind}`;
 try {
-const guestItems = JSON.parse(localStorage.getItem(guestKey) || "[]");
-if (!Array.isArray(guestItems) || guestItems.length === 0) return;
-const userItems = JSON.parse(localStorage.getItem(userKey) || "[]");
-const mergedItems = kind === "favorites"
-? [...new Set([...userItems, ...guestItems])]
-: mergeShoppingItems(userItems, guestItems);
+const guestItems = JSON.parse(localStorage.getItem(guestKey) || (kind === "planner" ? "{}" : "[]"));
+if (!guestItems || (Array.isArray(guestItems) && guestItems.length === 0) || (typeof guestItems === 'object' && Object.keys(guestItems).length === 0)) return;
+const userItems = JSON.parse(localStorage.getItem(userKey) || (kind === "planner" ? "{}" : "[]"));
+let mergedItems;
+if (kind === "favorites") {
+mergedItems = [...new Set([...userItems, ...guestItems])];
+} else if (kind === "shopping") {
+mergedItems = mergeShoppingItems(userItems, guestItems);
+} else {
+mergedItems = { ...guestItems, ...userItems };
+}
 localStorage.setItem(userKey, JSON.stringify(mergedItems));
 localStorage.removeItem(guestKey);
 } catch (error) {
@@ -1960,6 +2069,16 @@ const searchableText = [recipe.title, recipe.steps, category, subcategory, ingre
 return searchableText.includes(normalizedQuery);
 }
 
+function matchesFridgeSearch(recipe, fridgeText) {
+const normalizedFridge = fridgeText.trim().toLocaleLowerCase("pl-PL");
+if (!normalizedFridge) return true;
+const fridgeItems = normalizedFridge.split(',').map(item => item.trim()).filter(Boolean);
+if (fridgeItems.length === 0) return true;
+const ingredientNames = (recipe.ingredients || []).map(ingredient => (ingredient.name || "").toLocaleLowerCase("pl-PL")).join(" ");
+// Sprawdzamy czy którykolwiek produkt z lodówki pasuje do składników przepisu
+return fridgeItems.some(product => ingredientNames.includes(product));
+}
+
 window.setCatalogSearch = function(value) {
 currentCatalogSearch = value;
 renderCatalog();
@@ -1967,6 +2086,17 @@ renderCatalog();
 
 window.setMyRecipesSearch = function(value) {
 currentMyRecipesSearch = value;
+renderMyRecipes();
+};
+
+window.setFridgeSearch = function(value) {
+currentFridgeSearch = value;
+renderMyRecipes();
+};
+
+window.clearFridgeSearch = function() {
+document.getElementById("fridge-inventory-input").value = "";
+currentFridgeSearch = "";
 renderMyRecipes();
 };
 
@@ -1979,6 +2109,110 @@ window.setAllergenFilter = function(value) {
 currentExcludedAllergen = value;
 renderCatalog();
 };
+
+// Funkcje Plannera Posiłków
+function readPlannerData() {
+try {
+const data = JSON.parse(localStorage.getItem(userStorageKey("planner")) || "{}");
+return typeof data === 'object' && data !== null ? data : {};
+} catch (e) {
+return {};
+}
+}
+
+function writePlannerData(plannerObj) {
+try {
+localStorage.setItem(userStorageKey("planner"), JSON.stringify(plannerObj));
+return true;
+} catch (e) {
+return false;
+}
+}
+
+window.openPlannerModal = function(recipeId, recipeTitle) {
+document.getElementById("planner-modal-recipe-id").value = recipeId;
+document.getElementById("planner-modal-recipe-title-text").value = recipeTitle;
+document.getElementById("planner-modal-recipe-title").textContent = `Przepis: "${recipeTitle}"`;
+document.getElementById("planner-modal").classList.remove("hidden");
+};
+
+window.closePlannerModal = function() {
+document.getElementById("planner-modal").classList.add("hidden");
+};
+
+window.confirmAddToPlanner = function() {
+const recipeId = document.getElementById("planner-modal-recipe-id").value;
+const recipeTitle = document.getElementById("planner-modal-recipe-title-text").value;
+const day = document.getElementById("planner-day-select").value;
+const slot = document.getElementById("planner-slot-select").value;
+
+const planner = readPlannerData();
+if (!planner[day]) planner[day] = {};
+planner[day][slot] = { recipeId, recipeTitle };
+
+writePlannerData(planner);
+closePlannerModal();
+renderMealPlanner();
+alert(`Dodano "${recipeTitle}" do planera na ${day} (${slot})! 📅`);
+};
+
+window.removeFromPlanner = function(day, slot) {
+const planner = readPlannerData();
+if (planner[day] && planner[day][slot]) {
+delete planner[day][slot];
+if (Object.keys(planner[day]).length === 0) delete planner[day];
+writePlannerData(planner);
+renderMealPlanner();
+}
+};
+
+window.clearMealPlanner = function() {
+if (confirm("Czy na pewno chcesz wyczyścić cały tygodniowy planer?")) {
+localStorage.removeItem(userStorageKey("planner"));
+renderMealPlanner();
+}
+};
+
+function renderMealPlanner() {
+const container = document.getElementById("meal-planner-container");
+const planner = readPlannerData();
+const days = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela"];
+const slots = ["Śniadanie", "Obiad", "Kolacja", "Przekąska / Deser"];
+
+if (Object.keys(planner).length === 0) {
+container.innerHTML = "<p class='ingredient-helper-text'>Planner jest pusty. Kliknij „📅 Do planera” przy dowolnym przepisie.</p>";
+return;
+}
+
+let html = "";
+days.forEach(day => {
+const dayMeals = planner[day];
+if (!dayMeals || Object.keys(dayMeals).length === 0) return;
+
+html += `
+<div class="planner-day-card">
+<p class="planner-day-title"><span>🗓️ ${day}</span></p>
+<div class="planner-slots">
+`;
+slots.forEach(slot => {
+const meal = dayMeals[slot];
+if (meal) {
+html += `
+<div class="planner-slot">
+<div class="planner-slot-label">${slot}</div>
+<div class="planner-slot-content" style="display: flex; justify-content: space-between; align-items: center;">
+<span>🍳 ${escapeHtml(meal.recipeTitle)}</span>
+<button type="button" onclick="removeFromPlanner('${day}', '${slot}')" style="width: auto; margin: 0; padding: 2px 6px; font-size: 10px; background: #ef4444;" title="Usuń z planera">×</button>
+</div>
+</div>
+`;
+}
+});
+html += `</div></div>`;
+});
+
+container.innerHTML = html || "<p class='ingredient-helper-text'>Planner jest pusty.</p>";
+}
 
 function updateRecipeImagePreview(imageUrl) {
 existingRecipeImageUrl = imageUrl || "";
@@ -2075,8 +2309,8 @@ return;
 }
 container.innerHTML = `<ul class="shopping-list-items">${items.map((item, index) => {
 const formatted = formatIngredientQuantity(item);
-const quantityText = formatted.quantity ? ` · \${escapeHtml(formatted.quantity)}` : "";
-return `<li class="shopping-list-item\${item.checked ? " is-checked" : ""}"><input type="checkbox" aria-label="Odhacz \${escapeHtml(item.name)}" ${item.checked ? "checked" : ""} onchange="toggleShoppingItem(${index}, this.checked)"><span>${escapeHtml(item.name)}${quantityText}</span></li>`;
+const quantityText = formatted.quantity ? ` · ${escapeHtml(formatted.quantity)}` : "";
+return `<li class="shopping-list-item${item.checked ? " is-checked" : ""}"><input type="checkbox" aria-label="Odhacz ${escapeHtml(item.name)}" ${item.checked ? "checked" : ""} onchange="toggleShoppingItem(${index}, this.checked)"><span>${escapeHtml(item.name)}${quantityText}</span></li>`;
 }).join("")}</ul>`;
 }
 
@@ -2284,10 +2518,10 @@ const resultText = await callGeminiProxy(prompt);
 outputBox.innerHTML = marked.parse(resultText);
 };
 
-        function extractWeightFromText(text) {
-            const match = text.match(/(\d+)\s*(g|ml)\b/i);
-            return match ? parseInt(match[1]) : 0;
-        }
+function extractWeightFromText(text) {
+const match = text.match(/(\d+)\s*(g|ml)\b/i);
+return match ? parseInt(match[1]) : 0;
+}
 
 document.getElementById("btn-add-recipe").addEventListener("click", async () => {
 const editId = document.getElementById("edit-recipe-id").value;
@@ -2636,6 +2870,7 @@ const timeHtml = recipe.time ? `
                </div>` : "";
 
 const ingredientsString = encodeURIComponent(JSON.stringify(recipe.ingredients));
+const escapedTitle = escapeAttribute(recipe.title);
 
 let ownerActionsHtml = "";
 if (isOwnerView) {
@@ -2672,7 +2907,10 @@ return `
                            <span style="font-size: 13px; color: #64748b;">porcji</span>
                        </div>
 
-                       <button type="button" class="shopping-add-recipe-button" onclick="addRecipeToShoppingList('${ingredientsString}')">＋ Do listy zakupów</button>
+                       <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+                           <button type="button" class="shopping-add-recipe-button" style="margin:0; flex:1;" onclick="addRecipeToShoppingList('${ingredientsString}')">＋ Do listy zakupów</button>
+                           <button type="button" style="width: auto; margin: 0; padding: 8px 10px; font-size: 12px; background: #8b5cf6;" onclick="openPlannerModal('${docId}', '${escapedTitle}')">📅 Do planera</button>
+                       </div>
 
                        <p style="font-weight: 600; color: #334155; margin-bottom: 4px;">Składniki do odhaczenia:</p>
                        <ul id="scaled-ingredients-${docId}" class="cooking-checklist">
@@ -2751,9 +2989,15 @@ if (rawMyRecipes.length === 0) {
 container.innerHTML = `<div class="empty-state"><span class="icon">📖</span><p style="font-weight: 600; margin: 0;">Nie masz jeszcze swoich przepisów</p><p style="font-size: 13px; color: #94a3b8; margin: 4px 0 0 0;">Przejdź do zakładki „Dodaj”, aby stworzyć pierwszy!</p></div>`;
 return;
 }
-const filtered = rawMyRecipes.filter(item => matchesRecipeSearch(item.data, currentMyRecipesSearch) && (!favoritesOnly || isFavoriteRecipe(item.id)));
+const filtered = rawMyRecipes.filter(item => {
+if (!matchesRecipeSearch(item.data, currentMyRecipesSearch)) return false;
+if (!matchesFridgeSearch(item.data, currentFridgeSearch)) return false;
+if (favoritesOnly && !isFavoriteRecipe(item.id)) return false;
+return true;
+});
+
 if (filtered.length === 0) {
-container.innerHTML = `<div class="empty-state"><span class="icon">🔍</span><p style="font-weight: 600; margin: 0;">Nie znaleziono przepisów</p><p style="font-size: 13px; color: #94a3b8; margin: 4px 0 0 0;">Zmień wyszukiwanie lub filtr ulubionych.</p></div>`;
+container.innerHTML = `<div class="empty-state"><span class="icon">🔍</span><p style="font-weight: 600; margin: 0;">Nie znaleziono przepisów</p><p style="font-size: 13px; color: #94a3b8; margin: 4px 0 0 0;">Zmień kryteria wyszukiwania lub lodówki.</p></div>`;
 return;
 }
 container.innerHTML = filtered.map(item => renderRecipeCard(item.data, item.id, true)).join("");
@@ -2775,9 +3019,11 @@ rawMyRecipes = snapshot.docs.map(docSnap => ({ id: docSnap.id, data: docSnap.dat
 renderMyRecipes();
 });
 renderShoppingList();
+renderMealPlanner();
 } else {
 rawMyRecipes = [];
 renderShoppingList();
+renderMealPlanner();
 authStatus.textContent = "Nie jesteś zalogowany.";
 authSection.classList.remove("hidden");
 appTabs.classList.add("hidden");
