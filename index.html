@@ -593,10 +593,6 @@ margin: 12px 0;
 .recipe-option-group {
 min-width: 0;
 margin: 0;
-
-.recipe-safety-filters {
-grid-template-columns: minmax(0, 1fr);
-}
 padding: 10px;
 border: 1px solid #e2e8f0;
 border-radius: 10px;
@@ -751,6 +747,10 @@ grid-template-columns: minmax(0, 1fr);
 min-width: 62px;
 flex-basis: 62px;
 }
+
+.recipe-safety-filters {
+grid-template-columns: minmax(0, 1fr);
+}
 }
 
 .ingredient-editor-heading {
@@ -761,26 +761,9 @@ font-size: 15px;
 
 .ingredient-field-grid {
 display: grid;
-grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(90px, 0.7fr);
-gap: 10px;
-}
-
-.home-measure-inputs {
-display: flex;
-gap: 6px;
-}
-
-.home-measure-inputs input {
-min-width: 0;
-flex: 0.7;
-}
-
-.home-measure-inputs select {
-min-width: 0;
-flex: 1.3;
-margin: 3px 0 10px;
-padding: 10px 8px;
-background: #fff;
+grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+gap: 8px;
+margin-bottom: 12px;
 }
 
 .ingredient-field label,
@@ -792,7 +775,8 @@ font-size: 12px;
 font-weight: 700;
 }
 
-.ingredient-editor input {
+.ingredient-editor input,
+.ingredient-editor select {
 margin: 3px 0 10px;
 background: #fff;
 }
@@ -846,10 +830,7 @@ border-color: #e5e7eb;
 .ingredient-helper-text {
 padding-left: 9px;
 border-left: 2px solid #f9a8d4;
-}
-
-.ingredient-helper-text {
-margin: -2px 0 10px;
+margin: 8px 0 10px;
 color: #64748b;
 font-size: 12px;
 line-height: 1.4;
@@ -923,21 +904,10 @@ font-weight: 600;
 }
 
 @media (max-width: 480px) {
-.ingredient-field-grid {
-grid-template-columns: minmax(0, 1fr) minmax(82px, 0.65fr);
-gap: 8px;
-}
-
-.ingredient-field:first-child {
-grid-column: 1 / -1;
-}
-
 .ingredient-macros {
 grid-template-columns: repeat(2, minmax(0, 1fr));
 }
-}
 
-@media (max-width: 480px) {
 .inspiration-gallery {
 gap: 6px;
 }
@@ -1437,17 +1407,22 @@ to { opacity: 1; transform: translateY(0); }
 <p id="macro-mode-help" class="ingredient-helper-text">Przy każdym składniku wpisz wartości z etykiety na 100 g.</p>
 </div>
 
-            <div class="ingredient-field-grid" style="grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr); gap: 8px;">
+            <div id="ingredients-section-wrapper">
+                <div class="ingredient-editor">
+                    <div class="ingredient-editor-titlebar">
+                        <h4 class="ingredient-editor-heading">Dodaj składnik</h4>
+                    </div>
+                    <div class="ingredient-field-grid">
                         <div class="ingredient-field">
-                            <label for="ingredient-name" style="grid-column: 1 / -1;">Składnik</label>
-                            <input type="text" id="ingredient-name" placeholder="np. Mleko / Płatki owsiane">
+                            <label for="ingredient-name">Składnik</label>
+                            <input type="text" id="ingredient-name" placeholder="np. Mleko / Płatki">
                         </div>
                         <div class="ingredient-field">
-                            <label>Ilość miary</label>
+                            <label for="ingredient-measure-amount">Ilość miary</label>
                             <input type="number" id="ingredient-measure-amount" min="0" step="0.25" placeholder="1">
                         </div>
                         <div class="ingredient-field">
-                            <label>Miara domowa</label>
+                            <label for="ingredient-measure-unit">Miara domowa</label>
                             <select id="ingredient-measure-unit">
                                 <option value="">brak</option>
                                 <option value="szklanka">szklanka</option>
@@ -1460,11 +1435,11 @@ to { opacity: 1; transform: translateY(0); }
                             </select>
                         </div>
                         <div class="ingredient-field">
-                            <label>Ilość</label>
+                            <label for="ing-weight">Ilość</label>
                             <input type="number" id="ing-weight" min="0" placeholder="200">
                         </div>
                         <div class="ingredient-field">
-                            <label>Jednostka</label>
+                            <label for="ing-weight-unit">Jednostka</label>
                             <select id="ing-weight-unit">
                                 <option value="g">g</option>
                                 <option value="ml">ml</option>
@@ -1473,13 +1448,13 @@ to { opacity: 1; transform: translateY(0); }
                         </div>
                     </div>
                     <div id="ingredient-macro-section" class="ingredient-macros">
-                        <span class="ingredient-macros-title">Wartości na 100 g</span>
-                        <label class="macro-field"><span>Kcal</span><input type="number" id="ing-kcal" min="0" placeholder="0" aria-label="Kalorie na 100 gramów"></label>
-                        <label class="macro-field"><span>Białko</span><input type="number" id="ing-protein" min="0" step="0.1" placeholder="g" aria-label="Białko na 100 gramów"></label>
-                        <label class="macro-field"><span>Tłuszcz</span><input type="number" id="ing-fat" min="0" step="0.1" placeholder="g" aria-label="Tłuszcz na 100 gramów"></label>
-                        <label class="macro-field"><span>Węglowodany</span><input type="number" id="ing-carbs" min="0" step="0.1" placeholder="g" aria-label="Węglowodany na 100 gramów"></label>
+                        <span class="ingredient-macros-title">Wartości na 100 g (lub 100 ml)</span>
+                        <label class="macro-field"><span>Kcal</span><input type="number" id="ing-kcal" min="0" placeholder="0" aria-label="Kalorie na 100g"></label>
+                        <label class="macro-field"><span>Białko</span><input type="number" id="ing-protein" min="0" step="0.1" placeholder="g" aria-label="Białko na 100g"></label>
+                        <label class="macro-field"><span>Tłuszcz</span><input type="number" id="ing-fat" min="0" step="0.1" placeholder="g" aria-label="Tłuszcz na 100g"></label>
+                        <label class="macro-field"><span>Węglowodany</span><input type="number" id="ing-carbs" min="0" step="0.1" placeholder="g" aria-label="Węglowodany na 100g"></label>
                     </div>
-                    <p class="ingredient-helper-text">Wpisz dane z etykiety. Ilość makro w przepisie zostanie przeliczona na podaną gramaturę.</p>
+                    <p class="ingredient-helper-text">Wpisz dane z etykiety. Ilość makro zostanie przeliczona automatycznie.</p>
                     <button type="button" id="btn-add-ingredient" class="ingredient-add-button">＋ Dodaj do listy</button>
                 </div>
                 <div id="ingredients-summary-container" style="margin-bottom: 15px; font-size: 14px;">
@@ -1487,11 +1462,9 @@ to { opacity: 1; transform: translateY(0); }
                 </div>
             </div>
 
-            <!-- Kontener ręcznego makro -->
-            <!-- Sekcja ręcznego makro całościowego widoczna TYLKO w trybie total-recipe -->
-<div id="manual-macro-wrapper" class="hidden" style="background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); padding: 16px; border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.6);">
+            <div id="manual-macro-wrapper" class="hidden" style="background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); padding: 16px; border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.6);">
                 <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Wklej składniki, każdy w osobnym wierszu</h4>
-                <textarea id="manual-ingredients-text" rows="3" placeholder="Wpisz listę składników (np. Płatki owsiane - 50g&#10;Banan - 1 szt.)" style="margin-bottom: 12px;"></textarea>
+                <textarea id="manual-ingredients-text" rows="3" placeholder="Wpisz listę składników (np. Mleko - 200ml&#10;Banan - 1 szt.)" style="margin-bottom: 12px;"></textarea>
 
                 <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Makro całego przepisu (łącznie z internetu)</h4>
 <div style="display: flex; gap: 8px;">
@@ -1578,7 +1551,6 @@ Wyloguj się
 </button>
 </div>
 </div>
-
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 import { 
@@ -1898,13 +1870,14 @@ return ingredient.measure || "";
 
 function formatIngredientQuantity(ingredient, portionRatio = 1) {
 const originalWeight = Number(ingredient.weight ?? ingredient.amount);
+const weightUnit = ingredient.weightUnit || "g";
 const scaledWeight = originalWeight > 0 ? Math.round(originalWeight * portionRatio) : 0;
 const householdMeasure = formatHouseholdMeasure(ingredient, portionRatio);
-const embeddedWeight = !householdMeasure && originalWeight > 0 && new RegExp(`${originalWeight}\\s*g\\b`, "i").test(ingredient.name);
+const embeddedWeight = !householdMeasure && originalWeight > 0 && new RegExp(`${originalWeight}\\s*${weightUnit}\\b`, "i").test(ingredient.name);
 const name = embeddedWeight
-? ingredient.name.replace(new RegExp(`${originalWeight}\\s*g\\b`, "i"), `${scaledWeight}g`)
+? ingredient.name.replace(new RegExp(`${originalWeight}\\s*${weightUnit}\\b`, "i"), `${scaledWeight}${weightUnit}`)
 : ingredient.name;
-const quantity = [householdMeasure, scaledWeight > 0 && !embeddedWeight ? `${scaledWeight} g` : ""].filter(Boolean).join(" · ");
+const quantity = [householdMeasure, scaledWeight > 0 && !embeddedWeight ? `${scaledWeight} ${weightUnit}` : ""].filter(Boolean).join(" · ");
 return { name, quantity, scaledWeight };
 }
 
@@ -2102,8 +2075,8 @@ return;
 }
 container.innerHTML = `<ul class="shopping-list-items">${items.map((item, index) => {
 const formatted = formatIngredientQuantity(item);
-const quantityText = formatted.quantity ? ` · ${escapeHtml(formatted.quantity)}` : "";
-return `<li class="shopping-list-item${item.checked ? " is-checked" : ""}"><input type="checkbox" aria-label="Odhacz ${escapeHtml(item.name)}" ${item.checked ? "checked" : ""} onchange="toggleShoppingItem(${index}, this.checked)"><span>${escapeHtml(item.name)}${quantityText}</span></li>`;
+const quantityText = formatted.quantity ? ` · \${escapeHtml(formatted.quantity)}` : "";
+return `<li class="shopping-list-item\${item.checked ? " is-checked" : ""}"><input type="checkbox" aria-label="Odhacz \${escapeHtml(item.name)}" ${item.checked ? "checked" : ""} onchange="toggleShoppingItem(${index}, this.checked)"><span>${escapeHtml(item.name)}${quantityText}</span></li>`;
 }).join("")}</ul>`;
 }
 
@@ -2118,6 +2091,7 @@ return;
 const shoppingItems = mergeShoppingItems(readUserList("shopping"), ingredients.map(ingredient => ({
 name: ingredient.name.trim(),
 weight: Number(ingredient.weight ?? ingredient.amount) || 0,
+weightUnit: ingredient.weightUnit || "g",
 measureAmount: Number(ingredient.measureAmount) || null,
 measureUnit: ingredient.measureUnit || "",
 measure: ingredient.measure || "",
@@ -2154,7 +2128,7 @@ ingWrapper.classList.toggle('hidden', mode === 'manual');
 ingMacroSection.classList.toggle('hidden', mode !== 'ingredients' && mode !== 'per-ingredient');
 manualWrapper.classList.toggle('hidden', mode !== 'manual' && mode !== 'total-recipe');
 helpText.textContent = mode === 'per-ingredient' || mode === 'ingredients'
-? "Przy każdym składniku wpisz wartości z etykiety na 100 g."
+? "Przy każdym składniku wpisz wartości z etykiety na 100 g (lub 100 ml)."
 : mode === 'total-recipe'
 ? "Dodaj składniki po kolei, a łączne makro przepisu wpisz poniżej."
 : "Wklej listę składników po jednym w wierszu i wpisz łączne makro przepisu.";
@@ -2164,12 +2138,12 @@ document.getElementById("btn-add-ingredient").addEventListener("click", () => {
 const name = document.getElementById("ingredient-name").value.trim();
 const measureAmount = parseFloat(document.getElementById("ingredient-measure-amount").value) || 0;
 const measureUnit = document.getElementById("ingredient-measure-unit").value;
-const weightUnit = document.getElementById("ing-weight-unit").value;
 const weight = parseFloat(document.getElementById("ing-weight").value) || 0;
+const weightUnit = document.getElementById("ing-weight-unit").value;
 const mode = document.getElementById("macro-mode").value;
 
 if (!name || weight <= 0) {
-alert("Podaj nazwę składnika oraz wagę w gramach!");
+alert("Podaj nazwę składnika oraz jego ilość!");
 return;
 }
 
@@ -2178,7 +2152,7 @@ name,
 measureAmount: measureAmount > 0 && measureUnit ? measureAmount : null,
 measureUnit: measureAmount > 0 ? measureUnit : "",
 weight,
-weightUnit: wightUnit || "g"
+weightUnit: weightUnit || "g",
 kcal: 0,
 protein: 0,
 fat: 0,
@@ -2311,7 +2285,7 @@ outputBox.innerHTML = marked.parse(resultText);
 };
 
         function extractWeightFromText(text) {
-            const match = text.match(/(\d+)\s*g\b/i);
+            const match = text.match(/(\d+)\s*(g|ml)\b/i);
             return match ? parseInt(match[1]) : 0;
         }
 
@@ -2350,6 +2324,7 @@ finalIngredients = manualText.split('\n').filter(line => line.trim()).map(line =
 name: line.trim(),
 measure: '',
 weight: extractWeightFromText(line),
+weightUnit: 'g',
 kcal: 0,
 protein: 0,
 fat: 0,
@@ -2438,7 +2413,7 @@ document.getElementById("recipe-allergens-verified").checked = false;
 document.getElementById("recipe-steps").value = "";
 document.getElementById("recipe-time").value = "";
 document.getElementById("recipe-portions").value = "4";
-                document.getElementById("manual-ingredients-text").value = "";
+document.getElementById("manual-ingredients-text").value = "";
 document.getElementById("manual-total-kcal").value = "";
 document.getElementById("manual-total-protein").value = "";
 document.getElementById("manual-total-fat").value = "";
@@ -2505,7 +2480,7 @@ document.getElementById("recipe-allergens-verified").checked = false;
 document.getElementById("recipe-steps").value = "";
 document.getElementById("recipe-time").value = "";
 document.getElementById("recipe-portions").value = "4";
-            document.getElementById("manual-ingredients-text").value = "";
+document.getElementById("manual-ingredients-text").value = "";
 document.getElementById("manual-total-kcal").value = "";
 document.getElementById("manual-total-protein").value = "";
 document.getElementById("manual-total-fat").value = "";
@@ -2617,9 +2592,9 @@ const basePortions = recipe.portions || 1;
 const panHtml = recipe.panSize ? `<p style="color: #db2777; font-size: 13px; margin: 4px 0;">🍰 <strong>Foremka:</strong> ${escapeHtml(recipe.panSize)}</p>` : "";
 const categoryInfo = recipeCategories[recipe.category];
 const subcategoryInfo = categoryInfo?.subcategories.find(item => item.value === recipe.subcategory);
-const categoryHtml = categoryInfo ? `<span class="recipe-category-badge">${escapeHtml(categoryInfo.label)}${subcategoryInfo ? ` · ${escapeHtml(subcategoryInfo.label)}` : ""}</span>` : "";
+const categoryHtml = categoryInfo ? `<span class="recipe-category-badge">${escapeHtml(categoryInfo.label)}${subcategoryInfo ? ` · \${escapeHtml(subcategoryInfo.label)}` : ""}</span>` : "";
 const photoHtml = recipe.imageUrl ? `<img class="recipe-card-image" src="${escapeAttribute(recipe.imageUrl)}" alt="Zdjęcie przepisu" loading="lazy">` : "";
-const dietHtml = (recipe.dietTags || []).length ? `<div class="recipe-diet-badges">${recipe.dietTags.map(tag => dietLabels[tag]).filter(Boolean).map(label => `<span class="recipe-diet-badge">${escapeHtml(label)}</span>`).join("")}</div>` : "";
+const dietHtml = (recipe.dietTags || []).length ? `<div class="recipe-diet-badges">${recipe.dietTags.map(tag => dietLabels[tag]).filter(Boolean).map(label => `<span class="recipe-diet-badge">\${escapeHtml(label)}</span>`).join("")}</div>` : "";
 const declaredAllergens = (recipe.allergens || []).map(allergen => allergenLabels[allergen]).filter(Boolean);
 const allergenText = declaredAllergens.length ? `Zawiera: ${declaredAllergens.join(", ")}` : recipe.allergensVerified ? "Sprawdzono skład" : "Alergeny niezweryfikowane";
 const allergenHtml = `<small class="recipe-allergen-note">${escapeHtml(allergenText)}${declaredAllergens.length && !recipe.allergensVerified ? " · skład niezweryfikowany" : ""}</small>`;
