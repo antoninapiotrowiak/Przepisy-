@@ -83,52 +83,48 @@ line-height: 1.25;
 text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
 }
 
-/* Nowy styl kafelków kategorii (Cookidoo style) */
-.cookidoo-categories-grid {
+.catalog-inspiration {
 display: grid;
-grid-template-columns: repeat(2, minmax(0, 1fr));
-gap: 10px;
-margin-bottom: 20px;
-}
-
-.cookidoo-category-card {
-display: flex;
+grid-template-columns: minmax(100px, 0.85fr) minmax(0, 1.5fr);
 align-items: center;
-justify-content: space-between;
-background: #fdfaf6;
-border: 1px solid #f9e8d4;
+gap: 14px;
+margin: 0 0 20px;
+padding: 10px;
+border: 1px solid rgba(255, 255, 255, 0.9);
 border-radius: 14px;
-overflow: hidden;
-cursor: pointer;
-transition: all 0.2s ease;
-min-height: 68px;
-box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+background: rgba(255, 255, 255, 0.55);
 }
 
-.cookidoo-category-card:hover {
-transform: translateY(-2px);
-border-color: #f472b6;
-box-shadow: 0 6px 16px rgba(236,72,153,0.1);
-}
-
-.cookidoo-category-card.active {
-background: #fce7f3;
-border-color: #f472b6;
-}
-
-.cookidoo-category-title {
-padding: 8px 12px;
-font-size: 13px;
-font-weight: 700;
-color: #831843;
-line-height: 1.2;
-}
-
-.cookidoo-category-img {
-width: 68px;
-height: 68px;
+.catalog-inspiration img {
+display: block;
+width: 100%;
+height: 106px;
 object-fit: cover;
-flex-shrink: 0;
+border-radius: 10px;
+animation: imageDrift 18s ease-in-out infinite alternate;
+}
+
+.catalog-inspiration-copy h4 {
+margin: 0 0 4px;
+color: #166534;
+font-size: 15px;
+}
+
+.catalog-inspiration-copy p {
+margin: 0 0 9px;
+color: #52615b;
+font-size: 12px;
+line-height: 1.45;
+}
+
+.catalog-inspiration-button {
+width: auto;
+margin: 0;
+padding: 8px 11px;
+border-radius: 9px;
+background: #166534;
+box-shadow: 0 4px 12px rgba(22, 101, 52, 0.15);
+font-size: 12px;
 }
 
 .cooking-checklist {
@@ -148,7 +144,13 @@ padding: 9px 10px;
 border: 1px solid #e5e7eb;
 border-radius: 9px;
 background: rgba(255, 255, 255, 0.85);
+animation: checklistIn 0.28s ease-out both;
 }
+
+.cooking-checklist-item:nth-child(2) { animation-delay: 35ms; }
+.cooking-checklist-item:nth-child(3) { animation-delay: 70ms; }
+.cooking-checklist-item:nth-child(4) { animation-delay: 105ms; }
+.cooking-checklist-item:nth-child(5) { animation-delay: 140ms; }
 
 .cooking-checklist-item input {
 width: 18px;
@@ -174,6 +176,28 @@ color: #64748b;
 text-decoration: line-through;
 }
 
+.recipe-item.expanded .recipe-details {
+animation: fadeIn 0.24s ease-out;
+}
+
+@keyframes checklistIn {
+from { opacity: 0; transform: translateY(5px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes imageDrift {
+from { transform: scale(1); }
+to { transform: scale(1.04); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+.catalog-inspiration img,
+.cooking-checklist-item,
+.recipe-item.expanded .recipe-details {
+animation: none;
+}
+}
+
 .ingredient-editor {
 padding: 16px;
 margin: 10px 0 14px;
@@ -181,6 +205,27 @@ border: 1px solid #f1d8e4;
 border-left: 4px solid #ec4899;
 border-radius: 14px;
 background: linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(255, 248, 251, 0.82));
+}
+
+.ingredient-editor-titlebar {
+display: flex;
+align-items: center;
+gap: 10px;
+margin-bottom: 14px;
+}
+
+.ingredient-step-mark {
+display: grid;
+width: 34px;
+height: 34px;
+flex: 0 0 34px;
+place-items: center;
+border-radius: 11px;
+background: linear-gradient(145deg, #ec4899, #fb7185);
+color: #fff;
+font-size: 11px;
+font-weight: 800;
+box-shadow: 0 4px 10px rgba(236, 72, 153, 0.2);
 }
 
 .recipe-step {
@@ -209,10 +254,211 @@ grid-template-columns: minmax(0, 1.4fr) minmax(110px, 0.8fr);
 gap: 12px;
 }
 
+.recipe-final-options label {
+display: block;
+margin-bottom: 4px;
+color: #475569;
+font-size: 13px;
+font-weight: 600;
+}
+
 .recipe-category-fields {
 display: grid;
 grid-template-columns: repeat(2, minmax(0, 1fr));
 gap: 10px;
+}
+
+.recipe-category-fields label {
+display: block;
+margin-bottom: 4px;
+color: #475569;
+font-size: 12px;
+font-weight: 700;
+}
+
+.recipe-category-fields select {
+margin-top: 3px;
+}
+
+.category-navigation {
+margin: 0 -4px 18px;
+padding: 12px 4px 10px;
+border-top: 1px solid rgba(236, 72, 153, 0.12);
+border-bottom: 1px solid rgba(236, 72, 153, 0.12);
+}
+
+.category-navigation-label {
+margin: 0 0 8px 2px;
+color: #9d174d;
+font-size: 10px;
+font-weight: 800;
+}
+
+.category-tabs,
+.subcategory-tabs {
+display: flex;
+min-width: 0;
+flex: 1;
+gap: 5px;
+overflow-x: auto;
+scrollbar-width: none;
+overscroll-behavior-inline: contain;
+}
+
+.category-rail,
+.subcategory-rail {
+display: flex;
+align-items: center;
+gap: 5px;
+}
+
+.subcategory-rail {
+margin-top: 8px;
+}
+
+.category-scroll-button {
+display: none;
+width: 28px;
+height: 32px;
+flex: 0 0 28px;
+align-items: center;
+justify-content: center;
+margin: 0;
+padding: 0;
+border: 1px solid #fbcfe8;
+border-radius: 8px;
+background: rgba(255, 255, 255, 0.8);
+color: #9d174d;
+box-shadow: none;
+font-size: 19px;
+line-height: 1;
+}
+
+.category-scroll-button:hover {
+transform: none;
+background: #fff1f7;
+box-shadow: none;
+}
+
+.category-scroll-button:disabled,
+.category-scroll-button:disabled:hover {
+border-color: transparent;
+background: transparent;
+color: #cbd5e1;
+box-shadow: none;
+cursor: default;
+transform: none;
+}
+
+@media (min-width: 600px) {
+.category-scroll-button {
+display: inline-flex;
+}
+}
+
+.category-tabs::-webkit-scrollbar,
+.subcategory-tabs::-webkit-scrollbar {
+display: none;
+}
+
+.category-tab {
+display: flex;
+width: auto;
+min-width: 90px;
+min-height: 58px;
+flex: 0 0 90px;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 4px;
+margin: 0;
+padding: 7px 5px;
+border: 1px solid transparent;
+border-radius: 10px 10px 6px 6px;
+background: transparent;
+color: #64748b;
+box-shadow: none;
+font-size: 10px;
+line-height: 1.15;
+white-space: nowrap;
+}
+
+.category-tab:hover {
+transform: translateY(-1px);
+background: rgba(255, 255, 255, 0.75);
+color: #9d174d;
+box-shadow: none;
+}
+
+.category-tab[aria-pressed="true"] {
+border-color: #fbcfe8;
+background: #fff1f7;
+color: #be185d;
+box-shadow: inset 0 -2px 0 #ec4899;
+}
+
+.category-tab-icon {
+font-size: 18px;
+line-height: 1;
+}
+
+.category-tab-icon.jar-icon {
+position: relative;
+display: block;
+width: 18px;
+height: 19px;
+font-size: 0;
+}
+
+.category-tab-icon.jar-icon::before {
+position: absolute;
+top: 2px;
+left: 4px;
+width: 10px;
+height: 3px;
+border-radius: 2px;
+background: #92400e;
+content: "";
+}
+
+.category-tab-icon.jar-icon::after {
+position: absolute;
+top: 6px;
+left: 3px;
+width: 12px;
+height: 10px;
+border: 1.5px solid #b45309;
+border-radius: 3px 3px 5px 5px;
+background: linear-gradient(135deg, #fef3c7, #f59e0b);
+box-shadow: inset 0 -3px rgba(180, 83, 9, 0.2);
+content: "";
+}
+
+.subcategory-tabs {
+min-height: 29px;
+padding: 2px 0;
+}
+
+.subcategory-tab {
+width: auto;
+flex: 0 0 auto;
+margin: 0;
+padding: 6px 7px;
+border: 1px solid #e2e8f0;
+border-radius: 9999px;
+background: rgba(255, 255, 255, 0.68);
+color: #64748b;
+box-shadow: none;
+font-size: 11px;
+}
+
+.subcategory-tab:hover,
+.subcategory-tab[aria-pressed="true"] {
+border-color: #a7f3d0;
+background: #ecfdf5;
+color: #047857;
+box-shadow: none;
+transform: none;
 }
 
 .recipe-category-badge {
@@ -285,68 +531,33 @@ font-size: 13px;
 white-space: nowrap;
 }
 
-.recipe-options-dropdown {
-position: relative;
-display: inline-block;
-}
-
-.recipe-options-btn {
-width: 32px;
-height: 32px;
-padding: 0;
-margin: 0;
+.favorites-filter[aria-pressed="true"] {
+border-color: #f9a8d4;
 background: #fdf2f8;
-border: 1px solid #fbcfe8;
-border-radius: 8px;
-color: #db2777;
-font-size: 16px;
-font-weight: bold;
-cursor: pointer;
-box-shadow: none;
-display: flex;
-align-items: center;
-justify-content: center;
+color: #be185d;
 }
 
-.recipe-options-menu {
-display: none;
-position: absolute;
-right: 0;
-top: 38px;
-background: #ffffff;
-border: 1px solid #fbcfe8;
-border-radius: 12px;
-box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-z-index: 100;
-min-width: 180px;
-padding: 6px;
-}
-
-.recipe-options-menu.show {
-display: block;
-}
-
-.recipe-options-item {
+.recipe-card-topline {
 display: flex;
 align-items: center;
 gap: 8px;
-width: 100%;
-padding: 8px 12px;
-text-align: left;
-background: transparent;
-border: none;
-color: #334155;
-font-size: 13px;
-font-weight: 500;
-border-radius: 8px;
-margin-bottom: 2px;
-cursor: pointer;
 }
 
-.recipe-options-item:hover {
-background: #fdf2f8;
-color: #db2777;
+.recipe-favorite-button {
+width: 34px;
+height: 34px;
+flex: 0 0 34px;
+margin: 0;
+padding: 0;
+border: 1px solid #fbcfe8;
+border-radius: 9px;
+background: #fff;
+color: #be185d;
+box-shadow: none;
+font-size: 20px;
 }
+
+.recipe-favorite-button[aria-pressed="true"] { background: #fce7f3; }
 
 .recipe-image-preview {
 display: block;
@@ -366,6 +577,91 @@ object-fit: cover;
 border-radius: 12px;
 }
 
+.recipe-image-upload input {
+margin: 4px 0 10px;
+padding: 8px;
+background: rgba(255, 255, 255, 0.8);
+}
+
+.recipe-option-groups {
+display: grid;
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 10px;
+margin: 12px 0;
+}
+
+.recipe-option-group {
+min-width: 0;
+margin: 0;
+
+.recipe-safety-filters {
+grid-template-columns: minmax(0, 1fr);
+}
+padding: 10px;
+border: 1px solid #e2e8f0;
+border-radius: 10px;
+}
+
+.recipe-option-group legend {
+padding: 0 4px;
+color: #475569;
+font-size: 12px;
+font-weight: 700;
+}
+
+.recipe-option-list {
+display: flex;
+flex-wrap: wrap;
+gap: 6px;
+}
+
+.recipe-option-list label {
+display: inline-flex;
+align-items: center;
+gap: 5px;
+padding: 5px 7px;
+border: 1px solid #e2e8f0;
+border-radius: 8px;
+background: #fff;
+color: #475569;
+font-size: 11px;
+}
+
+.recipe-option-list input {
+width: auto;
+margin: 0;
+accent-color: #ec4899;
+}
+
+.recipe-diet-badges {
+display: flex;
+flex-wrap: wrap;
+gap: 5px;
+margin: 6px 0;
+}
+
+.recipe-diet-badge,
+.recipe-allergen-note {
+padding: 4px 8px;
+border-radius: 9999px;
+font-size: 11px;
+font-weight: 600;
+}
+
+.recipe-diet-badge {
+border: 1px solid #bbf7d0;
+background: #f0fdf4;
+color: #166534;
+}
+
+.recipe-allergen-note {
+display: inline-block;
+margin: 5px 0;
+border: 1px solid #fed7aa;
+background: #fff7ed;
+color: #9a3412;
+}
+
 .shopping-list-panel {
 margin: 12px 0 18px;
 padding: 12px 0;
@@ -373,34 +669,290 @@ border-top: 1px solid #fbcfe8;
 border-bottom: 1px solid #fbcfe8;
 }
 
-.planner-days-strip {
+.shopping-list-heading {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 8px;
+margin-bottom: 8px;
+}
+
+.shopping-list-heading h4 {
+margin: 0;
+color: #9d174d;
+font-size: 15px;
+}
+
+.shopping-clear-button {
+width: auto;
+margin: 0;
+padding: 6px 9px;
+border: 1px solid #e2e8f0;
+border-radius: 8px;
+background: #fff;
+color: #64748b;
+box-shadow: none;
+font-size: 11px;
+}
+
+.shopping-list-items {
+display: grid;
+gap: 5px;
+margin: 0;
+padding: 0;
+list-style: none;
+}
+
+.shopping-list-item {
+display: flex;
+align-items: center;
+gap: 8px;
+padding: 7px 9px;
+border-radius: 8px;
+background: rgba(255, 255, 255, 0.72);
+font-size: 13px;
+}
+
+.shopping-list-item input {
+width: 17px;
+height: 17px;
+margin: 0;
+accent-color: #16a34a;
+}
+
+.shopping-list-item.is-checked span {
+color: #94a3b8;
+text-decoration: line-through;
+}
+
+.shopping-add-recipe-button {
+width: auto;
+margin: 0 0 12px;
+padding: 8px 10px;
+border: 1px solid #a7f3d0;
+border-radius: 9px;
+background: #ecfdf5;
+color: #047857;
+box-shadow: none;
+font-size: 12px;
+}
+
+@media (max-width: 480px) {
+.recipe-category-fields {
+grid-template-columns: minmax(0, 1fr);
+gap: 0;
+}
+
+.recipe-option-groups {
+grid-template-columns: minmax(0, 1fr);
+}
+
+.category-tab {
+min-width: 62px;
+flex-basis: 62px;
+}
+}
+
+.ingredient-editor-heading {
+margin: 0;
+color: #9d174d;
+font-size: 15px;
+}
+
+.ingredient-field-grid {
+display: grid;
+grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(90px, 0.7fr);
+gap: 10px;
+}
+
+.home-measure-inputs {
 display: flex;
 gap: 6px;
-overflow-x: auto;
-padding-bottom: 8px;
-margin-bottom: 14px;
-scrollbar-width: none;
 }
-.planner-days-strip::-webkit-scrollbar { display: none; }
 
-.planner-day-pill {
-flex: 0 0 auto;
-padding: 8px 12px;
+.home-measure-inputs input {
+min-width: 0;
+flex: 0.7;
+}
+
+.home-measure-inputs select {
+min-width: 0;
+flex: 1.3;
+margin: 3px 0 10px;
+padding: 10px 8px;
 background: #fff;
-border: 1px solid #fbcfe8;
-border-radius: 12px;
-text-align: center;
-cursor: pointer;
+}
+
+.ingredient-field label,
+.ingredient-macros-title {
+display: block;
+margin-bottom: 3px;
+color: #475569;
 font-size: 12px;
+font-weight: 700;
+}
+
+.ingredient-editor input {
+margin: 3px 0 10px;
+background: #fff;
+}
+
+.ingredient-macros {
+display: grid;
+grid-template-columns: repeat(4, minmax(0, 1fr));
+gap: 8px;
+padding: 10px;
+border: 1px solid #f1d8e4;
+border-radius: 12px;
+background: rgba(255, 255, 255, 0.65);
+}
+
+.ingredient-macros-title {
+grid-column: 1 / -1;
+margin: 0;
+}
+
+.macro-field {
+min-width: 0;
+padding: 8px;
+border: 1px solid #e5e7eb;
+border-radius: 10px;
+background: #fff;
+}
+
+.macro-field span {
+display: block;
+font-size: 11px;
+font-weight: 700;
+}
+
+.macro-field input {
+margin: 5px 0 0;
+padding: 9px 8px;
+border-width: 1px;
+border-color: #e5e7eb;
+}
+
+.macro-field:nth-child(2) span { color: #be123c; }
+.macro-field:nth-child(3) span { color: #1d4ed8; }
+.macro-field:nth-child(4) span { color: #a16207; }
+.macro-field:nth-child(5) span { color: #15803d; }
+
+.macro-field:nth-child(2) input:focus { border-color: #fb7185; }
+.macro-field:nth-child(3) input:focus { border-color: #60a5fa; }
+.macro-field:nth-child(4) input:focus { border-color: #fbbf24; }
+.macro-field:nth-child(5) input:focus { border-color: #4ade80; }
+
+.ingredient-helper-text {
+padding-left: 9px;
+border-left: 2px solid #f9a8d4;
+}
+
+.ingredient-helper-text {
+margin: -2px 0 10px;
 color: #64748b;
+font-size: 12px;
+line-height: 1.4;
+}
+
+.ingredient-add-button {
+margin: 8px 0 0;
+}
+
+.ingredient-list {
+display: grid;
+gap: 7px;
+margin: 10px 0 14px;
+padding: 0;
+list-style: none;
+}
+
+.ingredient-list-item {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 10px;
+padding: 10px 12px;
+border: 1px solid #e5e7eb;
+border-left: 3px solid #86efac;
+border-radius: 10px;
+background: linear-gradient(100deg, #fff, rgba(240, 253, 244, 0.72));
+transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.ingredient-list-item:hover {
+border-color: #bbf7d0;
+box-shadow: 0 4px 12px rgba(22, 101, 52, 0.06);
+}
+
+.ingredient-list-item strong {
+color: #334155;
+font-size: 14px;
+}
+
+.ingredient-list-item span {
+display: block;
+margin-top: 2px;
+color: #64748b;
+font-size: 12px;
+}
+
+.ingredient-remove-button {
+flex: 0 0 auto;
+width: 32px;
+height: 32px;
+margin: 0;
+padding: 0;
+border: 1px solid #fecaca;
+border-radius: 8px;
+background: #fff1f2;
+color: #be123c;
+box-shadow: none;
+font-size: 18px;
+line-height: 1;
+}
+
+.ingredient-total {
+padding: 10px 12px;
+border-left: 3px solid #06b6d4;
+border-radius: 10px;
+background: linear-gradient(100deg, #cffafe, #ecfeff);
+color: #155e75;
+font-size: 13px;
 font-weight: 600;
 }
 
-.planner-day-pill.active {
-background: #db2777;
-color: #fff;
-border-color: #db2777;
-box-shadow: 0 4px 12px rgba(219,39,119,0.2);
+@media (max-width: 480px) {
+.ingredient-field-grid {
+grid-template-columns: minmax(0, 1fr) minmax(82px, 0.65fr);
+gap: 8px;
+}
+
+.ingredient-field:first-child {
+grid-column: 1 / -1;
+}
+
+.ingredient-macros {
+grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+}
+
+@media (max-width: 480px) {
+.inspiration-gallery {
+gap: 6px;
+}
+
+.inspiration-tile {
+height: 108px;
+border-radius: 11px;
+}
+
+.inspiration-tile figcaption {
+right: 6px;
+bottom: 7px;
+left: 6px;
+font-size: 10px;
+}
 }
 
 .card { 
@@ -513,6 +1065,7 @@ font-weight: 700;
 display: inline-flex;
 align-items: center;
 gap: 4px;
+box-shadow: 0 2px 6px rgba(0,0,0,0.02);
 }
 
 .badge-kcal { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
@@ -546,15 +1099,46 @@ border: 1px solid transparent;
 border-radius: 9px;
 background: transparent;
 color: #475569;
+box-shadow: none;
 font-size: 12px;
 font-weight: 700;
+line-height: 1.15;
 cursor: pointer;
+transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.chip small {
+color: #64748b;
+font-size: 10px;
+font-weight: 500;
+}
+
+.chip:hover {
+background: rgba(255, 255, 255, 0.8);
+border-color: #dbeafe;
+box-shadow: none;
+transform: none;
 }
 
 .chip.active {
 background: #e0f2fe;
 border-color: #7dd3fc;
 color: #075985;
+box-shadow: inset 0 -2px 0 #0284c7;
+}
+
+.chip.active small { color: #0369a1; }
+
+.empty-state {
+text-align: center;
+padding: 40px 20px;
+color: #64748b;
+}
+
+.empty-state .icon {
+font-size: 48px;
+margin-bottom: 12px;
+display: block;
 }
 
 .floating-glass-nav {
@@ -564,17 +1148,20 @@ left: 50% !important;
 transform: translateX(-50%) translateZ(0) !important;
 width: 92% !important;
 max-width: 480px !important;
-background: rgba(255, 255, 255, 0.6) !important;
+background: rgba(255, 255, 255, 0.5) !important;
 backdrop-filter: blur(20px) !important;
 -webkit-backdrop-filter: blur(20px) !important;
 border: 1px solid rgba(255, 255, 255, 0.8) !important;
-box-shadow: 0 15px 35px rgba(31, 38, 135, 0.15) !important;
+box-shadow: 0 15px 35px rgba(31, 38, 135, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
 border-radius: 9999px !important;
 display: flex !important;
 justify-content: space-between !important;
 align-items: center !important;
 padding: 8px 12px !important;
 z-index: 1000 !important;
+touch-action: none;
+will-change: transform;
+backface-visibility: hidden;
 }
 
 .liquid-bubble {
@@ -584,11 +1171,13 @@ bottom: 6px;
 width: 20%;
 background: rgba(255, 255, 255, 0.85);
 border-radius: 9999px;
-box-shadow: 0 4px 15px rgba(236, 72, 153, 0.15);
+box-shadow: 0 4px 15px rgba(236, 72, 153, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.9);
 border: 1px solid rgba(255, 255, 255, 0.9);
 transition: transform 0.2s cubic-bezier(0.25, 1, 0.5, 1), left 0.2s cubic-bezier(0.25, 1, 0.5, 1);
 pointer-events: none;
 z-index: 1;
+will-change: left, transform;
+transform: translateZ(0);
 }
 
 .tab-btn { 
@@ -604,7 +1193,15 @@ font-weight: 600;
 color: #64748b; 
 text-align: center;
 white-space: nowrap;
+margin-bottom: 0;
+box-shadow: none;
 font-size: 11px;
+transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.tab-btn:hover {
+color: var(--primary-pink);
+transform: scale(1.05);
 }
 
 .tab-btn.active { 
@@ -614,14 +1211,18 @@ font-weight: 700;
 
 .tab-content { display: none; }
 .tab-content.active { display: block; }
+
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
 
-<!-- Ikona profilu w prawym górnym rogu -->
 <div style="position: absolute; top: 20px; right: 20px; z-index: 100;">
-<div id="profile-trigger" onclick="switchTab('profile')" style="width: 34px; height: 34px; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: var(--primary-pink); cursor: pointer; box-shadow: 0 4px 12px rgba(236, 72, 153, 0.1);">
+<div id="profile-trigger" onclick="switchTab('profile')" style="width: 34px; height: 34px; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: var(--primary-pink); cursor: pointer; box-shadow: 0 4px 12px rgba(236, 72, 153, 0.1); transition: transform 0.2s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
 👤
 </div>
 </div>
@@ -630,16 +1231,16 @@ font-weight: 700;
 
 <div class="inspiration-gallery" aria-label="Kulinarne inspiracje">
 <figure class="inspiration-tile">
-<img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&amp;fit=crop&amp;w=900&amp;q=82" alt="Sałatka">
+<img src="https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&amp;fit=crop&amp;w=900&amp;q=82" alt="Kolorowa miska świeżej sałatki" fetchpriority="high">
 <figcaption>Kolorowo i świeżo</figcaption>
 </figure>
 <figure class="inspiration-tile">
-<img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&amp;fit=crop&amp;w=700&amp;q=82" alt="Zdrowy posiłek">
+<img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&amp;fit=crop&amp;w=700&amp;q=82" alt="Zdrowy posiłek z warzywami i owocami" loading="eager">
 <figcaption>Na dobry początek</figcaption>
 </figure>
 <figure class="inspiration-tile">
-<img src="https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&amp;fit=crop&amp;w=700&amp;q=82" alt="Deser">
-<figcaption>Słodka chwila</figcaption>
+<img src="https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&amp;fit=crop&amp;w=700&amp;q=82" alt="Deser z owocami i jogurtem" loading="eager">
+<figcaption>Mała słodka chwila</figcaption>
 </figure>
 </div>
 
@@ -649,60 +1250,61 @@ font-weight: 700;
 <h3 style="margin-top:0; color: #db2777;">Witaj ponownie! ✨</h3>
 <input type="email" id="email" placeholder="Twój e-mail">
 <input type="password" id="password" placeholder="Hasło (min. 6 znaków)">
+
 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px; font-size: 14px; color: #4a5568;">
 <input type="checkbox" id="remember-me" style="width: auto; margin: 0; accent-color: #ec4899;">
 <label for="remember-me" style="cursor: pointer;">Zapamiętaj mnie na tym urządzeniu</label>
 </div>
+
 <button id="btn-login">Zaloguj się e-mailem</button>
 <button id="btn-register" style="background: linear-gradient(135deg, #60a5fa 100%, #3b82f6 0%);">Zarejestruj się</button>
 <hr style="margin: 15px 0; border: 0; border-top: 1px solid rgba(255,255,255,0.6);">
 <button id="btn-google" style="background: #ffffff; color: #3b82f6; border: 2px solid #3b82f6; box-shadow: none;">Zaloguj przez Google</button>
 </div>
 
-<!-- NOWY DOLNY PASEK NAWIGACJI (Główna, Kalendarz, Dodaj, Ulubione, Zakupy) -->
 <div id="app-tabs" class="tabs hidden floating-glass-nav" onmouseleave="resetBubble()">
 <div id="liquid-bubble" class="liquid-bubble"></div>
-<button class="tab-btn active" onclick="switchTab('catalog')" onmouseenter="moveBubble(0)" ontouchstart="moveBubble(0)">🏠 Główna</button>
-<button class="tab-btn" onclick="switchTab('planner-tab')" onmouseenter="moveBubble(1)" ontouchstart="moveBubble(1)">📅 Kalendarz</button>
+<button class="tab-btn active" onclick="switchTab('catalog')" onmouseenter="moveBubble(0)" ontouchstart="moveBubble(0)">🌐 Katalog</button>
+<button class="tab-btn" onclick="switchTab('my-recipes')" onmouseenter="moveBubble(1)" ontouchstart="moveBubble(1)">📖 Moje</button>
 <button class="tab-btn" onclick="switchTab('add-recipe')" onmouseenter="moveBubble(2)" ontouchstart="moveBubble(2)" id="tab-btn-add">➕ Dodaj</button>
-<button class="tab-btn" onclick="switchTab('favorites-tab')" onmouseenter="moveBubble(3)" ontouchstart="moveBubble(3)">♥ Ulubione</button>
-<button class="tab-btn" onclick="switchTab('shopping-tab')" onmouseenter="moveBubble(4)" ontouchstart="moveBubble(4)">🛒 Zakupy</button>
+<button class="tab-btn" onclick="switchTab('ai-helper')" onmouseenter="moveBubble(3)" ontouchstart="moveBubble(3)">🤖 AI</button>
+<button class="tab-btn" onclick="switchTab('profile')" onmouseenter="moveBubble(4)" ontouchstart="moveBubble(4)">👤 Profil</button>
 </div>
 
-<!-- ZAKŁADKA 1: Główna (Katalog ze zdjęciowymi kafelkami kategorii w stylu Cookidoo) -->
+<!-- ZAKŁADKA 1: Katalog -->
 <div id="section-catalog" class="tab-content active">
 <div class="card">
-<h3 style="margin-top:0; color: #db2777;">Odkrywaj przepisy 🧁</h3>
+<h3 style="margin-top:0; color: #db2777;">Przepisy społeczności 🧁</h3>
 
-<div style="margin-bottom: 16px;">
-<p style="font-size: 12px; font-weight: 800; color: #9d174d; margin-bottom: 8px;">POPULARNE KATEGORIE</p>
-<div class="cookidoo-categories-grid">
-<div class="cookidoo-category-card active" onclick="setCatalogCategoryFilter('all', this)">
-<div class="cookidoo-category-title">🍽️ Wszystkie</div>
-<img src="https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=200&q=80" class="cookidoo-category-img" alt="Wszystkie">
+<nav class="category-navigation" aria-label="Kategorie przepisów">
+<p class="category-navigation-label">PRZEGLĄDAJ PO KATEGORII</p>
+<div class="category-rail">
+<button type="button" class="category-scroll-button" aria-label="Przewiń kategorie w lewo" onclick="scrollCategoryRail('category-tabs', -1)">‹</button>
+<div id="category-tabs" class="category-tabs" role="group" aria-label="Główne kategorie">
+<button type="button" class="category-tab" aria-pressed="true" onclick="setCatalogCategoryFilter('all', this)"><span class="category-tab-icon" aria-hidden="true">🍽️</span><span>Wszystkie</span></button>
+<button type="button" class="category-tab" aria-pressed="false" onclick="setCatalogCategoryFilter('obiadowe', this)"><span class="category-tab-icon" aria-hidden="true">🍲</span><span>Obiadowe</span></button>
+<button type="button" class="category-tab" aria-pressed="false" onclick="setCatalogCategoryFilter('desery', this)"><span class="category-tab-icon" aria-hidden="true">🍰</span><span>Desery</span></button>
+<button type="button" class="category-tab" aria-pressed="false" onclick="setCatalogCategoryFilter('sniadania', this)"><span class="category-tab-icon" aria-hidden="true">🍳</span><span>Śniadania</span></button>
+<button type="button" class="category-tab" aria-pressed="false" onclick="setCatalogCategoryFilter('przekaski', this)"><span class="category-tab-icon" aria-hidden="true">🥨</span><span>Przekąski</span></button>
+<button type="button" class="category-tab" aria-pressed="false" onclick="setCatalogCategoryFilter('dodatki', this)"><span class="category-tab-icon jar-icon" aria-hidden="true"></span><span>Dodatki</span></button>
 </div>
-<div class="cookidoo-category-card" onclick="setCatalogCategoryFilter('obiadowe', this)">
-<div class="cookidoo-category-title">🍲 Obiadowe</div>
-<img src="https://images.unsplash.com/photo-1543339308-43e59d6b73a6?auto=format&fit=crop&w=200&q=80" class="cookidoo-category-img" alt="Obiady">
+<button type="button" class="category-scroll-button" aria-label="Przewiń kategorie w prawo" onclick="scrollCategoryRail('category-tabs', 1)">›</button>
 </div>
-<div class="cookidoo-category-card" onclick="setCatalogCategoryFilter('desery', this)">
-<div class="cookidoo-category-title">🍰 Desery</div>
-<img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=200&q=80" class="cookidoo-category-img" alt="Desery">
+<div id="catalog-subcategory-rail" class="subcategory-rail hidden">
+<button type="button" class="category-scroll-button" aria-label="Przewiń podkategorie w lewo" onclick="scrollCategoryRail('catalog-subcategory-tabs', -1)">‹</button>
+<div id="catalog-subcategory-tabs" class="subcategory-tabs" role="group" aria-label="Podkategorie"></div>
+<button type="button" class="category-scroll-button" aria-label="Przewiń podkategorie w prawo" onclick="scrollCategoryRail('catalog-subcategory-tabs', 1)">›</button>
 </div>
-<div class="cookidoo-category-card" onclick="setCatalogCategoryFilter('sniadania', this)">
-<div class="cookidoo-category-title">🍳 Śniadania</div>
-<img src="https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=200&q=80" class="cookidoo-category-img" alt="Śniadania">
+</nav>
+
+<section class="catalog-inspiration" aria-label="Inspiracja kulinarna">
+<img src="https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&amp;fit=crop&amp;w=700&amp;q=82" alt="Świeże warzywa i składniki do gotowania" loading="eager">
+<div class="catalog-inspiration-copy">
+<h4>Co dziś ugotujemy?</h4>
+<p>Podaj składniki, które masz pod ręką, a AI podsunie pomysł na danie.</p>
+<button type="button" class="catalog-inspiration-button" onclick="switchTab('ai-helper')">Znajdź inspirację</button>
 </div>
-<div class="cookidoo-category-card" onclick="setCatalogCategoryFilter('przekaski', this)">
-<div class="cookidoo-category-title">🥨 Przekąski</div>
-<img src="https://images.unsplash.com/photo-1527477396000-e27163b481c2?auto=format&fit=crop&w=200&q=80" class="cookidoo-category-img" alt="Przekąski">
-</div>
-<div class="cookidoo-category-card" onclick="setCatalogCategoryFilter('dodatki', this)">
-<div class="cookidoo-category-title">🫙 Dodatki</div>
-<img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=200&q=80" class="cookidoo-category-img" alt="Dodatki">
-</div>
-</div>
-</div>
+</section>
 
 <div class="filter-chips" role="group" aria-label="Filtruj przepisy">
 <button type="button" class="chip active" aria-pressed="true" onclick="setCatalogFilter('all', this)"><span>Wszystkie</span><small>przepisy</small></button>
@@ -711,7 +1313,8 @@ font-weight: 700;
 </div>
 
 <div class="recipe-list-toolbar">
-<input type="search" id="catalog-search" class="recipe-search-input" placeholder="Szukaj przepisu lub składnika" oninput="setCatalogSearch(this.value)">
+<input type="search" id="catalog-search" class="recipe-search-input" placeholder="Szukaj przepisu lub składnika" aria-label="Szukaj przepisów" oninput="setCatalogSearch(this.value)">
+<button type="button" id="catalog-favorites-filter" class="favorites-filter" aria-pressed="false" onclick="toggleFavoritesFilter()">♡ Ulubione</button>
 </div>
 
 <div class="recipe-safety-filters">
@@ -732,27 +1335,37 @@ font-weight: 700;
 <option value="mleko">Mleko</option>
 <option value="jajka">Jajka</option>
 <option value="orzechy">Orzechy</option>
+<option value="soja">Soja</option>
+<option value="sezam">Sezam</option>
 </select>
 </label>
+<p class="allergen-filter-note">Przepisy bez oznaczeń alergenów są pomijane przy tym filtrze.</p>
 </div>
 
 <div id="catalog-container">Ładowanie przepisów...</div>
 </div>
 </div>
 
-<!-- ZAKŁADKA 2: Kalendarz / Mój Tydzień (Planner) -->
-<div id="section-planner-tab" class="tab-content">
+<!-- ZAKŁADKA 2: Moje przepisy -->
+<div id="section-my-recipes" class="tab-content">
 <div class="card">
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-<h3 style="margin: 0; color: #db2777;">📅 Kalendarz i Mój Tydzień</h3>
-<button type="button" class="shopping-clear-button" onclick="clearMealPlanner()">Wyczyść tydzień</button>
+<h3 style="margin-top:0; color: #db2777;">Twoja kolekcja 📖</h3>
+<div class="recipe-list-toolbar">
+<input type="search" id="my-recipes-search" class="recipe-search-input" placeholder="Szukaj w moich przepisach" aria-label="Szukaj w moich przepisach" oninput="setMyRecipesSearch(this.value)">
+<button type="button" id="my-favorites-filter" class="favorites-filter" aria-pressed="false" onclick="toggleFavoritesFilter()">♡ Ulubione</button>
 </div>
-<div id="planner-strip" class="planner-days-strip"></div>
-<div id="planner-day-details-container">Wybierz dzień powyżej.</div>
+<section class="shopping-list-panel" aria-labelledby="shopping-list-title">
+<div class="shopping-list-heading">
+<h4 id="shopping-list-title">Lista zakupów</h4>
+<button type="button" class="shopping-clear-button" onclick="clearShoppingList()">Wyczyść</button>
+</div>
+<div id="shopping-list-container">Lista jest pusta. Dodaj składniki z przepisu.</div>
+</section>
+<div id="my-recipes-container">Ładowanie Twoich przepisów...</div>
 </div>
 </div>
 
-<!-- ZAKŁADKA 3: Dodaj / Edycja przepisu -->
+<!-- ZAKŁADKA 3: Dodawanie / Edycja przepisu -->
 <div id="section-add-recipe" class="tab-content">
 <div class="card" style="padding: 24px;">
 <h3 id="form-heading" style="margin-top:0; color: #db2777; font-weight: 700;">Stwórz nowy przepis 🍰</h3>
@@ -764,7 +1377,7 @@ font-weight: 700;
 <div class="recipe-category-fields">
 <div>
 <label for="recipe-category">Kategoria</label>
-<select id="recipe-category">
+<select id="recipe-category" onchange="updateRecipeSubcategoryOptions()">
 <option value="">Wybierz kategorię</option>
 <option value="obiadowe">Dania obiadowe</option>
 <option value="desery">Desery</option>
@@ -775,110 +1388,223 @@ font-weight: 700;
 </div>
 <div>
 <label for="recipe-subcategory">Podkategoria</label>
-<input type="text" id="recipe-subcategory" placeholder="np. Słodkie, Zupy...">
+<select id="recipe-subcategory" disabled>
+<option value="">Najpierw wybierz kategorię</option>
+</select>
 </div>
 </div>
 <div class="recipe-image-upload">
 <label for="recipe-image-file">Zdjęcie gotowego dania (opcjonalnie)</label>
-<input type="file" id="recipe-image-file" accept="image/*">
-<p id="recipe-image-status" class="ingredient-helper-text">Wybierz zdjęcie do 5 MB.</p>
-<img id="recipe-image-preview" class="recipe-image-preview hidden" alt="Podgląd">
+<input type="file" id="recipe-image-file" accept="image/*" aria-label="Wybierz zdjęcie przepisu">
+<p id="recipe-image-status" class="ingredient-helper-text">Wybierz zdjęcie do 5 MB; zostanie zmniejszone w tej przeglądarce.</p>
+<img id="recipe-image-preview" class="recipe-image-preview hidden" alt="Podgląd zdjęcia przepisu">
+</div>
+<div class="recipe-option-groups">
+<fieldset class="recipe-option-group">
+<legend>Dieta</legend>
+<div class="recipe-option-list">
+<label><input type="checkbox" name="recipe-diet" value="wegetarianskie">Wegetariańskie</label>
+<label><input type="checkbox" name="recipe-diet" value="weganskie">Wegańskie</label>
+<label><input type="checkbox" name="recipe-diet" value="bez-glutenu">Bez glutenu</label>
+<label><input type="checkbox" name="recipe-diet" value="bez-nabialu">Bez nabiału</label>
+<label><input type="checkbox" name="recipe-diet" value="bez-cukru">Bez cukru</label>
+</div>
+</fieldset>
+<fieldset class="recipe-option-group">
+<legend>Zawiera alergeny</legend>
+<div class="recipe-option-list">
+<label><input type="checkbox" name="recipe-allergen" value="gluten">Gluten</label>
+<label><input type="checkbox" name="recipe-allergen" value="mleko">Mleko</label>
+<label><input type="checkbox" name="recipe-allergen" value="jajka">Jajka</label>
+<label><input type="checkbox" name="recipe-allergen" value="orzechy">Orzechy</label>
+<label><input type="checkbox" name="recipe-allergen" value="soja">Soja</label>
+<label><input type="checkbox" name="recipe-allergen" value="sezam">Sezam</label>
+<label><input type="checkbox" id="recipe-allergens-verified">Sprawdzono skład</label>
+</div>
+</fieldset>
 </div>
 </section>
 
 <section class="recipe-step">
 <h4 class="recipe-step-heading"><span class="ingredient-step-mark" aria-hidden="true">02</span>Składniki</h4>
-<div class="ingredient-editor">
-<div class="ingredient-field-grid" style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px;">
-<div class="ingredient-field"><label>Składnik</label><input type="text" id="ingredient-name" placeholder="np. Mleko"></div>
-<div class="ingredient-field"><label>Ilość</label><input type="number" id="ing-weight" min="0" placeholder="200"></div>
-<div class="ingredient-field"><label>Jednostka</label><input type="text" id="ing-weight-unit" value="g"></div>
+<div style="margin-bottom: 16px;">
+<label for="macro-mode" style="font-size: 13px; font-weight: 600; color: #4a5568; display: block; margin-bottom: 4px;">Sposób wprowadzania makro:</label>
+<select id="macro-mode" onchange="toggleMacroMode()">
+<option value="per-ingredient">Wpisuję makro każdego składnika</option>
+<option value="total-recipe">Wpisuję makro całego dania</option>
+<option value="manual">Wklejam listę i wpisuję makro dania</option>
+</select>
+<p id="macro-mode-help" class="ingredient-helper-text">Przy każdym składniku wpisz wartości z etykiety na 100 g.</p>
 </div>
-<button type="button" id="btn-add-ingredient" class="ingredient-add-button" style="margin-top: 10px;">＋ Dodaj składnik</button>
+
+            <div class="ingredient-field-grid" style="grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr); gap: 8px;">
+                        <div class="ingredient-field">
+                            <label for="ingredient-name" style="grid-column: 1 / -1;">Składnik</label>
+                            <input type="text" id="ingredient-name" placeholder="np. Mleko / Płatki owsiane">
+                        </div>
+                        <div class="ingredient-field">
+                            <label>Ilość miary</label>
+                            <input type="number" id="ingredient-measure-amount" min="0" step="0.25" placeholder="1">
+                        </div>
+                        <div class="ingredient-field">
+                            <label>Miara domowa</label>
+                            <select id="ingredient-measure-unit">
+                                <option value="">brak</option>
+                                <option value="szklanka">szklanka</option>
+                                <option value="łyżka">łyżka</option>
+                                <option value="łyżeczka">łyżeczka</option>
+                                <option value="sztuka">sztuka</option>
+                                <option value="garść">garść</option>
+                                <option value="plaster">plaster</option>
+                                <option value="opakowanie">opakowanie</option>
+                            </select>
+                        </div>
+                        <div class="ingredient-field">
+                            <label>Ilość</label>
+                            <input type="number" id="ing-weight" min="0" placeholder="200">
+                        </div>
+                        <div class="ingredient-field">
+                            <label>Jednostka</label>
+                            <select id="ing-weight-unit">
+                                <option value="g">g</option>
+                                <option value="ml">ml</option>
+                                <option value="">brak</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="ingredient-macro-section" class="ingredient-macros">
+                        <span class="ingredient-macros-title">Wartości na 100 g</span>
+                        <label class="macro-field"><span>Kcal</span><input type="number" id="ing-kcal" min="0" placeholder="0" aria-label="Kalorie na 100 gramów"></label>
+                        <label class="macro-field"><span>Białko</span><input type="number" id="ing-protein" min="0" step="0.1" placeholder="g" aria-label="Białko na 100 gramów"></label>
+                        <label class="macro-field"><span>Tłuszcz</span><input type="number" id="ing-fat" min="0" step="0.1" placeholder="g" aria-label="Tłuszcz na 100 gramów"></label>
+                        <label class="macro-field"><span>Węglowodany</span><input type="number" id="ing-carbs" min="0" step="0.1" placeholder="g" aria-label="Węglowodany na 100 gramów"></label>
+                    </div>
+                    <p class="ingredient-helper-text">Wpisz dane z etykiety. Ilość makro w przepisie zostanie przeliczona na podaną gramaturę.</p>
+                    <button type="button" id="btn-add-ingredient" class="ingredient-add-button">＋ Dodaj do listy</button>
+                </div>
+                <div id="ingredients-summary-container" style="margin-bottom: 15px; font-size: 14px;">
+                    <p style="color: #64748b;"><em>Brak dodanych składników.</em></p>
+                </div>
+            </div>
+
+            <!-- Kontener ręcznego makro -->
+            <!-- Sekcja ręcznego makro całościowego widoczna TYLKO w trybie total-recipe -->
+<div id="manual-macro-wrapper" class="hidden" style="background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); padding: 16px; border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255, 255, 255, 0.6);">
+                <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Wklej składniki, każdy w osobnym wierszu</h4>
+                <textarea id="manual-ingredients-text" rows="3" placeholder="Wpisz listę składników (np. Płatki owsiane - 50g&#10;Banan - 1 szt.)" style="margin-bottom: 12px;"></textarea>
+
+                <h4 style="margin-top: 0; margin-bottom: 10px; color: #db2777; font-size: 15px;">Makro całego przepisu (łącznie z internetu)</h4>
+<div style="display: flex; gap: 8px;">
+<input type="number" id="manual-total-kcal" placeholder="Całkowite Kcal">
+<input type="number" id="manual-total-protein" placeholder="Całkowite Białko (g)">
 </div>
-<div id="ingredients-summary-container" style="margin-bottom: 15px;"></div>
+<div style="display: flex; gap: 8px;">
+<input type="number" id="manual-total-fat" placeholder="Całkowity Tłuszcz (g)">
+<input type="number" id="manual-total-carbs" placeholder="Całkowite Węgle (g)">
+</div>
+</div>
 </section>
 
 <section class="recipe-step">
-<h4 class="recipe-step-heading"><span class="ingredient-step-mark" aria-hidden="true">03</span>Przygotowanie i Makro</h4>
-<textarea id="recipe-steps" rows="4" placeholder="Opis przygotowania krok po kroku..."></textarea>
-<input type="text" id="recipe-time" placeholder="Czas przygotowania (np. 25 minut)">
-<div style="display:grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-<input type="number" id="manual-total-kcal" placeholder="Kalorie (kcal)">
-<input type="number" id="manual-total-protein" placeholder="Białko (g)">
-</div>
+<h4 class="recipe-step-heading"><span class="ingredient-step-mark" aria-hidden="true">03</span>Przygotowanie</h4>
+<textarea id="recipe-steps" rows="4" placeholder="Krok po kroku (opis przygotowania)..."></textarea>
+<input type="text" id="recipe-time" placeholder="Czas przygotowania / pieczenia (np. 25 minut)">
+
+<label for="recipe-visibility" style="font-size: 14px; font-weight: 600; color: #4a5568; display: block; margin-bottom: 6px;">Widoczność:</label>
 <select id="recipe-visibility">
 <option value="public">Publiczny (widoczny w katalogu)</option>
 <option value="private">Prywatny (tylko dla mnie)</option>
 </select>
 </section>
 
-<button id="btn-add-recipe" style="margin-top: 15px;">Opublikuj przepis ✨</button>
+<section class="recipe-step">
+<h4 class="recipe-step-heading"><span class="ingredient-step-mark" aria-hidden="true">04</span>Foremka i liczba porcji</h4>
+<div class="recipe-final-options">
+<div>
+<label for="recipe-pan">Naczynie / foremka</label>
+<select id="recipe-pan">
+<option value="Tortownica okrągła 22 cm">Tortownica (22 cm)</option>
+<option value="Tortownica okrągła 24 cm">Tortownica (24 cm)</option>
+<option value="Blacha prostokątna 20x30 cm">Blacha 20x30 cm</option>
+<option value="Blacha prostokątna 25x35 cm">Blacha 25x35 cm</option>
+<option value="Keksówka 30 cm">Keksówka 30 cm</option>
+<option value="Foremka do muffinek (12 szt.)">Muffinki (12 szt.)</option>
+<option value="Inne">Inne</option>
+</select>
+</div>
+<div>
+<label for="recipe-portions">Liczba osób</label>
+<input type="number" id="recipe-portions" value="4" min="1">
+</div>
+</div>
+</section>
+
+<button id="btn-add-recipe" style="margin-top: 15px;">Opublikuj cały przepis ✨</button>
 <button id="btn-cancel-edit" type="button" class="hidden" style="background: #94a3b8; margin-top: 5px;" onclick="cancelEdit()">Anuluj edycję</button>
 </div>
 </div>
 
-<!-- ZAKŁADKA 4: Ulubione -->
-<div id="section-favorites-tab" class="tab-content">
+<!-- ZAKŁADKA 4: AI Studio -->
+<div id="section-ai-helper" class="tab-content">
 <div class="card">
-<h3 style="margin-top:0; color: #db2777;">♥ Twoje ulubione przepisy</h3>
-<div id="favorites-container">Brak ulubionych przepisów.</div>
+<h3 style="margin-top:0; color: #db2777;">🤖 Inteligentny Asystent Kulinarny AI</h3>
+<p style="font-size: 14px; color: #64748b;">Wpisz, co masz w lodówce albo zadaj dowolne pytanie o gotowanie, a Gemini od razu Ci pomoże!</p>
+
+<textarea id="ai-fridge-input" rows="3" placeholder="Co masz w lodówce? (np. mam serek wiejski, jajka i banany)"></textarea>
+<button type="button" onclick="generateRecipeFromFridge()">✨ Wygeneruj przepis z lodówki</button>
+
+<div id="ai-generator-result" style="margin-top: 15px; padding: 14px; background: rgba(255,255,255,0.9); border-radius: 14px; border: 1px solid #fbcfe8; white-space: pre-wrap; display: none; font-size: 14px; line-height: 1.5;"></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0; color: #db2777;">💬 Czat z Szefem Kuchni</h3>
+<input type="text" id="ai-general-query" placeholder="Zadaj pytanie (np. Czym zastąpić mąkę pszenną?)">
+<button type="button" onclick="askGeneralAI()">Wyślij pytanie do AI</button>
+<div id="ai-general-result" style="margin-top: 15px; padding: 14px; background: rgba(255,255,255,0.9); border-radius: 14px; border: 1px solid #e0f2fe; white-space: pre-wrap; display: none; font-size: 14px; line-height: 1.5;"></div>
 </div>
 </div>
 
-<!-- ZAKŁADKA 5: Zakupy -->
-<div id="section-shopping-tab" class="tab-content">
-<div class="card">
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-<h3 style="margin: 0; color: #db2777;">🛒 Lista zakupów</h3>
-<button type="button" class="shopping-clear-button" onclick="clearShoppingList()">Wyczyść wszystko</button>
-</div>
-<div id="shopping-list-container">Lista jest pusta.</div>
-</div>
-</div>
-
-<!-- ZAKŁADKA 6: Profil i MOJE PRZEPISY (pod ikoną profilu) -->
+<!-- ZAKŁADKA 5: Profil -->
 <div id="section-profile" class="tab-content">
 <div class="card">
 <h3 style="margin-top:0; color: #db2777;">Twój profil 👤</h3>
 <p><strong>E-mail:</strong> <span id="profile-email">-</span></p>
-<button id="btn-logout" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); margin-top: 10px;">Wyloguj się</button>
-</div>
+<p><strong>ID użytkownika:</strong> <span id="profile-uid" style="font-size: 12px; color: #666;">-</span></p>
 
-<div class="card">
-<h3 style="margin-top:0; color: #db2777;">Moje przepisy 📖</h3>
-<div class="recipe-list-toolbar" style="margin-bottom: 12px;">
-<input type="search" id="my-recipes-search" class="recipe-search-input" placeholder="Szukaj w moich przepisach" oninput="setMyRecipesSearch(this.value)">
-</div>
-<div id="my-recipes-container">Ładowanie Twoich przepisów...</div>
+<hr style="margin: 20px 0; border: 0; border-top: 1px solid rgba(0,0,0,0.05);">
+
+<button id="btn-logout" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); box-shadow: 0 6px 20px rgba(239, 68, 68, 0.2); margin-bottom: 0;">
+Wyloguj się
+</button>
 </div>
 </div>
 
-<!-- Modal / Wybór daty do planera -->
-<div id="planner-modal" class="hidden" onclick="closePlannerModalOnBackdrop(event)" style="position: fixed; inset: 0; background: rgba(0,0,0,0.45); backdrop-filter: blur(6px); z-index: 2000; padding: 20px; align-items: center; justify-content: center;">
-<div class="card" onclick="event.stopPropagation()" style="width: 100%; max-width: 400px; margin: 0; background: #ffffff; border-radius: 24px;">
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-<h3 style="margin: 0; color: #db2777; font-size: 18px; font-weight: 800;">Zaplanuj posiłek 📅</h3>
-<button type="button" onclick="closePlannerModal()" style="width: 32px; height: 32px; padding: 0; background: #f1f5f9; color: #64748b; border-radius: 50%;">✕</button>
-</div>
-<input type="hidden" id="planner-modal-recipe-id" value="">
-<input type="hidden" id="planner-modal-recipe-title-text" value="">
-<label style="display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 4px;">Data posiłku</label>
-<input type="date" id="planner-date-select" style="margin-bottom: 14px;">
-<label style="display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 4px;">Pora posiłku</label>
-<select id="planner-slot-select" style="margin-bottom: 20px;">
-<option value="Śniadanie">🥣 Śniadanie</option>
-<option value="Obiad">🍲 Obiad</option>
-<option value="Kolacja">🥗 Kolacja</option>
-<option value="Przekąska / Deser">🍰 Przekąska / Deser</option>
-</select>
-<button type="button" onclick="confirmAddToPlanner()">Zapisz ✨</button>
-</div>
-</div>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-import { getAuth, setPersistence, browserLocalPersistence, browserSessionPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-import { getFirestore, collection, doc, updateDoc, deleteDoc, setDoc, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+import { 
+getAuth, 
+setPersistence,
+browserLocalPersistence,
+browserSessionPersistence,
+createUserWithEmailAndPassword, 
+signInWithEmailAndPassword, 
+signInWithPopup,
+GoogleAuthProvider,
+signOut, 
+onAuthStateChanged 
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+import { 
+getFirestore, 
+collection, 
+doc,
+updateDoc,
+deleteDoc,
+setDoc,
+query, 
+where,
+onSnapshot, 
+serverTimestamp 
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
 const firebaseConfig = {
 apiKey: "AIzaSyACAYq6d_bOfUV8s_wlX-yTdTKhU9YVwnE",
@@ -903,25 +1629,86 @@ const passwordInput = document.getElementById("password");
 const rememberMeCheckbox = document.getElementById("remember-me");
 
 let currentRecipeIngredients = [];
+let currentCatalogFilter = 'all';
 let rawPublicRecipes = [];
 let rawMyRecipes = [];
 let currentCatalogCategory = 'all';
+let currentCatalogSubcategory = 'all';
 let currentCatalogSearch = "";
 let currentMyRecipesSearch = "";
+let favoritesOnly = false;
+let existingRecipeImageUrl = "";
 let currentDietFilter = "all";
 let currentExcludedAllergen = "all";
-let currentCatalogFilter = 'all';
-let existingRecipeImageUrl = "";
 let selectedImageCompressionPromise = null;
-let activePlannerDate = getTodayDateString();
 
-function getTodayDateString() {
-const today = new Date();
-const year = today.getFullYear();
-const month = String(today.getMonth() + 1).padStart(2, '0');
-const day = String(today.getDate()).padStart(2, '0');
-return `${year}-${month}-${day}`;
+const dietLabels = {
+wegetarianskie: "Wegetariańskie",
+weganskie: "Wegańskie",
+"bez-glutenu": "Bez glutenu",
+"bez-nabialu": "Bez nabiału",
+"bez-cukru": "Bez cukru"
+};
+
+const allergenLabels = {
+gluten: "Gluten",
+mleko: "Mleko",
+jajka: "Jajka",
+orzechy: "Orzechy",
+soja: "Soja",
+sezam: "Sezam"
+};
+
+const recipeCategories = {
+obiadowe: {
+label: "Dania obiadowe",
+subcategories: [
+{ value: "slone", label: "Słone i wytrawne" },
+{ value: "zupy", label: "Zupy" },
+{ value: "salatki", label: "Sałatki" },
+{ value: "makarony", label: "Makarony" },
+{ value: "miesne", label: "Dania mięsne" },
+{ value: "wegetarianskie", label: "Wegetariańskie" }
+]
+},
+desery: {
+label: "Desery",
+subcategories: [
+{ value: "ciasta", label: "Ciasta" },
+{ value: "ciastka", label: "Ciastka" },
+{ value: "na-zimno", label: "Desery na zimno" },
+{ value: "lody", label: "Lody" },
+{ value: "kremy", label: "Kremy i musy" },
+{ value: "inne", label: "Inne desery" }
+]
+},
+sniadania: {
+label: "Śniadania",
+subcategories: [
+{ value: "slodkie", label: "Na słodko" },
+{ value: "slone", label: "Na słono" },
+{ value: "owsianki", label: "Owsiane" },
+{ value: "jajeczne", label: "Jajeczne" }
+]
+},
+przekaski: {
+label: "Przekąski",
+subcategories: [
+{ value: "slone", label: "Słone" },
+{ value: "slodkie", label: "Słodkie" },
+{ value: "dipy", label: "Dipy i pasty" }
+]
+},
+dodatki: {
+label: "Dodatki i przetwory",
+subcategories: [
+{ value: "sosy", label: "Sosy" },
+{ value: "surowki", label: "Surówki" },
+{ value: "pieczywo", label: "Pieczywo" },
+{ value: "przetwory", label: "Przetwory" }
+]
 }
+};
 
 window.moveBubble = function(index) {
 const bubble = document.getElementById("liquid-bubble");
@@ -944,48 +1731,832 @@ window.switchTab = function(tabName) {
 document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
 document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
 
-let targetIndex = -1;
+let targetIndex = 0;
 if (tabName === 'catalog') {
 document.getElementById('section-catalog').classList.add('active');
 targetIndex = 0;
-} else if (tabName === 'planner-tab') {
-document.getElementById('section-planner-tab').classList.add('active');
-renderPlannerStrip();
-renderPlannerDayDetails(activePlannerDate);
+} else if (tabName === 'my-recipes') {
+document.getElementById('section-my-recipes').classList.add('active');
 targetIndex = 1;
 } else if (tabName === 'add-recipe') {
 document.getElementById('section-add-recipe').classList.add('active');
 targetIndex = 2;
-} else if (tabName === 'favorites-tab') {
-document.getElementById('section-favorites-tab').classList.add('active');
-renderFavoritesTab();
+} else if (tabName === 'ai-helper') {
+document.getElementById('section-ai-helper').classList.add('active');
 targetIndex = 3;
-} else if (tabName === 'shopping-tab') {
-document.getElementById('section-shopping-tab').classList.add('active');
-renderShoppingList();
-targetIndex = 4;
 } else if (tabName === 'profile') {
 document.getElementById('section-profile').classList.add('active');
-renderMyRecipes();
+targetIndex = 4;
 }
 
 const targetBtn = document.querySelector(`.tab-btn[onclick*="${tabName}"]`);
 if (targetBtn) {
 targetBtn.classList.add('active');
 }
-if (targetIndex >= 0) moveBubble(targetIndex);
+moveBubble(targetIndex);
 };
 
 async function applyPersistence() {
-const persistenceType = rememberMeCheckbox?.checked ? browserLocalPersistence : browserSessionPersistence;
+const persistenceType = rememberMeCheckbox.checked ? browserLocalPersistence : browserSessionPersistence;
 await setPersistence(auth, persistenceType);
 }
 
-window.setCatalogCategoryFilter = function(category, cardEl) {
+function populateSubcategorySelect(select, category, placeholder, selectedValue = "") {
+select.replaceChildren(new Option(placeholder, ""));
+const subcategories = recipeCategories[category]?.subcategories || [];
+select.disabled = subcategories.length === 0;
+subcategories.forEach(subcategory => {
+select.add(new Option(subcategory.label, subcategory.value));
+});
+if (subcategories.some(subcategory => subcategory.value === selectedValue)) {
+select.value = selectedValue;
+}
+}
+
+window.updateRecipeSubcategoryOptions = function(selectedValue = "") {
+const category = document.getElementById("recipe-category").value;
+populateSubcategorySelect(
+document.getElementById("recipe-subcategory"),
+category,
+category ? "Wybierz podkategorię" : "Najpierw wybierz kategorię",
+selectedValue
+);
+};
+
+function renderCatalogSubcategoryTabs(category) {
+const container = document.getElementById("catalog-subcategory-tabs");
+const rail = document.getElementById("catalog-subcategory-rail");
+const subcategories = recipeCategories[category]?.subcategories || [];
+if (subcategories.length === 0) {
+container.innerHTML = "";
+rail.classList.add("hidden");
+return;
+}
+container.innerHTML = `<button type="button" class="subcategory-tab" aria-pressed="true" onclick="setCatalogSubcategoryFilter('all', this)">Wszystkie</button>${subcategories.map(item => `<button type="button" class="subcategory-tab" aria-pressed="false" onclick="setCatalogSubcategoryFilter('${item.value}', this)">${item.label}</button>`).join("")}`;
+rail.classList.remove("hidden");
+updateCategoryRailControls(container);
+}
+
+function updateCategoryRailControls(rail) {
+const controls = rail.parentElement.querySelectorAll(".category-scroll-button");
+const maxScroll = rail.scrollWidth - rail.clientWidth;
+controls[0].disabled = maxScroll <= 1 || rail.scrollLeft <= 1;
+controls[1].disabled = maxScroll <= 1 || rail.scrollLeft >= maxScroll - 1;
+}
+
+window.scrollCategoryRail = function(railId, direction) {
+const rail = document.getElementById(railId);
+if (!rail) return;
+const maxScroll = rail.scrollWidth - rail.clientWidth;
+const distance = Math.max(160, rail.clientWidth * 0.75);
+rail.scrollLeft = Math.max(0, Math.min(maxScroll, rail.scrollLeft + direction * distance));
+updateCategoryRailControls(rail);
+};
+
+document.querySelectorAll(".category-tabs, .subcategory-tabs").forEach(rail => {
+rail.addEventListener("scroll", () => updateCategoryRailControls(rail), { passive: true });
+updateCategoryRailControls(rail);
+});
+
+window.addEventListener("resize", () => {
+document.querySelectorAll(".category-tabs, .subcategory-tabs").forEach(updateCategoryRailControls);
+});
+
+window.setCatalogCategoryFilter = function(category, button) {
 currentCatalogCategory = category;
-document.querySelectorAll('.cookidoo-category-card').forEach(card => card.classList.remove('active'));
-if (cardEl) cardEl.classList.add('active');
+currentCatalogSubcategory = "all";
+document.querySelectorAll(".category-tab").forEach(tab => {
+const isSelected = tab === button;
+tab.classList.toggle("active", isSelected);
+tab.setAttribute("aria-pressed", String(isSelected));
+});
+renderCatalogSubcategoryTabs(category);
 renderCatalog();
+};
+
+window.setCatalogSubcategoryFilter = function(subcategory, button) {
+currentCatalogSubcategory = subcategory;
+document.querySelectorAll(".subcategory-tab").forEach(tab => {
+tab.setAttribute("aria-pressed", String(tab === button));
+});
+renderCatalog();
+};
+
+function formatHouseholdUnit(amount, unit) {
+const unitForms = {
+"łyżeczka": ["łyżeczka", "łyżeczki", "łyżeczek"],
+"łyżka": ["łyżka", "łyżki", "łyżek"],
+"szklanka": ["szklanka", "szklanki", "szklanek"],
+"sztuka": ["sztuka", "sztuki", "sztuk"],
+"garść": ["garść", "garście", "garści"],
+"plaster": ["plaster", "plastry", "plastrów"],
+"opakowanie": ["opakowanie", "opakowania", "opakowań"],
+"ml": ["ml", "ml", "ml"],
+"g": ["g", "g", "g"]
+};
+const forms = unitForms[unit];
+if (!forms) return unit;
+if (!Number.isInteger(amount)) return forms[1];
+const remainder100 = amount % 100;
+if (amount === 1) return forms[0];
+if (amount % 10 >= 2 && amount % 10 <= 4 && (remainder100 < 12 || remainder100 > 14)) return forms[1];
+return forms[2];
+}
+
+function formatHouseholdMeasure(ingredient, portionRatio = 1) {
+let measureAmount = Number(ingredient.measureAmount);
+let measureUnit = ingredient.measureUnit;
+if ((!measureAmount || !measureUnit) && ingredient.measure) {
+const legacyMatch = ingredient.measure.trim().match(/^(\d+(?:[.,]\d+)?)\s+(.+)$/);
+if (legacyMatch) {
+const legacyUnit = legacyMatch[2].toLowerCase();
+const unitForms = {
+"łyżeczka": ["łyżeczka", "łyżeczki", "łyżeczek"],
+"łyżka": ["łyżka", "łyżki", "łyżek"],
+"szklanka": ["szklanka", "szklanki", "szklanek"],
+"sztuka": ["sztuka", "sztuki", "sztuk"],
+"garść": ["garść", "garście", "garści"],
+"plaster": ["plaster", "plastry", "plastrów"],
+"opakowanie": ["opakowanie", "opakowania", "opakowań"],
+"ml": ["ml", "ml", "ml"],
+"g": ["g", "g", "g"]
+};
+const matchingUnit = Object.entries(unitForms).find(([, forms]) => forms.includes(legacyUnit));
+if (matchingUnit) {
+measureAmount = parseFloat(legacyMatch[1].replace(",", "."));
+measureUnit = matchingUnit[0];
+}
+}
+}
+if (measureAmount > 0 && measureUnit) {
+const scaledAmount = Math.round(measureAmount * portionRatio * 4) / 4;
+const amountText = new Intl.NumberFormat("pl-PL", { maximumFractionDigits: 2 }).format(scaledAmount);
+return `${amountText} ${formatHouseholdUnit(scaledAmount, measureUnit)}`;
+}
+return ingredient.measure || "";
+}
+
+function formatIngredientQuantity(ingredient, portionRatio = 1) {
+const originalWeight = Number(ingredient.weight ?? ingredient.amount);
+const scaledWeight = originalWeight > 0 ? Math.round(originalWeight * portionRatio) : 0;
+const householdMeasure = formatHouseholdMeasure(ingredient, portionRatio);
+const embeddedWeight = !householdMeasure && originalWeight > 0 && new RegExp(`${originalWeight}\\s*g\\b`, "i").test(ingredient.name);
+const name = embeddedWeight
+? ingredient.name.replace(new RegExp(`${originalWeight}\\s*g\\b`, "i"), `${scaledWeight}g`)
+: ingredient.name;
+const quantity = [householdMeasure, scaledWeight > 0 && !embeddedWeight ? `${scaledWeight} g` : ""].filter(Boolean).join(" · ");
+return { name, quantity, scaledWeight };
+}
+
+function userStorageKey(kind) {
+return `recipe-book:${auth.currentUser?.uid || "guest"}:${kind}`;
+}
+
+function readUserList(kind) {
+try {
+const value = JSON.parse(localStorage.getItem(userStorageKey(kind)) || "[]");
+return Array.isArray(value) ? value : [];
+} catch (error) {
+console.error("Nie udało się odczytać danych lokalnych.", error);
+return [];
+}
+}
+
+function writeUserList(kind, value) {
+try {
+localStorage.setItem(userStorageKey(kind), JSON.stringify(value));
+return true;
+} catch (error) {
+console.error("Nie udało się zapisać danych lokalnych.", error);
+return false;
+}
+}
+
+function mergeShoppingItems(targetItems, incomingItems) {
+incomingItems.forEach(incomingItem => {
+const normalizedName = (incomingItem.name || "").trim().toLocaleLowerCase("pl-PL");
+if (!normalizedName) return;
+const existingItem = targetItems.find(item => item.name.trim().toLocaleLowerCase("pl-PL") === normalizedName);
+if (!existingItem) {
+targetItems.push({ ...incomingItem, checked: false });
+return;
+}
+existingItem.weight = (Number(existingItem.weight) || 0) + (Number(incomingItem.weight) || 0);
+if (incomingItem.measureUnit && incomingItem.measureUnit === existingItem.measureUnit) {
+existingItem.measureAmount = (Number(existingItem.measureAmount) || 0) + (Number(incomingItem.measureAmount) || 0);
+} else if (incomingItem.measureUnit && existingItem.measureUnit !== incomingItem.measureUnit) {
+existingItem.measureAmount = null;
+existingItem.measureUnit = "";
+existingItem.measure = "";
+}
+existingItem.checked = false;
+});
+return targetItems;
+}
+
+function migrateGuestDataToUser(userId) {
+["favorites", "shopping"].forEach(kind => {
+const guestKey = `recipe-book:guest:${kind}`;
+const userKey = `recipe-book:${userId}:${kind}`;
+try {
+const guestItems = JSON.parse(localStorage.getItem(guestKey) || "[]");
+if (!Array.isArray(guestItems) || guestItems.length === 0) return;
+const userItems = JSON.parse(localStorage.getItem(userKey) || "[]");
+const mergedItems = kind === "favorites"
+? [...new Set([...userItems, ...guestItems])]
+: mergeShoppingItems(userItems, guestItems);
+localStorage.setItem(userKey, JSON.stringify(mergedItems));
+localStorage.removeItem(guestKey);
+} catch (error) {
+console.error("Nie udało się przenieść danych gościa na konto.", error);
+}
+});
+}
+
+function isFavoriteRecipe(docId) {
+return readUserList("favorites").includes(docId);
+}
+
+function matchesRecipeSearch(recipe, queryText) {
+const normalizedQuery = queryText.trim().toLocaleLowerCase("pl-PL");
+if (!normalizedQuery) return true;
+const category = recipeCategories[recipe.category]?.label || "";
+const subcategory = recipeCategories[recipe.category]?.subcategories.find(item => item.value === recipe.subcategory)?.label || "";
+const ingredientNames = (recipe.ingredients || []).map(ingredient => ingredient.name || "").join(" ");
+const searchableText = [recipe.title, recipe.steps, category, subcategory, ingredientNames].join(" ").toLocaleLowerCase("pl-PL");
+return searchableText.includes(normalizedQuery);
+}
+
+window.setCatalogSearch = function(value) {
+currentCatalogSearch = value;
+renderCatalog();
+};
+
+window.setMyRecipesSearch = function(value) {
+currentMyRecipesSearch = value;
+renderMyRecipes();
+};
+
+window.setDietFilter = function(value) {
+currentDietFilter = value;
+renderCatalog();
+};
+
+window.setAllergenFilter = function(value) {
+currentExcludedAllergen = value;
+renderCatalog();
+};
+
+function updateRecipeImagePreview(imageUrl) {
+existingRecipeImageUrl = imageUrl || "";
+const preview = document.getElementById("recipe-image-preview");
+selectedImageCompressionPromise = null;
+preview.src = existingRecipeImageUrl;
+preview.classList.toggle("hidden", !existingRecipeImageUrl);
+document.getElementById("recipe-image-status").textContent = existingRecipeImageUrl
+? "Zapisane zdjęcie przepisu. Możesz wybrać nowe."
+: "Wybierz zdjęcie do 5 MB; zostanie zmniejszone w tej przeglądarce.";
+}
+
+document.getElementById("recipe-image-file").addEventListener("change", event => {
+const file = event.target.files[0];
+if (!file) return;
+if (!file.type.startsWith("image/") || file.size > 5 * 1024 * 1024) {
+alert("Wybierz zdjęcie o rozmiarze nie większym niż 5 MB.");
+event.target.value = "";
+selectedImageCompressionPromise = null;
+return;
+}
+const preview = document.getElementById("recipe-image-preview");
+const status = document.getElementById("recipe-image-status");
+status.textContent = "Zmniejszam zdjęcie…";
+selectedImageCompressionPromise = compressRecipeImage(file).then(imageData => {
+preview.src = imageData;
+preview.classList.remove("hidden");
+status.textContent = `Gotowe do zapisu · około ${Math.round(imageData.length * 0.75 / 1024)} KB`;
+return imageData;
+}).catch(error => {
+status.textContent = error.message;
+return null;
+});
+});
+
+async function compressRecipeImage(file) {
+if (!file) return existingRecipeImageUrl;
+if (!file.type.startsWith("image/") || file.size > 5 * 1024 * 1024) {
+throw new Error("Zdjęcie musi być plikiem graficznym do 5 MB.");
+}
+const imageBitmap = await createImageBitmap(file);
+try {
+const canvas = document.createElement("canvas");
+const context = canvas.getContext("2d", { alpha: false });
+let scale = Math.min(1, 1200 / Math.max(imageBitmap.width, imageBitmap.height));
+for (let resizeAttempt = 0; resizeAttempt < 5; resizeAttempt++) {
+canvas.width = Math.max(1, Math.round(imageBitmap.width * scale));
+canvas.height = Math.max(1, Math.round(imageBitmap.height * scale));
+context.drawImage(imageBitmap, 0, 0, canvas.width, canvas.height);
+for (const quality of [0.82, 0.72, 0.62, 0.52]) {
+const compressedBlob = await new Promise(resolve => canvas.toBlob(resolve, "image/jpeg", quality));
+if (!compressedBlob || compressedBlob.size > 240 * 1024) continue;
+return await new Promise((resolve, reject) => {
+const reader = new FileReader();
+reader.onload = () => resolve(reader.result);
+reader.onerror = () => reject(new Error("Nie udało się przygotować zdjęcia."));
+reader.readAsDataURL(compressedBlob);
+});
+}
+scale *= 0.8;
+}
+throw new Error("Nie udało się zmniejszyć zdjęcia do bezpiecznego rozmiaru.");
+} finally {
+imageBitmap.close();
+}
+}
+
+window.toggleFavoritesFilter = function() {
+favoritesOnly = !favoritesOnly;
+document.querySelectorAll(".favorites-filter").forEach(button => {
+button.setAttribute("aria-pressed", String(favoritesOnly));
+button.innerHTML = `${favoritesOnly ? "♥" : "♡"} Ulubione`;
+});
+renderCatalog();
+renderMyRecipes();
+};
+
+window.toggleFavorite = function(docId) {
+const favoriteIds = readUserList("favorites");
+const nextFavoriteIds = favoriteIds.includes(docId)
+? favoriteIds.filter(favoriteId => favoriteId !== docId)
+: [...favoriteIds, docId];
+writeUserList("favorites", nextFavoriteIds);
+renderCatalog();
+renderMyRecipes();
+};
+
+function renderShoppingList() {
+const container = document.getElementById("shopping-list-container");
+const items = readUserList("shopping");
+if (items.length === 0) {
+container.innerHTML = "<p class='ingredient-helper-text'>Lista jest pusta. Dodaj składniki z przepisu.</p>";
+return;
+}
+container.innerHTML = `<ul class="shopping-list-items">${items.map((item, index) => {
+const formatted = formatIngredientQuantity(item);
+const quantityText = formatted.quantity ? ` · ${escapeHtml(formatted.quantity)}` : "";
+return `<li class="shopping-list-item${item.checked ? " is-checked" : ""}"><input type="checkbox" aria-label="Odhacz ${escapeHtml(item.name)}" ${item.checked ? "checked" : ""} onchange="toggleShoppingItem(${index}, this.checked)"><span>${escapeHtml(item.name)}${quantityText}</span></li>`;
+}).join("")}</ul>`;
+}
+
+window.addRecipeToShoppingList = function(ingredientsJson) {
+let ingredients;
+try {
+ingredients = JSON.parse(decodeURIComponent(ingredientsJson));
+} catch (error) {
+alert("Nie udało się odczytać składników tego przepisu.");
+return;
+}
+const shoppingItems = mergeShoppingItems(readUserList("shopping"), ingredients.map(ingredient => ({
+name: ingredient.name.trim(),
+weight: Number(ingredient.weight ?? ingredient.amount) || 0,
+measureAmount: Number(ingredient.measureAmount) || null,
+measureUnit: ingredient.measureUnit || "",
+measure: ingredient.measure || "",
+checked: false
+})));
+if (!writeUserList("shopping", shoppingItems)) {
+alert("Nie udało się zapisać listy zakupów w tej przeglądarce.");
+return;
+}
+renderShoppingList();
+switchTab("my-recipes");
+};
+
+window.toggleShoppingItem = function(index, checked) {
+const items = readUserList("shopping");
+if (!items[index]) return;
+items[index].checked = checked;
+writeUserList("shopping", items);
+renderShoppingList();
+};
+
+window.clearShoppingList = function() {
+writeUserList("shopping", []);
+renderShoppingList();
+};
+
+window.toggleMacroMode = function() {
+const mode = document.getElementById("macro-mode").value;
+const ingWrapper = document.getElementById("ingredients-section-wrapper");
+const ingMacroSection = document.getElementById("ingredient-macro-section");
+const manualWrapper = document.getElementById("manual-macro-wrapper");
+const helpText = document.getElementById("macro-mode-help");
+ingWrapper.classList.toggle('hidden', mode === 'manual');
+ingMacroSection.classList.toggle('hidden', mode !== 'ingredients' && mode !== 'per-ingredient');
+manualWrapper.classList.toggle('hidden', mode !== 'manual' && mode !== 'total-recipe');
+helpText.textContent = mode === 'per-ingredient' || mode === 'ingredients'
+? "Przy każdym składniku wpisz wartości z etykiety na 100 g."
+: mode === 'total-recipe'
+? "Dodaj składniki po kolei, a łączne makro przepisu wpisz poniżej."
+: "Wklej listę składników po jednym w wierszu i wpisz łączne makro przepisu.";
+};
+
+document.getElementById("btn-add-ingredient").addEventListener("click", () => {
+const name = document.getElementById("ingredient-name").value.trim();
+const measureAmount = parseFloat(document.getElementById("ingredient-measure-amount").value) || 0;
+const measureUnit = document.getElementById("ingredient-measure-unit").value;
+const weightUnit = document.getElementById("ing-weight-unit").value;
+const weight = parseFloat(document.getElementById("ing-weight").value) || 0;
+const mode = document.getElementById("macro-mode").value;
+
+if (!name || weight <= 0) {
+alert("Podaj nazwę składnika oraz wagę w gramach!");
+return;
+}
+
+const ingredientData = {
+name,
+measureAmount: measureAmount > 0 && measureUnit ? measureAmount : null,
+measureUnit: measureAmount > 0 ? measureUnit : "",
+weight,
+weightUnit: wightUnit || "g"
+kcal: 0,
+protein: 0,
+fat: 0,
+carbs: 0
+};
+
+if (mode === 'ingredients' || mode === 'per-ingredient') {
+const kcal100 = parseFloat(document.getElementById("ing-kcal").value) || 0;
+const protein100 = parseFloat(document.getElementById("ing-protein").value) || 0;
+const fat100 = parseFloat(document.getElementById("ing-fat").value) || 0;
+const carbs100 = parseFloat(document.getElementById("ing-carbs").value) || 0;
+const factor = weight / 100;
+ingredientData.kcal = Math.round(kcal100 * factor);
+ingredientData.protein = parseFloat((protein100 * factor).toFixed(1));
+ingredientData.fat = parseFloat((fat100 * factor).toFixed(1));
+ingredientData.carbs = parseFloat((carbs100 * factor).toFixed(1));
+}
+
+currentRecipeIngredients.push(ingredientData);
+updateIngredientsUI();
+
+document.getElementById("ingredient-name").value = "";
+document.getElementById("ingredient-measure-amount").value = "";
+document.getElementById("ingredient-measure-unit").value = "";
+document.getElementById("ing-weight").value = "";
+document.getElementById("ing-kcal").value = "";
+document.getElementById("ing-protein").value = "";
+document.getElementById("ing-fat").value = "";
+document.getElementById("ing-carbs").value = "";
+});
+
+function updateIngredientsUI() {
+const container = document.getElementById("ingredients-summary-container");
+const mode = document.getElementById("macro-mode").value;
+
+if (currentRecipeIngredients.length === 0) {
+container.innerHTML = "<p class='ingredient-helper-text'>Dodane składniki pojawią się tutaj.</p>";
+return;
+}
+
+let html = "<strong style='color: #475569;'>Składniki w przepisie</strong><ul class='ingredient-list'>";
+let totalKcal = 0, totalP = 0, totalF = 0, totalC = 0;
+
+currentRecipeIngredients.forEach((item, index) => {
+const measureText = formatIngredientQuantity(item).quantity;
+const macroText = mode === 'per-ingredient' || mode === 'ingredients'
+? `${item.kcal || 0} kcal · B ${item.protein || 0} g · T ${item.fat || 0} g · W ${item.carbs || 0} g`
+: "Makro całego dania wpiszesz poniżej";
+html += `<li class="ingredient-list-item"><div><strong>${escapeHtml(item.name)}</strong><span>${escapeHtml(measureText)}${measureText ? " · " : ""}${macroText}</span></div><button type="button" class="ingredient-remove-button" onclick="removeIngredient(${index})" aria-label="Usuń ${escapeHtml(item.name)}" title="Usuń składnik">×</button></li>`;
+if (mode === 'per-ingredient' || mode === 'ingredients') {
+totalKcal += item.kcal;
+totalP += item.protein;
+totalF += item.fat;
+totalC += item.carbs;
+}
+});
+
+html += `</ul>`;
+if (mode === 'per-ingredient' || mode === 'ingredients') {
+html += `<div class="ingredient-total">Razem: ${totalKcal} kcal · B ${totalP.toFixed(1)} g · T ${totalF.toFixed(1)} g · W ${totalC.toFixed(1)} g</div>`;
+}
+container.innerHTML = html;
+}
+
+window.removeIngredient = function(index) {
+currentRecipeIngredients.splice(index, 1);
+updateIngredientsUI();
+};
+
+async function callGeminiProxy(promptText) {
+try {
+const response = await fetch('/api/gemini', {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify({ prompt: promptText })
+});
+const data = await response.json();
+if (response.ok) {
+return data.text || "Brak odpowiedzi od AI.";
+} else {
+return "Błąd serwera: " + (data.error || "Nieznany błąd.");
+}
+} catch (err) {
+console.error(err);
+return "Błąd połączenia z serwerem.";
+}
+}
+
+window.generateRecipeFromFridge = async function() {
+const fridge = document.getElementById("ai-fridge-input").value.trim();
+const resBox = document.getElementById("ai-generator-result");
+if (!fridge) {
+alert("Wpisz co masz w lodówce!");
+return;
+}
+
+resBox.style.display = 'block';
+resBox.innerHTML = "⏳ Gemini wymyśla pyszny przepis...";
+
+const prompt = `Jesteś szefem kuchni. Użytkownik ma w lodówce: "${fridge}". Ułóż z tego fajny, konkretny przepis kulinarny (podaj nazwę, składniki z gramaturą, makro na całość i krok po kroku). Odpowiedz po polsku.`;
+const resultText = await callGeminiProxy(prompt);
+resBox.innerHTML = marked.parse(resultText);
+};
+
+window.askGeneralAI = async function() {
+const queryText = document.getElementById("ai-general-query").value.trim();
+const resBox = document.getElementById("ai-general-result");
+if (!queryText) return;
+
+resBox.style.display = 'block';
+resBox.innerHTML = "⏳ Szef kuchni myśli...";
+
+const prompt = `Jesteś pomocnym asystentem kulinarnym. Odpowiedz zwięźle i praktycznie na pytanie użytkownika: "${queryText}"`;
+const resultText = await callGeminiProxy(prompt);
+resBox.innerHTML = marked.parse(resultText);
+};
+
+window.askRecipeAI = async function(docId) {
+const inputField = document.getElementById(`recipe-ai-input-${docId}`);
+const outputBox = document.getElementById(`recipe-ai-output-${docId}`);
+const question = inputField.value.trim();
+if (!question) return;
+
+outputBox.style.display = 'block';
+outputBox.textContent = "⏳ Analizuję przepis...";
+
+const prompt = `Jesteś asystentem w książce kucharskiej. Pytanie użytkownika do przepisu: "${question}". Odpowiedz krótko i rzeczowo po polsku.`;
+const resultText = await callGeminiProxy(prompt);
+outputBox.innerHTML = marked.parse(resultText);
+};
+
+        function extractWeightFromText(text) {
+            const match = text.match(/(\d+)\s*g\b/i);
+            return match ? parseInt(match[1]) : 0;
+        }
+
+document.getElementById("btn-add-recipe").addEventListener("click", async () => {
+const editId = document.getElementById("edit-recipe-id").value;
+const title = document.getElementById("recipe-title").value.trim();
+const panSize = document.getElementById("recipe-pan").value;
+const portions = parseInt(document.getElementById("recipe-portions").value) || 1;
+const steps = document.getElementById("recipe-steps").value.trim();
+const time = document.getElementById("recipe-time").value.trim();
+const visibility = document.getElementById("recipe-visibility").value;
+const macroMode = document.getElementById("macro-mode").value;
+const category = document.getElementById("recipe-category").value;
+const subcategory = document.getElementById("recipe-subcategory").value;
+const dietTags = [...document.querySelectorAll('input[name="recipe-diet"]:checked')].map(input => input.value);
+const allergens = [...document.querySelectorAll('input[name="recipe-allergen"]:checked')].map(input => input.value);
+const allergensVerified = document.getElementById("recipe-allergens-verified").checked;
+const recipeImageFile = document.getElementById("recipe-image-file").files[0];
+const user = auth.currentUser;
+
+if (!title) {
+alert("Podaj nazwę przepisu!");
+return;
+}
+
+let finalIngredients = [];
+let totals = { kcal: 0, protein: 0, fat: 0, carbs: 0 };
+
+if (macroMode === 'manual') {
+const manualText = document.getElementById("manual-ingredients-text").value.trim();
+if (!manualText) {
+alert("Wpisz listę składników!");
+return;
+}
+finalIngredients = manualText.split('\n').filter(line => line.trim()).map(line => ({
+name: line.trim(),
+measure: '',
+weight: extractWeightFromText(line),
+kcal: 0,
+protein: 0,
+fat: 0,
+carbs: 0
+}));
+} else {
+if (currentRecipeIngredients.length === 0) {
+alert("Dodaj przynajmniej jeden składnik!");
+return;
+}
+finalIngredients = currentRecipeIngredients;
+}
+
+if (macroMode === 'manual' || macroMode === 'total-recipe') {
+totals.kcal = parseFloat(document.getElementById("manual-total-kcal").value) || 0;
+totals.protein = parseFloat(document.getElementById("manual-total-protein").value) || 0;
+totals.fat = parseFloat(document.getElementById("manual-total-fat").value) || 0;
+totals.carbs = parseFloat(document.getElementById("manual-total-carbs").value) || 0;
+} else {
+totals = currentRecipeIngredients.reduce((acc, item) => {
+acc.kcal += item.kcal;
+acc.protein += item.protein;
+acc.fat += item.fat;
+acc.carbs += item.carbs;
+return acc;
+}, { kcal: 0, protein: 0, fat: 0, carbs: 0 });
+}
+
+const perPortion = {
+kcal: Math.round(totals.kcal / portions),
+protein: parseFloat((totals.protein / portions).toFixed(1)),
+fat: parseFloat((totals.fat / portions).toFixed(1)),
+carbs: parseFloat((totals.carbs / portions).toFixed(1))
+};
+
+const recipePayload = {
+title,
+category,
+subcategory,
+dietTags,
+allergens,
+allergensVerified,
+panSize,
+portions,
+ingredients: finalIngredients,
+macroMode,
+totalMacros: {
+kcal: totals.kcal,
+protein: parseFloat(totals.protein.toFixed(1)),
+fat: parseFloat(totals.fat.toFixed(1)),
+carbs: parseFloat(totals.carbs.toFixed(1))
+},
+perPortionMacros: perPortion,
+steps,
+time,
+isPublic: visibility === "public",
+userId: user.uid,
+userEmail: user.email || user.displayName,
+updatedAt: serverTimestamp()
+};
+
+try {
+const recipeRef = editId ? doc(db, "recipes", editId) : doc(collection(db, "recipes"));
+const compressedImage = recipeImageFile
+? await (selectedImageCompressionPromise || compressRecipeImage(recipeImageFile))
+: existingRecipeImageUrl;
+if (recipeImageFile && !compressedImage) throw new Error("Nie udało się przygotować zdjęcia do zapisu.");
+recipePayload.imageUrl = compressedImage || "";
+if (editId) {
+await updateDoc(recipeRef, recipePayload);
+alert("Przepis zaktualizowany pomyślnie!");
+cancelEdit();
+} else {
+recipePayload.createdAt = serverTimestamp();
+await setDoc(recipeRef, recipePayload);
+alert("Przepis dodany pomyślnie!");
+}
+
+document.getElementById("recipe-title").value = "";
+document.getElementById("recipe-category").value = "";
+updateRecipeSubcategoryOptions();
+document.getElementById("recipe-image-file").value = "";
+updateRecipeImagePreview("");
+document.querySelectorAll('input[name="recipe-diet"], input[name="recipe-allergen"]').forEach(input => { input.checked = false; });
+document.getElementById("recipe-allergens-verified").checked = false;
+document.getElementById("recipe-steps").value = "";
+document.getElementById("recipe-time").value = "";
+document.getElementById("recipe-portions").value = "4";
+                document.getElementById("manual-ingredients-text").value = "";
+document.getElementById("manual-total-kcal").value = "";
+document.getElementById("manual-total-protein").value = "";
+document.getElementById("manual-total-fat").value = "";
+document.getElementById("manual-total-carbs").value = "";
+currentRecipeIngredients = [];
+updateIngredientsUI();
+
+switchTab('my-recipes');
+} catch (error) {
+alert("Błąd zapisu: " + error.message);
+}
+});
+
+window.editRecipe = function(docId, recipeJson) {
+const cachedRecipe = rawMyRecipes.find(item => item.id === docId)?.data || rawPublicRecipes.find(item => item.id === docId)?.data;
+const recipe = recipeJson ? JSON.parse(decodeURIComponent(recipeJson)) : cachedRecipe;
+if (!recipe) return;
+document.getElementById("edit-recipe-id").value = docId;
+document.getElementById("recipe-title").value = recipe.title || "";
+document.getElementById("recipe-pan").value = recipe.panSize || "Tortownica okrągła 22 cm";
+document.getElementById("recipe-portions").value = recipe.portions || 4;
+document.getElementById("recipe-steps").value = recipe.steps || "";
+document.getElementById("recipe-time").value = recipe.time || "";
+document.getElementById("recipe-visibility").value = recipe.isPublic ? "public" : "private";
+document.getElementById("recipe-category").value = recipe.category || "";
+updateRecipeSubcategoryOptions(recipe.subcategory || "");
+document.querySelectorAll('input[name="recipe-diet"]').forEach(input => { input.checked = (recipe.dietTags || []).includes(input.value); });
+document.querySelectorAll('input[name="recipe-allergen"]').forEach(input => { input.checked = (recipe.allergens || []).includes(input.value); });
+document.getElementById("recipe-allergens-verified").checked = Boolean(recipe.allergensVerified);
+document.getElementById("recipe-image-file").value = "";
+updateRecipeImagePreview(recipe.imageUrl || "");
+const hasIngredientMacros = recipe.ingredients?.some(ingredient => ingredient.kcal > 0);
+const savedMacroMode = recipe.macroMode || (hasIngredientMacros ? "per-ingredient" : "total-recipe");
+const macroMode = savedMacroMode === "ingredients" ? "per-ingredient" : savedMacroMode;
+document.getElementById("macro-mode").value = macroMode;
+document.getElementById("manual-ingredients-text").value = macroMode === "manual"
+? (recipe.ingredients || []).map(ingredient => ingredient.name).join('\n')
+: "";
+if (recipe.totalMacros) {
+document.getElementById("manual-total-kcal").value = recipe.totalMacros.kcal || "";
+document.getElementById("manual-total-protein").value = recipe.totalMacros.protein || "";
+document.getElementById("manual-total-fat").value = recipe.totalMacros.fat || "";
+document.getElementById("manual-total-carbs").value = recipe.totalMacros.carbs || "";
+}
+toggleMacroMode();
+currentRecipeIngredients = recipe.ingredients || [];
+updateIngredientsUI();
+
+document.getElementById("form-heading").textContent = "Edytuj przepis 📝";
+document.getElementById("btn-add-recipe").textContent = "Zapisz zmiany ✨";
+document.getElementById("btn-cancel-edit").classList.remove("hidden");
+switchTab('add-recipe');
+};
+
+window.cancelEdit = function() {
+document.getElementById("edit-recipe-id").value = "";
+document.getElementById("recipe-title").value = "";
+document.getElementById("recipe-category").value = "";
+updateRecipeSubcategoryOptions();
+document.getElementById("recipe-image-file").value = "";
+updateRecipeImagePreview("");
+document.querySelectorAll('input[name="recipe-diet"], input[name="recipe-allergen"]').forEach(input => { input.checked = false; });
+document.getElementById("recipe-allergens-verified").checked = false;
+document.getElementById("recipe-steps").value = "";
+document.getElementById("recipe-time").value = "";
+document.getElementById("recipe-portions").value = "4";
+            document.getElementById("manual-ingredients-text").value = "";
+document.getElementById("manual-total-kcal").value = "";
+document.getElementById("manual-total-protein").value = "";
+document.getElementById("manual-total-fat").value = "";
+document.getElementById("manual-total-carbs").value = "";
+currentRecipeIngredients = [];
+updateIngredientsUI();
+
+document.getElementById("form-heading").textContent = "Stwórz nowy przepis 🍰";
+document.getElementById("btn-add-recipe").textContent = "Opublikuj cały przepis ✨";
+document.getElementById("btn-cancel-edit").classList.add("hidden");
+};
+
+window.deleteRecipe = async function(docId) {
+if (confirm("Czy na pewno chcesz bezpowrotnie usunąć ten przepis?")) {
+try {
+await deleteDoc(doc(db, "recipes", docId));
+alert("Przepis został usunięty.");
+} catch (error) {
+alert("Błąd podczas usuwania: " + error.message);
+}
+}
+};
+
+window.toggleVisibility = async function(docId, currentStatus) {
+try {
+await updateDoc(doc(db, "recipes", docId), {
+isPublic: !currentStatus
+});
+} catch (error) {
+alert("Błąd zmiany statusu: " + error.message);
+}
+};
+
+window.activeTimers = {};
+window.startTimer = function(uniqueId, minutes) {
+let secondsLeft = minutes * 60;
+const displayEl = document.getElementById(`timer-display-${uniqueId}`);
+if (window.activeTimers[uniqueId]) clearInterval(window.activeTimers[uniqueId]);
+
+window.activeTimers[uniqueId] = setInterval(() => {
+if (secondsLeft <= 0) {
+clearInterval(window.activeTimers[uniqueId]);
+displayEl.textContent = "⏰ Czas minął!";
+alert("Czas minął! 🔔");
+return;
+}
+secondsLeft--;
+const m = Math.floor(secondsLeft / 60);
+const s = secondsLeft % 60;
+displayEl.textContent = `⏳ Pozostało: ${m}:${s < 10 ? '0' : ''}${s}`;
+}, 1000);
 };
 
 window.setCatalogFilter = function(filterType, el) {
@@ -998,474 +2569,295 @@ chip.setAttribute('aria-pressed', String(isSelected));
 renderCatalog();
 };
 
-window.setCatalogSearch = function(val) {
-currentCatalogSearch = val;
-renderCatalog();
-};
-
-window.setMyRecipesSearch = function(val) {
-currentMyRecipesSearch = val;
-renderMyRecipes();
-};
-
-window.setDietFilter = function(val) {
-currentDietFilter = val;
-renderCatalog();
-};
-
-window.setAllergenFilter = function(val) {
-currentExcludedAllergen = val;
-renderCatalog();
-};
-
-window.toggleRecipeMenu = function(event, docId) {
-event.stopPropagation();
-document.querySelectorAll('.recipe-options-menu').forEach(menu => {
-if (menu.id !== `menu-${docId}`) menu.classList.remove('show');
-});
-const menu = document.getElementById(`menu-${docId}`);
-if (menu) menu.classList.toggle('show');
-};
-
-window.addEventListener('click', () => {
-document.querySelectorAll('.recipe-options-menu').forEach(menu => menu.classList.remove('show'));
-});
-
-// Planner Posiłków (Kalendarz)
-function readPlannerData() {
-try {
-const data = JSON.parse(localStorage.getItem(`recipe-book:${auth.currentUser?.uid || "guest"}:planner`) || "{}");
-return typeof data === 'object' && data !== null ? data : {};
-} catch (e) { return {}; }
-}
-
-function writePlannerData(plannerObj) {
-localStorage.setItem(`recipe-book:${auth.currentUser?.uid || "guest"}:planner`, JSON.stringify(plannerObj));
-}
-
-window.openPlannerModal = function(recipeId, recipeTitle) {
-document.getElementById("planner-modal-recipe-id").value = recipeId;
-document.getElementById("planner-modal-recipe-title-text").value = recipeTitle;
-document.getElementById("planner-date-select").value = activePlannerDate;
-const modal = document.getElementById("planner-modal");
-modal.classList.remove("hidden");
-modal.style.display = "flex";
-};
-
-window.closePlannerModal = function() {
-const modal = document.getElementById("planner-modal");
-modal.classList.add("hidden");
-modal.style.display = "none";
-};
-
-window.closePlannerModalOnBackdrop = function(event) {
-if (event.target.id === "planner-modal") closePlannerModal();
-};
-
-window.confirmAddToPlanner = function() {
-const recipeId = document.getElementById("planner-modal-recipe-id").value;
-const recipeTitle = document.getElementById("planner-modal-recipe-title-text").value;
-const dateVal = document.getElementById("planner-date-select").value;
-const slot = document.getElementById("planner-slot-select").value;
-
-if (!dateVal) { alert("Wybierz datę!"); return; }
-
-const planner = readPlannerData();
-if (!planner[dateVal]) planner[dateVal] = {};
-planner[dateVal][slot] = { recipeId, recipeTitle };
-
-writePlannerData(planner);
-closePlannerModal();
-activePlannerDate = dateVal;
-renderPlannerStrip();
-renderPlannerDayDetails(activePlannerDate);
-alert(`Dodano "${recipeTitle}" do kalendarza! 📅`);
-};
-
-window.removeFromPlanner = function(dateKey, slot) {
-const planner = readPlannerData();
-if (planner[dateKey] && planner[dateKey][slot]) {
-delete planner[dateKey][slot];
-if (Object.keys(planner[dateKey]).length === 0) delete planner[dateKey];
-writePlannerData(planner);
-renderPlannerDayDetails(activePlannerDate);
-}
-};
-
-window.clearMealPlanner = function() {
-if (confirm("Czy na pewno chcesz wyczyścić cały kalendarz tygodniowy?")) {
-localStorage.removeItem(`recipe-book:${auth.currentUser?.uid || "guest"}:planner`);
-renderPlannerStrip();
-renderPlannerDayDetails(activePlannerDate);
-}
-};
-
-function renderPlannerStrip() {
-const stripContainer = document.getElementById("planner-strip");
-if (!stripContainer) return;
-let html = "";
-const today = new Date();
-
-for (let i = -2; i <= 4; i++) {
-const d = new Date(today);
-d.setDate(today.getDate() + i);
-const year = d.getFullYear();
-const month = String(d.getMonth() + 1).padStart(2, '0');
-const day = String(d.getDate()).padStart(2, '0');
-const dateStr = `${year}-${month}-${day}`;
-const label = d.toLocaleDateString('pl-PL', { weekday: 'short', day: 'numeric', month: 'numeric' });
-const isActive = dateStr === activePlannerDate;
-
-html += `<button type="button" class="planner-day-pill${isActive ? ' active' : ''}" onclick="selectPlannerDay('${dateStr}')">${label}</button>`;
-}
-stripContainer.innerHTML = html;
-}
-
-window.selectPlannerDay = function(dateStr) {
-activePlannerDate = dateStr;
-renderPlannerStrip();
-renderPlannerDayDetails(dateStr);
-};
-
-function renderPlannerDayDetails(dateStr) {
-const container = document.getElementById("planner-day-details-container");
-if (!container) return;
-const planner = readPlannerData();
-const dayMeals = planner[dateStr] || {};
-const slots = ["Śniadanie", "Obiad", "Kolacja", "Przekąska / Deser"];
-
-let html = `<p style="font-weight: 700; color: #9d174d; margin-bottom: 10px;">Posiłki na dzień: ${dateStr}</p>`;
-
-if (Object.keys(dayMeals).length === 0) {
-container.innerHTML = html + `<p class="ingredient-helper-text">Brak zaplanowanych posiłków na ten dzień.</p>`;
-return;
-}
-
-slots.forEach(slot => {
-const meal = dayMeals[slot];
-if (meal) {
-html += `
-<div style="background: #fff; border: 1px solid #fbcfe8; border-radius: 12px; padding: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
-<div><span style="font-size: 11px; color: #db2777; font-weight: 700; display: block;">${slot}</span><strong style="font-size: 14px; color: #1e293b;">${escapeHtml(meal.recipeTitle)}</strong></div>
-<button type="button" onclick="removeFromPlanner('${dateStr}', '${slot}')" style="width: auto; margin: 0; padding: 4px 8px; font-size: 11px; background: #ef4444;">Usuń</button>
-</div>`;
-}
-});
-container.innerHTML = html;
-}
-
-// Zakupy i Ulubione
-function readUserList(kind) {
-try {
-return JSON.parse(localStorage.getItem(`recipe-book:${auth.currentUser?.uid || "guest"}:${kind}`) || "[]");
-} catch (e) { return []; }
-}
-
-function writeUserList(kind, list) {
-localStorage.setItem(`recipe-book:${auth.currentUser?.uid || "guest"}:${kind}`, JSON.stringify(list));
-}
-
-window.addRecipeToShoppingList = function(ingredientsJson) {
-try {
-const ingredients = JSON.parse(decodeURIComponent(ingredientsJson));
-const list = readUserList("shopping");
-ingredients.forEach(ing => {
-list.push({ name: ing.name, weight: ing.weight || 0, weightUnit: ing.weightUnit || 'g', checked: false });
-});
-writeUserList("shopping", list);
-alert("Dodano składniki do listy zakupów! 🛒");
-} catch (e) { alert("Błąd dodawania do zakupów."); }
-};
-
-window.renderShoppingList = function() {
-const container = document.getElementById("shopping-list-container");
-if (!container) return;
-const list = readUserList("shopping");
-if (list.length === 0) {
-container.innerHTML = "<p class='ingredient-helper-text'>Lista zakupów jest pusta.</p>";
-return;
-}
-container.innerHTML = `<ul class="shopping-list-items">${list.map((item, idx) => `
-<li class="shopping-list-item\${item.checked ? ' is-checked' : ''}">
-<input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleShoppingItem(${idx}, this.checked)">
-<span>\${escapeHtml(item.name)} (${item.weight}${item.weightUnit || 'g'})</span>
-</li>`).join('')}</ul>`;
-};
-
-window.toggleShoppingItem = function(idx, checked) {
-const list = readUserList("shopping");
-if (list[idx]) {
-list[idx].checked = checked;
-writeUserList("shopping", list);
-renderShoppingList();
-}
-};
-
-window.clearShoppingList = function() {
-writeUserList("shopping", []);
-renderShoppingList();
-};
-
-window.toggleFavorite = function(docId) {
-const favs = readUserList("favorites");
-const next = favs.includes(docId) ? favs.filter(id => id !== docId) : [...favs, docId];
-writeUserList("favorites", next);
-renderCatalog();
-renderFavoritesTab();
-renderMyRecipes();
-};
-
-function renderFavoritesTab() {
-const container = document.getElementById("favorites-container");
-if (!container) return;
-const favs = readUserList("favorites");
-const all = [...rawPublicRecipes, ...rawMyRecipes];
-const matched = all.filter(item => favs.includes(item.id));
-
-if (matched.length === 0) {
-container.innerHTML = "<p class='ingredient-helper-text'>Brak ulubionych przepisów.</p>";
-return;
-}
-container.innerHTML = matched.map(item => renderRecipeCard(item.data, item.id)).join("");
-}
-
-// Składniki w formularzu dodawania
-document.getElementById("btn-add-ingredient").addEventListener("click", () => {
-const name = document.getElementById("ingredient-name").value.trim();
-const weight = parseFloat(document.getElementById("ing-weight").value) || 0;
-const weightUnit = document.getElementById("ing-weight-unit").value;
-
-if (!name || weight <= 0) {
-alert("Podaj nazwę składnika i ilość!");
-return;
-}
-
-currentRecipeIngredients.push({ name, weight, weightUnit, kcal: 0, protein: 0, fat: 0, carbs: 0 });
-updateIngredientsUI();
-
-document.getElementById("ingredient-name").value = "";
-document.getElementById("ing-weight").value = "";
-});
-
-function updateIngredientsUI() {
-const container = document.getElementById("ingredients-summary-container");
-if (!container) return;
-if (currentRecipeIngredients.length === 0) {
-container.innerHTML = "<p class='ingredient-helper-text'>Brak dodanych składników.</p>";
-return;
-}
-container.innerHTML = `<ul class="cooking-checklist">${currentRecipeIngredients.map((item, idx) => `
-<li class="cooking-checklist-item">
-<label>\${escapeHtml(item.name)} (${item.weight}${item.weightUnit})</label>
-<button type="button" onclick="removeIngredient(\${idx})" style="background:#ef4444; width:auto; padding:2px 6px; font-size:10px;">Usuń</button>
-</li>`).join('')}</ul>`;
-}
-
-window.removeIngredient = function(idx) {
-currentRecipeIngredients.splice(idx, 1);
-updateIngredientsUI();
-};
-
-// Renderowanie karty przepisu
 window.toggleRecipeCard = function(cardEl, event) {
-if (event.target.closest('button') || event.target.closest('input')) return;
+if (event.target.tagName === 'BUTTON' || event.target.tagName === 'INPUT' || event.target.tagName === 'LABEL' || event.target.closest('button') || event.target.closest('input')) {
+return;
+}
 cardEl.classList.toggle('expanded');
 };
 
-function renderRecipeCard(recipe, docId) {
-const isFav = readUserList("favorites").includes(docId);
-const photoHtml = recipe.imageUrl ? `<img class="recipe-card-image" src="${escapeAttribute(recipe.imageUrl)}" alt="Zdjęcie">` : "";
-const ingredientsJson = encodeURIComponent(JSON.stringify(recipe.ingredients || []));
-const escapedTitle = escapeAttribute(recipe.title);
+const cookingChecklist = new Map();
+
+window.toggleCookingIngredient = function(docId, ingredientIndex, isChecked) {
+if (!cookingChecklist.has(docId)) cookingChecklist.set(docId, new Set());
+const checkedIngredients = cookingChecklist.get(docId);
+if (isChecked) checkedIngredients.add(ingredientIndex);
+else checkedIngredients.delete(ingredientIndex);
+const checkbox = document.getElementById(`cooking-check-${docId}-${ingredientIndex}`);
+if (checkbox) checkbox.closest('.cooking-checklist-item').classList.toggle('is-checked', isChecked);
+};
+
+function renderCookingChecklist(ingredients, docId, ratio = 1) {
+if (!cookingChecklist.has(docId)) cookingChecklist.set(docId, new Set());
+const checkedIngredients = cookingChecklist.get(docId);
+return ingredients.map((ingredient, index) => {
+const quantity = formatIngredientQuantity(ingredient, ratio);
+const measureText = quantity.quantity ? ` (${escapeHtml(quantity.quantity)})` : "";
+const macroText = ingredient.kcal > 0 ? ` — ${Math.round(ingredient.kcal * ratio)} kcal` : "";
+const isChecked = checkedIngredients.has(index);
+return `<li class="cooking-checklist-item${isChecked ? " is-checked" : ""}"><input type="checkbox" id="cooking-check-${docId}-${index}" aria-label="Oznacz składnik jako użyty" ${isChecked ? "checked" : ""} onchange="toggleCookingIngredient('${docId}', ${index}, this.checked)"><label for="cooking-check-${docId}-${index}">${escapeHtml(quantity.name)}${measureText}${macroText}</label></li>`;
+}).join("");
+}
+
+window.updatePortionMultiplier = function(docId, basePortions, ingredientsJson) {
+const multiplierInput = document.getElementById(`portion-input-${docId}`);
+const selectedPortions = parseFloat(multiplierInput.value) || 1;
+const ratio = selectedPortions / basePortions;
+
+const ingredientsContainer = document.getElementById(`scaled-ingredients-${docId}`);
+const ingredients = JSON.parse(decodeURIComponent(ingredientsJson));
+
+const html = renderCookingChecklist(ingredients, docId, ratio);
+ingredientsContainer.innerHTML = html;
+};
+
+function renderRecipeCard(recipe, docId, isOwnerView = false) {
+const badge = recipe.isPublic ? "🌐 Publiczny" : "🔒 Prywatny";
+const basePortions = recipe.portions || 1;
+const panHtml = recipe.panSize ? `<p style="color: #db2777; font-size: 13px; margin: 4px 0;">🍰 <strong>Foremka:</strong> ${escapeHtml(recipe.panSize)}</p>` : "";
+const categoryInfo = recipeCategories[recipe.category];
+const subcategoryInfo = categoryInfo?.subcategories.find(item => item.value === recipe.subcategory);
+const categoryHtml = categoryInfo ? `<span class="recipe-category-badge">${escapeHtml(categoryInfo.label)}${subcategoryInfo ? ` · ${escapeHtml(subcategoryInfo.label)}` : ""}</span>` : "";
+const photoHtml = recipe.imageUrl ? `<img class="recipe-card-image" src="${escapeAttribute(recipe.imageUrl)}" alt="Zdjęcie przepisu" loading="lazy">` : "";
+const dietHtml = (recipe.dietTags || []).length ? `<div class="recipe-diet-badges">${recipe.dietTags.map(tag => dietLabels[tag]).filter(Boolean).map(label => `<span class="recipe-diet-badge">${escapeHtml(label)}</span>`).join("")}</div>` : "";
+const declaredAllergens = (recipe.allergens || []).map(allergen => allergenLabels[allergen]).filter(Boolean);
+const allergenText = declaredAllergens.length ? `Zawiera: ${declaredAllergens.join(", ")}` : recipe.allergensVerified ? "Sprawdzono skład" : "Alergeny niezweryfikowane";
+const allergenHtml = `<small class="recipe-allergen-note">${escapeHtml(allergenText)}${declaredAllergens.length && !recipe.allergensVerified ? " · skład niezweryfikowany" : ""}</small>`;
+
+let macrosHtml = "";
+let portionMacro = recipe.perPortionMacros || (recipe.totalMacros ? {
+kcal: Math.round(recipe.totalMacros.kcal / basePortions),
+protein: (recipe.totalMacros.protein / basePortions).toFixed(1),
+fat: (recipe.totalMacros.fat / basePortions).toFixed(1),
+carbs: (recipe.totalMacros.carbs / basePortions).toFixed(1)
+} : null);
+
+if (portionMacro) {
+macrosHtml = `
+                   <div class="macro-badge-container">
+                       <span class="macro-badge badge-kcal">🔥 ${portionMacro.kcal} kcal / porcja</span>
+                       <span class="macro-badge badge-protein">💪 B: ${portionMacro.protein}g</span>
+                       <span class="macro-badge badge-fat">🥑 T: ${portionMacro.fat}g</span>
+                       <span class="macro-badge badge-carbs">🌾 W: ${portionMacro.carbs}g</span>
+                   </div>
+               `;
+}
+
+const initialIngredientsHtml = renderCookingChecklist(recipe.ingredients || [], docId);
+
+let timeMinutes = 15;
+if (recipe.time) {
+const match = recipe.time.match(/\d+/);
+if (match) timeMinutes = parseInt(match[0]);
+}
+
+const timeHtml = recipe.time ? `
+               <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(248, 250, 252, 0.7); padding: 8px 12px; border-radius: 12px; margin-bottom: 12px;">
+                   <span style="color: #64748b; font-size: 14px;">⏱️ <strong>Czas:</strong> ${escapeHtml(recipe.time)}</span>
+                   <div>
+                       <button onclick="startTimer('${docId}', ${timeMinutes})" style="width: auto; padding: 6px 12px; font-size: 12px; margin-bottom: 0;">Start Stoper</button>
+                       <span id="timer-display-${docId}" style="margin-left: 8px; font-size: 13px; font-weight: 600; color: #3b82f6;"></span>
+                   </div>
+               </div>` : "";
+
+const ingredientsString = encodeURIComponent(JSON.stringify(recipe.ingredients));
+
+let ownerActionsHtml = "";
+if (isOwnerView) {
+const visibilityBtnText = recipe.isPublic ? "🔒 Zmień na prywatny" : "🌐 Upublicznij";
+ownerActionsHtml = `
+                   <div style="margin-top: 15px; padding-top: 12px; border-top: 1px dashed rgba(0,0,0,0.1); display: flex; gap: 8px; flex-wrap: wrap;">
+                       <button type="button" onclick="editRecipe('${docId}')" style="width: auto; padding: 6px 12px; font-size: 12px; background: #3b82f6; margin-bottom: 0;">Edytuj</button>
+                       <button type="button" onclick="toggleVisibility('${docId}', ${recipe.isPublic})" style="width: auto; padding: 6px 12px; font-size: 12px; background: #f59e0b; margin-bottom: 0;">${visibilityBtnText}</button>
+                       <button type="button" onclick="deleteRecipe('${docId}')" style="width: auto; padding: 6px 12px; font-size: 12px; background: #ef4444; margin-bottom: 0;">Usuń</button>
+                   </div>
+               `;
+}
 
 return `
-<div class="recipe-item" onclick="toggleRecipeCard(this, event)">
-<div style="display: flex; justify-content: space-between; align-items: center;">
-<h4 style="margin: 0; color: #1e293b; font-size: 18px;">${escapeHtml(recipe.title)}</h4>
-<div style="display: flex; align-items: center; gap: 8px;">
-<button type="button" style="background:none; border:none; color: ${isFav ? '#db2777' : '#94a3b8'}; font-size: 20px; cursor:pointer; box-shadow:none; padding:0; width:auto;" onclick="toggleFavorite('${docId}')">${isFav ? '♥' : '♡'}</button>
-<div class="recipe-options-dropdown">
-<button type="button" class="recipe-options-btn" onclick="toggleRecipeMenu(event, '${docId}')">⋮</button>
-<div id="menu-${docId}" class="recipe-options-menu">
-<button type="button" class="recipe-options-item" onclick="openPlannerModal('${docId}', '${escapedTitle}')">📅 Dodaj do kalendarza</button>
-<button type="button" class="recipe-options-item" onclick="addRecipeToShoppingList('${ingredientsJson}')">🛒 Dodaj do zakupów</button>
-<button type="button" class="recipe-options-item" onclick="editRecipe('${docId}')">✏️ Edytuj przepis</button>
-<button type="button" class="recipe-options-item" onclick="deleteRecipe('${docId}')" style="color: #ef4444;">🗑️ Usuń przepis</button>
-</div>
-</div>
-</div>
-</div>
-${photoHtml}
-<p style="font-size: 13px; color: #64748b; margin: 4px 0;">Kliknij kartę, aby rozwinąć szczegóły</p>
-<div class="recipe-details">
-<p style="font-weight: 600; color: #334155; margin-bottom: 4px;">Składniki:</p>
-<ul class="cooking-checklist">
-${(recipe.ingredients || []).map(ing => `<li class="cooking-checklist-item"><input type="checkbox"><label>\${escapeHtml(ing.name)} (${ing.weight \vert{}\vert{} ''}${ing.weightUnit || ''})</label></li>`).join('')}
-</ul>
-<p style="font-weight: 600; color: #334155; margin-top: 10px;">Przygotowanie:</p>
-<p style="color: #4a5568; line-height: 1.4;">${escapeHtml(recipe.steps)}</p>
-</div>
-</div>`;
+               <div class="recipe-item" onclick="toggleRecipeCard(this, event)">
+                   <h4 style="margin-top: 0; color: #1e293b; font-size: 18px; display: flex; justify-content: space-between; align-items: center;">
+                       <span>${escapeHtml(recipe.title)} <small style="font-size: 12px; color: #94a3b8; font-weight: normal;">(${badge})</small></span>
+                       <span class="recipe-card-topline"><span style="font-size: 13px; color: var(--primary-pink); font-weight: 600;">👥 ${basePortions} porcje ▼</span><button type="button" class="recipe-favorite-button" aria-label="${isFavoriteRecipe(docId) ? "Usuń z ulubionych" : "Dodaj do ulubionych"}" aria-pressed="${isFavoriteRecipe(docId)}" onclick="toggleFavorite('${docId}')">${isFavoriteRecipe(docId) ? "♥" : "♡"}</button></span>
+                   </h4>
+                   ${photoHtml}
+                   ${panHtml}
+                   ${categoryHtml}
+                   ${dietHtml}
+                   ${allergenHtml}
+                   <p style="font-size: 13px; color: #64748b; margin: 4px 0;">Kliknij kartę, aby zobaczyć cały przepis i składniki</p>
+                   ${macrosHtml}
+
+                   <div class="recipe-details">
+                       ${timeHtml}
+                       
+                       <div style="background: rgba(236, 72, 153, 0.05); padding: 12px; border-radius: 12px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                           <label style="font-size: 13px; font-weight: 600; color: #db2777; margin: 0; white-space: nowrap;">Kalkulator porcji:</label>
+                           <input type="number" id="portion-input-${docId}" value="${basePortions}" min="1" style="width: 80px; margin: 0; padding: 6px 10px;" oninput="updatePortionMultiplier('${docId}', ${basePortions}, '${ingredientsString}')">
+                           <span style="font-size: 13px; color: #64748b;">porcji</span>
+                       </div>
+
+                       <button type="button" class="shopping-add-recipe-button" onclick="addRecipeToShoppingList('${ingredientsString}')">＋ Do listy zakupów</button>
+
+                       <p style="font-weight: 600; color: #334155; margin-bottom: 4px;">Składniki do odhaczenia:</p>
+                       <ul id="scaled-ingredients-${docId}" class="cooking-checklist">
+                           ${initialIngredientsHtml}
+                       </ul>
+
+                       <p style="font-weight: 600; color: #334155; margin-bottom: 4px; margin-top: 12px;">Przygotowanie:</p>
+                       <p style="color: #4a5568; line-height: 1.5; margin-top: 0;">${escapeHtml(recipe.steps).replace(/\n/g, '<br>')}</p>
+                       
+                       <div style="margin-top: 15px; background: rgba(250, 245, 255, 0.7); padding: 10px; border-radius: 12px; border: 1px solid #f3e8ff;">
+                           <input type="text" id="recipe-ai-input-${docId}" placeholder="Zapytaj AI o ten przepis..." style="margin: 0 0 6px 0; font-size: 13px;">
+                           <button type="button" onclick="askRecipeAI('${docId}')" style="width: auto; padding: 6px 12px; font-size: 12px; margin-bottom: 0; background: #ec4899;">🤖 Zapytaj AI o przepis</button>
+                           <div id="recipe-ai-output-${docId}" style="margin-top: 8px; font-size: 13px; color: #4a5568; white-space: pre-wrap; display: none; background: #fff; padding: 8px; border-radius: 8px;"></div>
+                       </div>
+
+                       <small style="color: #94a3b8; display: block; margin-top: 10px;">Autor: ${recipe.userEmail || 'Nieznany'}</small>
+                       ${ownerActionsHtml}
+                   </div>
+               </div>
+           `;
 }
 
 function renderCatalog() {
 const container = document.getElementById("catalog-container");
-if (!container) return;
+if (!rawPublicRecipes || rawPublicRecipes.length === 0) {
+container.innerHTML = `
+                   <div class="empty-state">
+                       <span class="icon">☕</span>
+                       <p style="font-weight: 600; margin: 0;">Brak przepisów w katalogu</p>
+                       <p style="font-size: 13px; color: #94a3b8; margin: 4px 0 0 0;">Bądź pierwszą osobą, która coś doda!</p>
+                   </div>`;
+return;
+}
+
 let filtered = rawPublicRecipes.filter(item => {
 const data = item.data;
+if (!matchesRecipeSearch(data, currentCatalogSearch)) return false;
+if (favoritesOnly && !isFavoriteRecipe(item.id)) return false;
+if (currentDietFilter !== "all" && !(data.dietTags || []).includes(currentDietFilter)) return false;
+if (currentExcludedAllergen !== "all" && (!data.allergensVerified || (data.allergens || []).includes(currentExcludedAllergen))) return false;
 if (currentCatalogCategory !== 'all' && data.category !== currentCatalogCategory) return false;
-if (currentCatalogSearch && !data.title.toLowerCase().includes(currentCatalogSearch.toLowerCase())) return false;
+if (currentCatalogSubcategory !== 'all' && data.subcategory !== currentCatalogSubcategory) return false;
+if (currentCatalogFilter === 'quick') {
+if (!data.time) return false;
+const match = data.time.match(/\d+/);
+return match && parseInt(match[0]) <= 20;
+}
+if (currentCatalogFilter === 'fit') {
+const baseP = data.portions || 1;
+const perKcal = data.totalMacros ? (data.totalMacros.kcal / baseP) : 0;
+return perKcal <= 350;
+}
 return true;
 });
 
 if (filtered.length === 0) {
-container.innerHTML = `<div class="empty-state"><span class="icon">☕</span><p>Brak przepisów w tej kategorii.</p></div>`;
+container.innerHTML = `
+                   <div class="empty-state">
+                       <span class="icon">🔍</span>
+                       <p style="font-weight: 600; margin: 0;">Brak przepisów spełniających kryteria</p>
+                       <p style="font-size: 13px; color: #94a3b8; margin: 4px 0 0 0;">Spróbuj zmienić filtr powyżej.</p>
+                   </div>`;
 return;
 }
-container.innerHTML = filtered.map(item => renderRecipeCard(item.data, item.id)).join("");
+
+let html = "";
+filtered.forEach(item => {
+html += renderRecipeCard(item.data, item.id, false);
+});
+container.innerHTML = html;
 }
 
 function renderMyRecipes() {
 const container = document.getElementById("my-recipes-container");
-if (!container) return;
-let filtered = rawMyRecipes.filter(item => {
-if (currentMyRecipesSearch && !item.data.title.toLowerCase().includes(currentMyRecipesSearch.toLowerCase())) return false;
-return true;
-});
-
-if (filtered.length === 0) {
-container.innerHTML = `<p class='ingredient-helper-text'>Nie masz jeszcze własnych przepisów.</p>`;
+if (rawMyRecipes.length === 0) {
+container.innerHTML = `<div class="empty-state"><span class="icon">📖</span><p style="font-weight: 600; margin: 0;">Nie masz jeszcze swoich przepisów</p><p style="font-size: 13px; color: #94a3b8; margin: 4px 0 0 0;">Przejdź do zakładki „Dodaj”, aby stworzyć pierwszy!</p></div>`;
 return;
 }
-container.innerHTML = filtered.map(item => renderRecipeCard(item.data, item.id)).join("");
+const filtered = rawMyRecipes.filter(item => matchesRecipeSearch(item.data, currentMyRecipesSearch) && (!favoritesOnly || isFavoriteRecipe(item.id)));
+if (filtered.length === 0) {
+container.innerHTML = `<div class="empty-state"><span class="icon">🔍</span><p style="font-weight: 600; margin: 0;">Nie znaleziono przepisów</p><p style="font-size: 13px; color: #94a3b8; margin: 4px 0 0 0;">Zmień wyszukiwanie lub filtr ulubionych.</p></div>`;
+return;
+}
+container.innerHTML = filtered.map(item => renderRecipeCard(item.data, item.id, true)).join("");
 }
 
-// Zapis nowego przepisu
-document.getElementById("btn-add-recipe").addEventListener("click", async () => {
-const editId = document.getElementById("edit-recipe-id").value;
-const title = document.getElementById("recipe-title").value.trim();
-const category = document.getElementById("recipe-category").value;
-const subcategory = document.getElementById("recipe-subcategory").value;
-const steps = document.getElementById("recipe-steps").value.trim();
-const time = document.getElementById("recipe-time").value.trim();
-const visibility = document.getElementById("recipe-visibility").value;
-const user = auth.currentUser;
-
-if (!title) { alert("Podaj nazwę przepisu!"); return; }
-if (currentRecipeIngredients.length === 0) { alert("Dodaj przynajmniej jeden składnik!"); return; }
-
-const recipePayload = {
-title,
-category,
-subcategory,
-ingredients: currentRecipeIngredients,
-steps,
-time,
-isPublic: visibility === "public",
-userId: user ? user.uid : "guest",
-userEmail: user ? user.email : "Gość",
-updatedAt: serverTimestamp()
-};
-
-try {
-const recipeRef = editId ? doc(db, "recipes", editId) : doc(collection(db, "recipes"));
-if (editId) {
-await updateDoc(recipeRef, recipePayload);
-alert("Zaktualizowano przepis!");
-} else {
-recipePayload.createdAt = serverTimestamp();
-await setDoc(recipeRef, recipePayload);
-alert("Dodano przepis pomyślnie!");
-}
-document.getElementById("recipe-title").value = "";
-document.getElementById("recipe-steps").value = "";
-currentRecipeIngredients = [];
-updateIngredientsUI();
-switchTab('profile');
-} catch (e) {
-alert("Błąd zapisu: " + e.message);
-}
-});
-
-window.deleteRecipe = async function(docId) {
-if (confirm("Usunąć przepis?")) {
-await deleteDoc(doc(db, "recipes", docId));
-}
-};
-
-window.editRecipe = function(docId) {
-const recipe = rawMyRecipes.find(item => item.id === docId)?.data;
-if (!recipe) return;
-document.getElementById("edit-recipe-id").value = docId;
-document.getElementById("recipe-title").value = recipe.title || "";
-document.getElementById("recipe-category").value = recipe.category || "";
-document.getElementById("recipe-subcategory").value = recipe.subcategory || "";
-document.getElementById("recipe-steps").value = recipe.steps || "";
-document.getElementById("recipe-time").value = recipe.time || "";
-currentRecipeIngredients = recipe.ingredients || [];
-updateIngredientsUI();
-switchTab('add-recipe');
-};
-
-// Autoryzacja i nasłuch bazy
 onAuthStateChanged(auth, (user) => {
 if (user) {
-authStatus.textContent = `Zalogowany jako: ${user.email}`;
+authStatus.textContent = `Zalogowany jako: ${user.email || user.displayName}`;
 authSection.classList.add("hidden");
 appTabs.classList.remove("hidden");
-document.getElementById("profile-email").textContent = user.email;
+document.getElementById("profile-email").textContent = user.email || user.displayName;
+document.getElementById("profile-uid").textContent = user.uid;
 moveBubble(0);
+migrateGuestDataToUser(user.uid);
 
-const qMy = query(collection(db, "recipes"), where("userId", "==", user.uid));
-onSnapshot(qMy, (snapshot) => {
-rawMyRecipes = [];
-snapshot.forEach(docSnap => {
-rawMyRecipes.push({ id: docSnap.id, data: docSnap.data() });
-});
+const myQuery = query(collection(db, "recipes"), where("userId", "==", user.uid));
+onSnapshot(myQuery, (snapshot) => {
+rawMyRecipes = snapshot.docs.map(docSnap => ({ id: docSnap.id, data: docSnap.data() }));
 renderMyRecipes();
 });
+renderShoppingList();
+} else {
+rawMyRecipes = [];
+renderShoppingList();
+authStatus.textContent = "Nie jesteś zalogowany.";
+authSection.classList.remove("hidden");
+appTabs.classList.add("hidden");
+document.getElementById("my-recipes-container").innerHTML = `
+                   <div class="empty-state">
+                       <span class="icon">🔒</span>
+                       <p style="font-weight: 600; margin: 0;">Musisz się zalogować</p>
+                   </div>`;
+}
+});
 
-const qPublic = query(collection(db, "recipes"), where("isPublic", "==", true));
-onSnapshot(qPublic, (snapshot) => {
+const publicQuery = query(collection(db, "recipes"), where("isPublic", "==", true));
+onSnapshot(publicQuery, (snapshot) => {
 rawPublicRecipes = [];
-snapshot.forEach(docSnap => {
+snapshot.forEach((docSnap) => {
 rawPublicRecipes.push({ id: docSnap.id, data: docSnap.data() });
 });
 renderCatalog();
 });
-} else {
-authStatus.textContent = "Nie jesteś zalogowany.";
-authSection.classList.remove("hidden");
-appTabs.classList.add("hidden");
-}
-});
 
 document.getElementById("btn-register").addEventListener("click", async () => {
 try {
-if (rememberMeCheckbox.checked) await setPersistence(auth, browserLocalPersistence);
+await applyPersistence();
 await createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
 alert("Konto utworzone!");
-} catch (e) { alert(e.message); }
+} catch (error) { alert("Błąd: " + error.message); }
 });
 
 document.getElementById("btn-login").addEventListener("click", async () => {
 try {
-if (rememberMeCheckbox.checked) await setPersistence(auth, browserLocalPersistence);
+await applyPersistence();
 await signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
-} catch (e) { alert(e.message); }
+} catch (error) { alert("Błąd: " + error.message); }
 });
 
 document.getElementById("btn-google").addEventListener("click", async () => {
 try {
 await setPersistence(auth, browserLocalPersistence);
 await signInWithPopup(auth, googleProvider);
-} catch (e) { alert(e.message); }
+} catch (error) { alert("Błąd: " + error.message); }
 });
 
-document.getElementById("btn-logout").addEventListener("click", () => { signOut(auth); switchTab('catalog'); });
+document.getElementById("btn-logout").addEventListener("click", () => {
+signOut(auth);
+switchTab('catalog');
+});
 
-function escapeHtml(t) { return t ? t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : ""; }
-function escapeAttribute(t) { return escapeHtml(String(t || "")).replace(/"/g, "&quot;"); }
+function escapeHtml(text) {
+if (!text) return "";
+return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function escapeAttribute(text) {
+return escapeHtml(String(text || "")).replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
 </script>
 </body>
 </html>
