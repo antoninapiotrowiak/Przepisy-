@@ -1196,6 +1196,19 @@ to { opacity: 1; transform: translateY(0); }
 👤
 </div>
 </div>
+<!-- Ikona AI w lewym górnym rogu -->
+<div style="position: absolute; top: 20px; left: 20px; z-index: 100;">
+<div id="ai-trigger" onclick="switchTab('ai-helper')" style="width: 34px; height: 34px; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: var(--primary-blue); cursor: pointer; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);" title="Asystent AI">
+🤖
+</div>
+</div>
+
+<!-- Ikona Profilu w prawym górnym rogu -->
+<div style="position: absolute; top: 20px; right: 20px; z-index: 100;">
+<div id="profile-trigger" onclick="switchTab('profile')" style="width: 34px; height: 34px; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: var(--primary-pink); cursor: pointer; box-shadow: 0 4px 12px rgba(236, 72, 153, 0.1);" title="Profil">
+👤
+</div>
+</div>
 
 <h1>🌸 Moja Książka Przepisów 🌸</h1>
 
@@ -1232,13 +1245,14 @@ to { opacity: 1; transform: translateY(0); }
 <button id="btn-google" style="background: #ffffff; color: #3b82f6; border: 2px solid #3b82f6; box-shadow: none;">Zaloguj przez Google</button>
 </div>
 
+
 <div id="app-tabs" class="tabs hidden floating-glass-nav" onmouseleave="resetBubble()">
 <div id="liquid-bubble" class="liquid-bubble"></div>
-<button class="tab-btn active" onclick="switchTab('catalog')" onmouseenter="moveBubble(0)" ontouchstart="moveBubble(0)">🌐 Katalog</button>
-<button class="tab-btn" onclick="switchTab('my-recipes')" onmouseenter="moveBubble(1)" ontouchstart="moveBubble(1)">📖 Moje</button>
+<button class="tab-btn active" onclick="switchTab('catalog')" onmouseenter="moveBubble(0)" ontouchstart="moveBubble(0)">🏠 Główna</button>
+<button class="tab-btn" onclick="switchTab('planner-tab')" onmouseenter="moveBubble(1)" ontouchstart="moveBubble(1)">📅 Kalendarz</button>
 <button class="tab-btn" onclick="switchTab('add-recipe')" onmouseenter="moveBubble(2)" ontouchstart="moveBubble(2)" id="tab-btn-add">➕ Dodaj</button>
-<button class="tab-btn" onclick="switchTab('ai-helper')" onmouseenter="moveBubble(3)" ontouchstart="moveBubble(3)">🤖 AI</button>
-<button class="tab-btn" onclick="switchTab('profile')" onmouseenter="moveBubble(4)" ontouchstart="moveBubble(4)">👤 Profil</button>
+<button class="tab-btn" onclick="switchTab('favorites-tab')" onmouseenter="moveBubble(3)" ontouchstart="moveBubble(3)">♥ Ulubione</button>
+<button class="tab-btn" onclick="switchTab('shopping-tab')" onmouseenter="moveBubble(4)" ontouchstart="moveBubble(4)">🛒 Lista</button>
 </div>
 
 <!-- ZAKŁADKA 1: Katalog -->
@@ -1517,6 +1531,25 @@ to { opacity: 1; transform: translateY(0); }
 </div>
 </div>
 
+<!-- ZAKŁADKA: Ulubione -->
+<div id="section-favorites-tab" class="tab-content">
+<div class="card">
+<h3 style="margin-top:0; color: #db2777;">♥ Twoje ulubione przepisy</h3>
+<div id="favorites-container">Brak ulubionych przepisów. Zaznacz serduszko przy przepisie.</div>
+</div>
+</div>
+
+<!-- ZAKŁADKA: Lista zakupów -->
+<div id="section-shopping-tab" class="tab-content">
+<div class="card">
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+<h3 style="margin: 0; color: #db2777;">🛒 Lista zakupów</h3>
+<button type="button" class="shopping-clear-button" onclick="clearShoppingList()">Wyczyść wszystko</button>
+</div>
+<div id="shopping-list-container">Lista jest pusta.</div>
+</div>
+</div>
+
 <!-- ZAKŁADKA 4: AI Studio -->
 <div id="section-ai-helper" class="tab-content">
 <div class="card">
@@ -1704,27 +1737,33 @@ document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('act
 document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
 
 let targetIndex = 0;
-if (tabName === 'catalog') {
-document.getElementById('section-catalog').classList.add('active');
-targetIndex = 0;
-} else if (tabName === 'my-recipes') {
-document.getElementById('section-my-recipes').classList.add('active');
-targetIndex = 1;
-} else if (tabName === 'add-recipe') {
-document.getElementById('section-add-recipe').classList.add('active');
-targetIndex = 2;
-} else if (tabName === 'ai-helper') {
-document.getElementById('section-ai-helper').classList.add('active');
-targetIndex = 3;
-} else if (tabName === 'profile') {
-document.getElementById('section-profile').classList.add('active');
-targetIndex = 4;
+if (tabName === 'catalog') { 
+document.getElementById('section-catalog').classList.add('active'); 
+targetIndex = 0; 
+} else if (tabName === 'planner-tab') { 
+document.getElementById('section-my-recipes').classList.add('active'); 
+targetIndex = 1; 
+} else if (tabName === 'add-recipe') { 
+document.getElementById('section-add-recipe').classList.add('active'); 
+targetIndex = 2; 
+} else if (tabName === 'favorites-tab') { 
+document.getElementById('section-favorites-tab').classList.add('active'); 
+targetIndex = 3; 
+renderFavoritesTab();
+} else if (tabName === 'shopping-tab') { 
+document.getElementById('section-shopping-tab').classList.add('active'); 
+targetIndex = 4; 
+renderShoppingList();
+} else if (tabName === 'ai-helper') { 
+document.getElementById('section-ai-helper').classList.add('active'); 
+return; // Otwierane z ikony robota, nie rusza paska dolnego
+} else if (tabName === 'profile') { 
+document.getElementById('section-profile').classList.add('active'); 
+return; // Otwierane z ikony profilu, nie rusza paska dolnego
 }
 
 const targetBtn = document.querySelector(`.tab-btn[onclick*="${tabName}"]`);
-if (targetBtn) {
-targetBtn.classList.add('active');
-}
+if (targetBtn) targetBtn.classList.add('active');
 moveBubble(targetIndex);
 };
 
