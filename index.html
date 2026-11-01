@@ -1960,10 +1960,11 @@ const unit = /^łyżeczk/.test(normalizedUnit) ? "łyżeczka"
 : "opakowanie";
 const amountTextFormatted = new Intl.NumberFormat("pl-PL", { maximumFractionDigits: 2 }).format(scaledAmount);
 const adjectiveForms = adjective?.toLocaleLowerCase("pl-PL").startsWith("płask")
-? ["płaska", "płaskie", "płaskich"]
-: ["czubata", "czubate", "czubatych"];
+? ["płaska", "płaskie", "płaskich", "płaskiej"]
+: ["czubata", "czubate", "czubatych", "czubatej"];
 const remainder100 = scaledAmount % 100;
 const adjectiveIndex = scaledAmount === 1 ? 0
+: !Number.isInteger(scaledAmount) ? 3
 : Number.isInteger(scaledAmount) && scaledAmount % 10 >= 2 && scaledAmount % 10 <= 4 && (remainder100 < 12 || remainder100 > 14) ? 1
 : 2;
 const adjectiveText = adjective ? `${adjectiveForms[adjectiveIndex]} ` : "";
@@ -1977,7 +1978,10 @@ const normalizedAmount = amountText.replace(/\s/g, "").replace(",", ".");
 const amount = normalizedAmount.includes("/")
 ? Number(normalizedAmount.split("/")[0]) / Number(normalizedAmount.split("/")[1])
 : Number(normalizedAmount);
-const scaledAmount = Number((amount * portionRatio).toFixed(2));
+const normalizedUnit = unit.toLocaleLowerCase("pl-PL");
+const scaledAmount = /^(kg|kilogram|l|litr)/.test(normalizedUnit)
+? Number((amount * portionRatio).toFixed(2))
+: Math.round(amount * portionRatio);
 const amountTextFormatted = new Intl.NumberFormat("pl-PL", { maximumFractionDigits: 2 }).format(scaledAmount);
 const separator = /\s/.test(match.slice(amountText.length, match.length - unit.length)) ? " " : "";
 return `${amountTextFormatted}${separator}${unit}`;
