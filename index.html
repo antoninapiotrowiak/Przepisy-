@@ -761,9 +761,18 @@ font-size: 15px;
 
 .ingredient-field-grid {
 display: grid;
-grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-gap: 8px;
+grid-template-columns: repeat(4, minmax(0, 1fr));
+align-items: start;
+gap: 10px 12px;
 margin-bottom: 12px;
+}
+
+.ingredient-field {
+min-width: 0;
+}
+
+.ingredient-field:first-child {
+grid-column: 1 / -1;
 }
 
 .ingredient-field label,
@@ -777,8 +786,19 @@ font-weight: 700;
 
 .ingredient-editor input,
 .ingredient-editor select {
-margin: 3px 0 10px;
+height: 44px;
+margin: 5px 0 0;
+padding: 10px 12px;
+border: 1px solid #e7d8f2;
+border-radius: 10px;
 background: #fff;
+font-size: 13px;
+}
+
+.ingredient-editor input:focus,
+.ingredient-editor select:focus {
+border-color: #ec4899;
+box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
 }
 
 .ingredient-macros {
@@ -1187,17 +1207,9 @@ from { opacity: 0; transform: translateY(10px); }
 to { opacity: 1; transform: translateY(0); }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
 .ingredient-field-grid {
 grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
-.ingredient-field-grid .ingredient-field:first-child {
-grid-column: 1 / -1;
-}
-
-.ingredient-field {
-min-width: 0;
 }
 }
 </style>
