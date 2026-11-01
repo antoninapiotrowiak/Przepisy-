@@ -733,6 +733,356 @@ box-shadow: none;
 font-size: 12px;
 }
 
+.planner-header,
+.planner-month-toolbar,
+.planner-meals-heading,
+.planner-meal-heading {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 10px;
+}
+
+.planner-header {
+margin-bottom: 14px;
+}
+
+.planner-kicker {
+margin: 0 0 3px;
+color: #9d174d;
+font-size: 10px;
+font-weight: 800;
+}
+
+.planner-title {
+margin: 0;
+color: #334155;
+font-size: 21px;
+}
+
+.planner-shopping-shortcut,
+.planner-month-toolbar button,
+.planner-meals-heading button,
+.planner-meal-actions button,
+.planner-form-actions button,
+.planner-view-tab {
+width: auto;
+margin: 0;
+box-shadow: none;
+}
+
+.planner-shopping-shortcut {
+padding: 9px 11px;
+border: 1px solid #a7f3d0;
+border-radius: 9px;
+background: #ecfdf5;
+color: #047857;
+font-size: 12px;
+white-space: nowrap;
+}
+
+.planner-view-switch {
+display: flex;
+gap: 5px;
+margin: 0 0 16px;
+padding: 4px;
+border: 1px solid #f1d8e4;
+border-radius: 10px;
+background: rgba(255, 255, 255, 0.62);
+}
+
+.planner-view-tab {
+flex: 1;
+padding: 9px 10px;
+border: 1px solid transparent;
+border-radius: 7px;
+background: transparent;
+color: #64748b;
+font-size: 13px;
+}
+
+.planner-view-tab[aria-pressed="true"] {
+border-color: #fbcfe8;
+background: #fff1f7;
+color: #be185d;
+}
+
+.planner-calendar-layout {
+display: grid;
+grid-template-columns: minmax(0, 1.15fr) minmax(250px, 0.85fr);
+align-items: start;
+gap: 18px;
+}
+
+.planner-calendar,
+.planner-day-panel {
+min-width: 0;
+}
+
+.planner-month-toolbar {
+margin-bottom: 10px;
+}
+
+.planner-month-toolbar h4,
+.planner-meals-heading h4 {
+margin: 0;
+color: #334155;
+font-size: 15px;
+}
+
+.planner-month-controls {
+display: flex;
+align-items: center;
+gap: 5px;
+}
+
+.planner-month-toolbar button {
+padding: 7px 10px;
+border: 1px solid #e2e8f0;
+border-radius: 8px;
+background: #fff;
+color: #475569;
+font-size: 12px;
+}
+
+.planner-month-grid {
+display: grid;
+grid-template-columns: repeat(7, minmax(0, 1fr));
+border-top: 1px solid #e2e8f0;
+border-left: 1px solid #e2e8f0;
+}
+
+.planner-weekday,
+.planner-day-button {
+min-width: 0;
+border-right: 1px solid #e2e8f0;
+border-bottom: 1px solid #e2e8f0;
+}
+
+.planner-weekday {
+padding: 7px 2px;
+background: #f8fafc;
+color: #64748b;
+font-size: 10px;
+font-weight: 700;
+text-align: center;
+}
+
+.planner-day-button {
+display: flex;
+min-height: 62px;
+flex-direction: column;
+align-items: center;
+justify-content: flex-start;
+gap: 4px;
+padding: 7px 2px;
+border-radius: 0;
+background: rgba(255, 255, 255, 0.8);
+color: #334155;
+font-size: 12px;
+}
+
+.planner-day-button:hover {
+transform: none;
+background: #fff1f7;
+box-shadow: none;
+}
+
+.planner-day-button.is-outside-month { color: #cbd5e1; }
+.planner-day-button.is-today { color: #be185d; font-weight: 800; }
+.planner-day-button[aria-pressed="true"] { background: #fce7f3; box-shadow: inset 0 0 0 1px #f9a8d4; }
+
+.planner-day-dots {
+display: flex;
+min-height: 5px;
+gap: 3px;
+}
+
+.planner-day-dots span {
+width: 5px;
+height: 5px;
+border-radius: 50%;
+background: #10b981;
+}
+
+.planner-today-widget {
+display: grid;
+grid-template-columns: minmax(0, 1fr) auto;
+align-items: center;
+gap: 12px;
+margin-bottom: 14px;
+padding: 13px;
+border: 1px solid #bfdbfe;
+border-radius: 11px;
+background: linear-gradient(120deg, #eff6ff, #f0fdf4);
+}
+
+.planner-widget-label {
+display: block;
+margin-bottom: 3px;
+color: #475569;
+font-size: 10px;
+font-weight: 700;
+}
+
+.planner-widget-count {
+color: #0f766e;
+font-size: 20px;
+font-weight: 800;
+}
+
+.planner-widget-kcal {
+color: #1d4ed8;
+font-size: 13px;
+font-weight: 800;
+white-space: nowrap;
+}
+
+.planner-kcal-toggle {
+display: flex;
+align-items: center;
+gap: 7px;
+margin: 0 0 12px;
+color: #475569;
+font-size: 12px;
+font-weight: 600;
+}
+
+.planner-kcal-toggle input {
+width: 16px;
+height: 16px;
+margin: 0;
+accent-color: #16a34a;
+}
+
+.planner-meals-heading {
+margin: 0 0 10px;
+}
+
+.planner-meals-heading button,
+.planner-form-actions .planner-save-button {
+padding: 8px 11px;
+border-radius: 8px;
+background: #166534;
+color: #fff;
+font-size: 12px;
+}
+
+.planner-meal-list {
+display: grid;
+gap: 8px;
+}
+
+.planner-meal-item {
+padding: 11px;
+border: 1px solid #e2e8f0;
+border-left: 3px solid #34d399;
+border-radius: 9px;
+background: #fff;
+}
+
+.planner-meal-heading {
+align-items: flex-start;
+margin-bottom: 5px;
+}
+
+.planner-meal-type {
+color: #047857;
+font-size: 10px;
+font-weight: 800;
+}
+
+.planner-meal-title {
+margin: 2px 0 0;
+color: #334155;
+font-size: 14px;
+font-weight: 700;
+}
+
+.planner-meal-meta {
+margin: 0;
+color: #64748b;
+font-size: 11px;
+}
+
+.planner-meal-actions,
+.planner-form-actions {
+display: flex;
+flex-wrap: wrap;
+gap: 6px;
+margin-top: 9px;
+}
+
+.planner-meal-actions button,
+.planner-form-actions .planner-cancel-button {
+padding: 6px 8px;
+border: 1px solid #e2e8f0;
+border-radius: 7px;
+background: #fff;
+color: #475569;
+font-size: 11px;
+}
+
+.planner-meal-actions .planner-delete-button {
+border-color: #fecaca;
+color: #be123c;
+}
+
+.planner-meal-form {
+margin-top: 12px;
+padding: 12px;
+border: 1px solid #fbcfe8;
+border-radius: 10px;
+background: #fff8fb;
+}
+
+.planner-meal-form h4 {
+margin: 0 0 10px;
+color: #9d174d;
+font-size: 14px;
+}
+
+.planner-form-grid {
+display: grid;
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 0 10px;
+}
+
+.planner-form-grid label {
+display: block;
+min-width: 0;
+color: #475569;
+font-size: 11px;
+font-weight: 700;
+}
+
+.planner-form-grid select,
+.planner-form-grid input {
+height: 40px;
+margin: 4px 0 10px;
+padding: 8px 10px;
+border-width: 1px;
+border-radius: 8px;
+background: #fff;
+font-size: 12px;
+}
+
+.planner-form-grid .planner-form-wide { grid-column: 1 / -1; }
+.planner-library-view .shopping-list-panel { margin-top: 12px; }
+
+@media (max-width: 700px) {
+.planner-calendar-layout { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 480px) {
+.planner-header { align-items: flex-start; }
+.planner-title { font-size: 18px; }
+.planner-shopping-shortcut { padding: 8px; font-size: 11px; }
+.planner-day-button { min-height: 48px; padding: 6px 1px; }
+.planner-form-grid { grid-template-columns: minmax(0, 1fr); }
+.planner-form-grid .planner-form-wide { grid-column: auto; }
+}
+
 @media (max-width: 480px) {
 .recipe-category-fields {
 grid-template-columns: minmax(0, 1fr);
@@ -1356,9 +1706,86 @@ grid-template-columns: repeat(2, minmax(0, 1fr));
 </div>
 </div>
 
-<!-- ZAKŁADKA 2: Moje przepisy -->
+<!-- ZAKŁADKA 2: Kalendarz i moje przepisy -->
 <div id="section-my-recipes" class="tab-content">
 <div class="card">
+<div id="planner-calendar-view">
+<div class="planner-header">
+<div>
+<p class="planner-kicker">PLAN POSIŁKÓW</p>
+<h3 id="planner-day-heading" class="planner-title">Kalendarz</h3>
+</div>
+<button type="button" class="planner-shopping-shortcut" onclick="switchTab('shopping-tab')">🛒 Lista zakupów</button>
+</div>
+<div class="planner-view-switch" role="group" aria-label="Widoki planera">
+<button type="button" class="planner-view-tab" aria-pressed="true" onclick="showPlannerView('calendar', this)">Kalendarz</button>
+<button type="button" class="planner-view-tab" aria-pressed="false" onclick="showPlannerView('library', this)">Moje przepisy</button>
+</div>
+<div class="planner-calendar-layout">
+<section class="planner-calendar" aria-label="Kalendarz miesięczny">
+<div class="planner-month-toolbar">
+<h4 id="planner-month-label"></h4>
+<div class="planner-month-controls">
+<button type="button" aria-label="Poprzedni miesiąc" onclick="changePlannerMonth(-1)">‹</button>
+<button type="button" onclick="goToPlannerToday()">Dziś</button>
+<button type="button" aria-label="Następny miesiąc" onclick="changePlannerMonth(1)">›</button>
+</div>
+</div>
+<div class="planner-month-grid" aria-hidden="true">
+<span class="planner-weekday">Pn</span><span class="planner-weekday">Wt</span><span class="planner-weekday">Śr</span><span class="planner-weekday">Cz</span><span class="planner-weekday">Pt</span><span class="planner-weekday">So</span><span class="planner-weekday">Nd</span>
+</div>
+<div id="planner-month-grid" class="planner-month-grid" role="grid" aria-label="Dni miesiąca"></div>
+</section>
+<aside class="planner-day-panel">
+<section class="planner-today-widget" aria-label="Podsumowanie dnia">
+<div>
+<span class="planner-widget-label">POSIŁKI W PLANIE</span>
+<span id="planner-widget-count" class="planner-widget-count">0</span>
+</div>
+<span id="planner-widget-kcal" class="planner-widget-kcal">0 kcal</span>
+</section>
+<label class="planner-kcal-toggle"><input id="planner-kcal-toggle" type="checkbox" checked> Licz kcal dla dnia</label>
+<div class="planner-meals-heading">
+<h4 id="planner-day-title">Posiłki</h4>
+<button type="button" onclick="openPlannerMealForm()">＋ Dodaj</button>
+</div>
+<div id="planner-meal-list" class="planner-meal-list" aria-live="polite"></div>
+<form id="planner-meal-form" class="planner-meal-form hidden">
+<h4 id="planner-form-title">Zaplanuj posiłek</h4>
+<input type="hidden" id="planner-edit-id">
+<div class="planner-form-grid">
+<label class="planner-form-wide">Przepis
+<select id="planner-recipe-select" required></select>
+</label>
+<label>Posiłek
+<select id="planner-meal-type">
+<option value="sniadanie">Śniadanie</option>
+<option value="drugie-sniadanie">Drugie śniadanie</option>
+<option value="obiad">Obiad</option>
+<option value="podwieczorek">Podwieczorek</option>
+<option value="kolacja">Kolacja</option>
+</select>
+</label>
+<label>Godzina
+<input type="time" id="planner-meal-time">
+</label>
+<label>Data
+<input type="date" id="planner-meal-date" required>
+</label>
+<label>Liczba porcji
+<input type="number" id="planner-meal-portions" min="1" step="1" value="1" required>
+</label>
+</div>
+<p id="planner-no-recipes" class="ingredient-helper-text hidden">Nie masz jeszcze przepisów do zaplanowania. Dodaj przepis w zakładce „Dodaj”.</p>
+<div class="planner-form-actions">
+<button type="submit" class="planner-save-button">Zapisz posiłek</button>
+<button type="button" class="planner-cancel-button" onclick="closePlannerMealForm()">Anuluj</button>
+</div>
+</form>
+</aside>
+</div>
+</div>
+<div id="planner-library-view" class="planner-library-view hidden">
 <h3 style="margin-top:0; color: #db2777;">Twoja kolekcja 📖</h3>
 <div class="recipe-list-toolbar">
 <input type="search" id="my-recipes-search" class="recipe-search-input" placeholder="Szukaj w moich przepisach" aria-label="Szukaj w moich przepisach" oninput="setMyRecipesSearch(this.value)">
@@ -1372,6 +1799,7 @@ grid-template-columns: repeat(2, minmax(0, 1fr));
 <div id="shopping-list-container">Lista jest pusta. Dodaj składniki z przepisu.</div>
 </section>
 <div id="my-recipes-container">Ładowanie Twoich przepisów...</div>
+</div>
 </div>
 </div>
 
@@ -1672,6 +2100,8 @@ let existingRecipeImageUrl = "";
 let currentDietFilter = "all";
 let currentExcludedAllergen = "all";
 let selectedImageCompressionPromise = null;
+let selectedPlannerDate = getLocalDateKey(new Date());
+let visiblePlannerMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 
 const dietLabels = {
 wegetarianskie: "Wegetariańskie",
@@ -1768,7 +2198,11 @@ document.getElementById('section-catalog').classList.add('active');
 targetIndex = 0; 
 } else if (tabName === 'planner-tab') { 
 document.getElementById('section-my-recipes').classList.add('active'); 
+document.getElementById('planner-calendar-view').classList.remove('hidden');
+document.getElementById('planner-library-view').classList.add('hidden');
+document.querySelectorAll('.planner-view-tab').forEach((tab, index) => tab.setAttribute('aria-pressed', String(index === 0)));
 targetIndex = 1; 
+renderPlanner();
 } else if (tabName === 'add-recipe') { 
 document.getElementById('section-add-recipe').classList.add('active'); 
 targetIndex = 2; 
@@ -2037,7 +2471,7 @@ return targetItems;
 }
 
 function migrateGuestDataToUser(userId) {
-["favorites", "shopping"].forEach(kind => {
+["favorites", "shopping", "planner"].forEach(kind => {
 const guestKey = `recipe-book:guest:${kind}`;
 const userKey = `recipe-book:${userId}:${kind}`;
 try {
@@ -2046,13 +2480,25 @@ if (!Array.isArray(guestItems) || guestItems.length === 0) return;
 const userItems = JSON.parse(localStorage.getItem(userKey) || "[]");
 const mergedItems = kind === "favorites"
 ? [...new Set([...userItems, ...guestItems])]
-: mergeShoppingItems(userItems, guestItems);
+: kind === "shopping"
+? mergeShoppingItems(userItems, guestItems)
+: [...userItems, ...guestItems.filter(guestItem => !userItems.some(userItem => userItem.id === guestItem.id))];
 localStorage.setItem(userKey, JSON.stringify(mergedItems));
 localStorage.removeItem(guestKey);
 } catch (error) {
 console.error("Nie udało się przenieść danych gościa na konto.", error);
 }
 });
+try {
+const guestSettingsKey = "recipe-book:guest:planner-settings";
+const userSettingsKey = `recipe-book:${userId}:planner-settings`;
+if (!localStorage.getItem(userSettingsKey) && localStorage.getItem(guestSettingsKey)) {
+localStorage.setItem(userSettingsKey, localStorage.getItem(guestSettingsKey));
+localStorage.removeItem(guestSettingsKey);
+}
+} catch (error) {
+console.error("Nie udało się przenieść ustawień planera.", error);
+}
 }
 
 function isFavoriteRecipe(docId) {
@@ -2176,17 +2622,18 @@ renderMyRecipes();
 };
 
 function renderShoppingList() {
-const container = document.getElementById("shopping-list-container");
+const containers = document.querySelectorAll("#shopping-list-container");
 const items = readUserList("shopping");
 if (items.length === 0) {
-container.innerHTML = "<p class='ingredient-helper-text'>Lista jest pusta. Dodaj składniki z przepisu.</p>";
+containers.forEach(container => { container.innerHTML = "<p class='ingredient-helper-text'>Lista jest pusta. Dodaj składniki z przepisu.</p>"; });
 return;
 }
-container.innerHTML = `<ul class="shopping-list-items">${items.map((item, index) => {
+const listHtml = `<ul class="shopping-list-items">${items.map((item, index) => {
 const formatted = formatIngredientQuantity(item);
-const quantityText = formatted.quantity ? ` · \${escapeHtml(formatted.quantity)}` : "";
-return `<li class="shopping-list-item\${item.checked ? " is-checked" : ""}"><input type="checkbox" aria-label="Odhacz \${escapeHtml(item.name)}" ${item.checked ? "checked" : ""} onchange="toggleShoppingItem(${index}, this.checked)"><span>${escapeHtml(item.name)}${quantityText}</span></li>`;
+const quantityText = formatted.quantity ? ` · ${escapeHtml(formatted.quantity)}` : "";
+return `<li class="shopping-list-item${item.checked ? " is-checked" : ""}"><input type="checkbox" aria-label="Odhacz ${escapeHtml(item.name)}" ${item.checked ? "checked" : ""} onchange="toggleShoppingItem(${index}, this.checked)"><span>${escapeHtml(item.name)}${quantityText}</span></li>`;
 }).join("")}</ul>`;
+containers.forEach(container => { container.innerHTML = listHtml; });
 }
 
 window.addRecipeToShoppingList = function(ingredientsJson) {
@@ -2211,7 +2658,7 @@ alert("Nie udało się zapisać listy zakupów w tej przeglądarce.");
 return;
 }
 renderShoppingList();
-switchTab("my-recipes");
+switchTab("shopping-tab");
 };
 
 window.toggleShoppingItem = function(index, checked) {
@@ -2833,6 +3280,7 @@ return `
                            <span style="font-size: 13px; color: #64748b;">porcji</span>
                        </div>
 
+                       <button type="button" class="shopping-add-recipe-button" onclick="openPlannerForRecipe('${docId}')">＋ Zaplanuj</button>
                        <button type="button" class="shopping-add-recipe-button" onclick="addRecipeToShoppingList('${ingredientsString}')">＋ Do listy zakupów</button>
 
                        <p style="font-weight: 600; color: #334155; margin-bottom: 4px;">Składniki do odhaczenia:</p>
@@ -2920,6 +3368,281 @@ return;
 container.innerHTML = filtered.map(item => renderRecipeCard(item.data, item.id, true)).join("");
 }
 
+function getLocalDateKey(date) {
+const year = date.getFullYear();
+const month = String(date.getMonth() + 1).padStart(2, "0");
+const day = String(date.getDate()).padStart(2, "0");
+return `${year}-${month}-${day}`;
+}
+
+function parsePlannerDate(dateKey) {
+const [year, month, day] = dateKey.split("-").map(Number);
+return new Date(year, month - 1, day);
+}
+
+function plannerSettingsKey() {
+return userStorageKey("planner-settings");
+}
+
+function readPlannerKcalSetting() {
+try {
+const settings = JSON.parse(localStorage.getItem(plannerSettingsKey()) || "{}");
+return settings.showKcal !== false;
+} catch (error) {
+return true;
+}
+}
+
+function getPlannerRecipeRecords() {
+const recipes = new Map();
+[...rawPublicRecipes, ...rawMyRecipes].forEach(item => recipes.set(item.id, item));
+return [...recipes.values()].sort((first, second) => (first.data.title || "").localeCompare(second.data.title || "", "pl-PL"));
+}
+
+function getRecipeKcalPerPortion(recipe) {
+if (recipe.perPortionMacros && Number.isFinite(Number(recipe.perPortionMacros.kcal))) {
+return Number(recipe.perPortionMacros.kcal);
+}
+const portions = Number(recipe.portions) || 1;
+if (recipe.totalMacros && Number.isFinite(Number(recipe.totalMacros.kcal))) {
+return Number(recipe.totalMacros.kcal) / portions;
+}
+return null;
+}
+
+function renderPlannerCalendar() {
+const monthLabel = document.getElementById("planner-month-label");
+const grid = document.getElementById("planner-month-grid");
+if (!monthLabel || !grid) return;
+
+monthLabel.textContent = new Intl.DateTimeFormat("pl-PL", { month: "long", year: "numeric" }).format(visiblePlannerMonth);
+const firstOfMonth = new Date(visiblePlannerMonth.getFullYear(), visiblePlannerMonth.getMonth(), 1);
+const gridStart = new Date(firstOfMonth);
+gridStart.setDate(firstOfMonth.getDate() - ((firstOfMonth.getDay() + 6) % 7));
+const todayKey = getLocalDateKey(new Date());
+const meals = readUserList("planner");
+const dayButtons = [];
+
+for (let index = 0; index < 42; index++) {
+const date = new Date(gridStart);
+date.setDate(gridStart.getDate() + index);
+const dateKey = getLocalDateKey(date);
+const dayMeals = meals.filter(meal => meal.date === dateKey);
+const dots = dayMeals.slice(0, 3).map(() => "<span></span>").join("");
+const dateLabel = new Intl.DateTimeFormat("pl-PL", { day: "numeric", month: "long" }).format(date);
+const classes = [
+"planner-day-button",
+date.getMonth() !== visiblePlannerMonth.getMonth() ? "is-outside-month" : "",
+dateKey === todayKey ? "is-today" : ""
+].filter(Boolean).join(" ");
+dayButtons.push(`<button type="button" class="${classes}" role="gridcell" aria-label="${dateLabel}, ${dayMeals.length} posiłków" aria-pressed="${dateKey === selectedPlannerDate}" onclick="selectPlannerDate('${dateKey}')"><span>${date.getDate()}</span><span class="planner-day-dots" aria-hidden="true">${dots}</span></button>`);
+}
+
+grid.innerHTML = dayButtons.join("");
+}
+
+function renderPlannerMeals() {
+const meals = readUserList("planner").filter(meal => meal.date === selectedPlannerDate);
+const mealList = document.getElementById("planner-meal-list");
+const heading = document.getElementById("planner-day-title");
+const header = document.getElementById("planner-day-heading");
+const widgetCount = document.getElementById("planner-widget-count");
+const widgetKcal = document.getElementById("planner-widget-kcal");
+const kcalEnabled = readPlannerKcalSetting();
+const selectedDate = parsePlannerDate(selectedPlannerDate);
+const formattedDate = new Intl.DateTimeFormat("pl-PL", { weekday: "long", day: "numeric", month: "long" }).format(selectedDate);
+const dateTitle = formattedDate.charAt(0).toLocaleUpperCase("pl-PL") + formattedDate.slice(1);
+const mealOrder = ["sniadanie", "drugie-sniadanie", "obiad", "podwieczorek", "kolacja"];
+const mealLabels = { "sniadanie": "Śniadanie", "drugie-sniadanie": "Drugie śniadanie", "obiad": "Obiad", "podwieczorek": "Podwieczorek", "kolacja": "Kolacja" };
+meals.sort((first, second) => (first.time || "").localeCompare(second.time || "") || mealOrder.indexOf(first.mealType) - mealOrder.indexOf(second.mealType));
+
+heading.textContent = `Posiłki · ${dateTitle}`;
+header.textContent = dateTitle;
+widgetCount.textContent = String(meals.length);
+widgetKcal.classList.toggle("hidden", !kcalEnabled);
+const mealsWithKcal = meals.filter(meal => meal.kcalPerPortion !== null && Number.isFinite(Number(meal.kcalPerPortion)));
+const totalKcal = mealsWithKcal.reduce((total, meal) => total + Number(meal.kcalPerPortion) * (Number(meal.portions) || 1), 0);
+widgetKcal.textContent = meals.length === 0 ? "0 kcal" : mealsWithKcal.length === 0 ? "Brak danych kcal" : `${Math.round(totalKcal)} kcal`;
+
+if (meals.length === 0) {
+mealList.innerHTML = "<p class='ingredient-helper-text'>Brak zaplanowanych posiłków. Dodaj przepis do wybranego dnia.</p>";
+return;
+}
+
+mealList.innerHTML = meals.map(meal => {
+const portions = Number(meal.portions) || 1;
+const kcalText = kcalEnabled && meal.kcalPerPortion !== null && Number.isFinite(Number(meal.kcalPerPortion))
+? `<p class="planner-meal-meta">${Math.round(Number(meal.kcalPerPortion) * portions)} kcal · ${portions} ${portions === 1 ? "porcja" : "porcje"}</p>`
+: `<p class="planner-meal-meta">${portions} ${portions === 1 ? "porcja" : "porcje"}</p>`;
+const timeText = meal.time ? `${escapeHtml(meal.time)} · ` : "";
+const mealId = encodeURIComponent(meal.id);
+return `<article class="planner-meal-item"><div class="planner-meal-heading"><div><span class="planner-meal-type">${escapeHtml(mealLabels[meal.mealType] || "Posiłek")}</span><p class="planner-meal-title">${escapeHtml(meal.recipeTitle || "Przepis")}</p></div><span class="planner-meal-meta">${timeText}</span></div>${kcalText}<div class="planner-meal-actions"><button type="button" onclick="editPlannerMeal('${mealId}')">Edytuj</button><button type="button" onclick="addPlannerMealToShoppingList('${mealId}')">＋ Do zakupów</button><button type="button" class="planner-delete-button" onclick="deletePlannerMeal('${mealId}')">Usuń</button></div></article>`;
+}).join("");
+}
+
+function renderPlanner() {
+const showKcal = readPlannerKcalSetting();
+const kcalToggle = document.getElementById("planner-kcal-toggle");
+if (kcalToggle) kcalToggle.checked = showKcal;
+renderPlannerCalendar();
+renderPlannerMeals();
+}
+
+function refreshPlannerRecipeOptions(selectedId = "", missingTitle = "") {
+const select = document.getElementById("planner-recipe-select");
+const recipes = getPlannerRecipeRecords();
+select.replaceChildren(new Option("Wybierz przepis", ""));
+recipes.forEach(item => select.add(new Option(item.data.title || "Bez nazwy", item.id)));
+if (selectedId && !recipes.some(item => item.id === selectedId)) {
+select.add(new Option(missingTitle || "Usunięty przepis", selectedId));
+}
+select.value = selectedId;
+document.getElementById("planner-no-recipes").classList.toggle("hidden", recipes.length > 0);
+select.disabled = recipes.length === 0 && !selectedId;
+}
+
+window.selectPlannerDate = function(dateKey) {
+selectedPlannerDate = dateKey;
+const date = parsePlannerDate(dateKey);
+visiblePlannerMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+renderPlanner();
+};
+
+window.changePlannerMonth = function(offset) {
+const selectedDate = parsePlannerDate(selectedPlannerDate);
+visiblePlannerMonth = new Date(visiblePlannerMonth.getFullYear(), visiblePlannerMonth.getMonth() + offset, 1);
+const lastDay = new Date(visiblePlannerMonth.getFullYear(), visiblePlannerMonth.getMonth() + 1, 0).getDate();
+selectedPlannerDate = getLocalDateKey(new Date(visiblePlannerMonth.getFullYear(), visiblePlannerMonth.getMonth(), Math.min(selectedDate.getDate(), lastDay)));
+renderPlanner();
+};
+
+window.goToPlannerToday = function() {
+selectedPlannerDate = getLocalDateKey(new Date());
+const today = new Date();
+visiblePlannerMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+renderPlanner();
+};
+
+window.showPlannerView = function(view, button) {
+const showLibrary = view === "library";
+document.getElementById("planner-calendar-view").classList.toggle("hidden", showLibrary);
+document.getElementById("planner-library-view").classList.toggle("hidden", !showLibrary);
+document.querySelectorAll(".planner-view-tab").forEach(tab => {
+const selected = button ? tab === button : tab.textContent.trim() === (showLibrary ? "Moje przepisy" : "Kalendarz");
+tab.setAttribute("aria-pressed", String(selected));
+});
+if (showLibrary) renderMyRecipes();
+else renderPlanner();
+};
+
+window.openPlannerMealForm = function(recipeId = "") {
+const form = document.getElementById("planner-meal-form");
+document.getElementById("planner-edit-id").value = "";
+document.getElementById("planner-form-title").textContent = "Zaplanuj posiłek";
+document.getElementById("planner-meal-date").value = selectedPlannerDate;
+document.getElementById("planner-meal-time").value = "";
+document.getElementById("planner-meal-portions").value = "1";
+const hour = new Date().getHours();
+document.getElementById("planner-meal-type").value = hour < 10 ? "sniadanie" : hour < 15 ? "obiad" : "kolacja";
+refreshPlannerRecipeOptions(recipeId);
+form.classList.remove("hidden");
+};
+
+window.closePlannerMealForm = function() {
+document.getElementById("planner-meal-form").classList.add("hidden");
+};
+
+window.openPlannerForRecipe = function(recipeId) {
+switchTab("planner-tab");
+showPlannerView("calendar");
+openPlannerMealForm(recipeId);
+document.getElementById("planner-meal-type").focus();
+};
+
+window.editPlannerMeal = function(encodedId) {
+const mealId = decodeURIComponent(encodedId);
+const meal = readUserList("planner").find(item => item.id === mealId);
+if (!meal) return;
+document.getElementById("planner-edit-id").value = meal.id;
+document.getElementById("planner-form-title").textContent = "Edytuj zaplanowany posiłek";
+document.getElementById("planner-meal-date").value = meal.date;
+document.getElementById("planner-meal-time").value = meal.time || "";
+document.getElementById("planner-meal-type").value = meal.mealType || "obiad";
+document.getElementById("planner-meal-portions").value = Number(meal.portions) || 1;
+refreshPlannerRecipeOptions(meal.recipeId, meal.recipeTitle);
+document.getElementById("planner-meal-form").classList.remove("hidden");
+document.getElementById("planner-form-title").scrollIntoView({ behavior: "smooth", block: "nearest" });
+};
+
+window.deletePlannerMeal = function(encodedId) {
+const mealId = decodeURIComponent(encodedId);
+const nextMeals = readUserList("planner").filter(item => item.id !== mealId);
+if (writeUserList("planner", nextMeals)) renderPlanner();
+};
+
+window.addPlannerMealToShoppingList = function(encodedId) {
+const mealId = decodeURIComponent(encodedId);
+const meal = readUserList("planner").find(item => item.id === mealId);
+if (!meal) return;
+const recipe = getPlannerRecipeRecords().find(item => item.id === meal.recipeId)?.data;
+const ingredients = recipe?.ingredients || meal.ingredients || [];
+if (ingredients.length === 0) {
+alert("Ten przepis nie ma zapisanej listy składników.");
+return;
+}
+window.addRecipeToShoppingList(encodeURIComponent(JSON.stringify(ingredients)));
+};
+
+document.getElementById("planner-meal-form").addEventListener("submit", event => {
+event.preventDefault();
+const meals = readUserList("planner");
+const editId = document.getElementById("planner-edit-id").value;
+const previous = meals.find(meal => meal.id === editId);
+const recipeId = document.getElementById("planner-recipe-select").value;
+const recipeRecord = getPlannerRecipeRecords().find(item => item.id === recipeId);
+if (!recipeRecord && !previous) {
+alert("Wybierz przepis do zaplanowania.");
+return;
+}
+const recipe = recipeRecord?.data;
+const date = document.getElementById("planner-meal-date").value;
+const portions = Math.max(1, parseInt(document.getElementById("planner-meal-portions").value, 10) || 1);
+const id = editId || (window.crypto?.randomUUID ? window.crypto.randomUUID() : `meal-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+const entry = {
+...previous,
+id,
+date,
+time: document.getElementById("planner-meal-time").value,
+mealType: document.getElementById("planner-meal-type").value,
+portions,
+recipeId: recipeId || previous?.recipeId || "",
+recipeTitle: recipe?.title || previous?.recipeTitle || "Przepis",
+kcalPerPortion: recipe ? getRecipeKcalPerPortion(recipe) : previous?.kcalPerPortion ?? null,
+ingredients: recipe?.ingredients || previous?.ingredients || []
+};
+const existingIndex = meals.findIndex(meal => meal.id === id);
+if (existingIndex >= 0) meals[existingIndex] = entry;
+else meals.push(entry);
+if (!writeUserList("planner", meals)) {
+alert("Nie udało się zapisać planu w tej przeglądarce.");
+return;
+}
+selectedPlannerDate = date;
+const savedDate = parsePlannerDate(date);
+visiblePlannerMonth = new Date(savedDate.getFullYear(), savedDate.getMonth(), 1);
+closePlannerMealForm();
+renderPlanner();
+});
+
+document.getElementById("planner-kcal-toggle").addEventListener("change", event => {
+try {
+localStorage.setItem(plannerSettingsKey(), JSON.stringify({ showKcal: event.target.checked }));
+} catch (error) {
+alert("Nie udało się zapisać ustawienia kcal.");
+}
+renderPlanner();
+});
+
 onAuthStateChanged(auth, (user) => {
 if (user) {
 authStatus.textContent = `Zalogowany jako: ${user.email || user.displayName}`;
@@ -2929,15 +3652,18 @@ document.getElementById("profile-email").textContent = user.email || user.displa
 document.getElementById("profile-uid").textContent = user.uid;
 moveBubble(0);
 migrateGuestDataToUser(user.uid);
+renderPlanner();
 
 const myQuery = query(collection(db, "recipes"), where("userId", "==", user.uid));
 onSnapshot(myQuery, (snapshot) => {
 rawMyRecipes = snapshot.docs.map(docSnap => ({ id: docSnap.id, data: docSnap.data() }));
 renderMyRecipes();
+renderPlanner();
 });
 renderShoppingList();
 } else {
 rawMyRecipes = [];
+renderPlanner();
 renderShoppingList();
 authStatus.textContent = "Nie jesteś zalogowany.";
 authSection.classList.remove("hidden");
@@ -2957,6 +3683,7 @@ snapshot.forEach((docSnap) => {
 rawPublicRecipes.push({ id: docSnap.id, data: docSnap.data() });
 });
 renderCatalog();
+renderPlanner();
 });
 
 document.getElementById("btn-register").addEventListener("click", async () => {
