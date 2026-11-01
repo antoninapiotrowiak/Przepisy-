@@ -1186,6 +1186,20 @@ font-weight: 700;
 from { opacity: 0; transform: translateY(10px); }
 to { opacity: 1; transform: translateY(0); }
 }
+
+@media (max-width: 480px) {
+.ingredient-field-grid {
+grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.ingredient-field-grid .ingredient-field:first-child {
+grid-column: 1 / -1;
+}
+
+.ingredient-field {
+min-width: 0;
+}
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
@@ -2181,8 +2195,8 @@ const weight = parseFloat(document.getElementById("ing-weight").value) || 0;
 const weightUnit = document.getElementById("ing-weight-unit").value;
 const mode = document.getElementById("macro-mode").value;
 
-if (!name || weight <= 0) {
-alert("Podaj nazwę składnika oraz jego ilość!");
+if (!name || (weight <= 0 && !(measureAmount > 0 && measureUnit))) {
+alert("Podaj nazwę składnika oraz jego ilość lub miarę domową!");
 return;
 }
 
@@ -2190,8 +2204,8 @@ const ingredientData = {
 name,
 measureAmount: measureAmount > 0 && measureUnit ? measureAmount : null,
 measureUnit: measureAmount > 0 ? measureUnit : "",
-weight,
-weightUnit: weightUnit || "g",
+weight: weight > 0 ? weight : 0,
+weightUnit: weight > 0 ? (weightUnit || "g") : "",
 kcal: 0,
 protein: 0,
 fat: 0,
@@ -2323,10 +2337,61 @@ const resultText = await callGeminiProxy(prompt);
 outputBox.innerHTML = marked.parse(resultText);
 };
 
-        function extractWeightFromText(text) {
-            const match = text.match(/(\d+)\s*(g|ml)\b/i);
-            return match ? parseInt(match[1]) : 0;
-        }
+function parseIngredientLine(line) {
+const pattern = /(\d+\s*\/\s*\d+|\d+(?:[.,]\d+)?)\s*(kilogram(?:ów|y|a)?|kg|gram(?:ów|y|a)?|g|mililitr(?:ów|y|a)?|ml|litr(?:ów|y|a)?|l|łyżeczk(?:a|i|ę|ek)|łyżk(?:a|i|ę|ek)|szklank(?:a|i|ę|ek)|szt(?:uka|uki|ukę|uk|\.?)|garść|garście|plaster(?:ek|ki|y)?|opakowani(?:e|a|u|em))(?=\s|$|[,.;])/i;
+const match = line.match(pattern);
+
+if (!match) {
+return {
+name: line.trim(),
+weight: 0,
+weightUnit: "",
+measureAmount: null,
+measureUnit: "",
+kcal: 0,
+protein: 0,
+fat: 0,
+carbs: 0
+};
+}
+
+const amountText = match[1].replace(/\s/g, "").replace(",", ".");
+const amount = amountText.includes("/")
+? Number(amountText.split("/")[0]) / Number(amountText.split("/")[1])
+: Number(amountText);
+const unit = match[2].toLocaleLowerCase("pl-PL").replace(/\.$/, "");
+
+let weight = 0;
+let weightUnit = "";
+let measureUnit = "";
+
+if (/^(kg|kilogram)/.test(unit)) { weight = amount * 1000; weightUnit = "g"; }
+else if (/^(g|gram)/.test(unit)) { weight = amount; weightUnit = "g"; }
+else if (/^(l|litr)/.test(unit)) { weight = amount * 1000; weightUnit = "ml"; }
+else if (/^(ml|mililitr)/.test(unit)) { weight = amount; weightUnit = "ml"; }
+else if (/^łyżeczk/.test(unit)) measureUnit = "łyżeczka";
+else if (/^łyżk/.test(unit)) measureUnit = "łyżka";
+else if (/^szklank/.test(unit)) measureUnit = "szklanka";
+else if (/^szt/.test(unit)) measureUnit = "sztuka";
+else if (/^garść|^garście/.test(unit)) measureUnit = "garść";
+else if (/^plaster/.test(unit)) measureUnit = "plaster";
+else if (/^opakowani/.test(unit)) measureUnit = "opakowanie";
+
+const before = line.slice(0, match.index).replace(/[\s:–—-]+$/, "");
+const after = line.slice(match.index + match[0].length).replace(/^[\s:–—-]+/, "");
+
+return {
+name: `${before} ${after}`.trim() || line.trim(),
+weight,
+weightUnit,
+measureAmount: measureUnit ? amount : null,
+measureUnit,
+kcal: 0,
+protein: 0,
+fat: 0,
+carbs: 0
+};
+}
 
 document.getElementById("btn-add-recipe").addEventListener("click", async () => {
 const editId = document.getElementById("edit-recipe-id").value;
@@ -2359,16 +2424,10 @@ if (!manualText) {
 alert("Wpisz listę składników!");
 return;
 }
-finalIngredients = manualText.split('\n').filter(line => line.trim()).map(line => ({
-name: line.trim(),
-measure: '',
-weight: extractWeightFromText(line),
-weightUnit: 'g',
-kcal: 0,
-protein: 0,
-fat: 0,
-carbs: 0
-}));
+finalIngredients = manualText
+.split("\n")
+.filter(line => line.trim())
+.map(parseIngredientLine);
 } else {
 if (currentRecipeIngredients.length === 0) {
 alert("Dodaj przynajmniej jeden składnik!");
@@ -2489,7 +2548,14 @@ const savedMacroMode = recipe.macroMode || (hasIngredientMacros ? "per-ingredien
 const macroMode = savedMacroMode === "ingredients" ? "per-ingredient" : savedMacroMode;
 document.getElementById("macro-mode").value = macroMode;
 document.getElementById("manual-ingredients-text").value = macroMode === "manual"
-? (recipe.ingredients || []).map(ingredient => ingredient.name).join('\n')
+? (recipe.ingredients || []).map(ingredient => {
+const amount = ingredient.measureAmount && ingredient.measureUnit
+? `${ingredient.measureAmount} ${ingredient.measureUnit}`
+: ingredient.weight > 0
+? `${ingredient.weight} ${ingredient.weightUnit || "g"}`
+: "";
+return `${ingredient.name}${amount ? ` - ${amount}` : ""}`;
+}).join("\n")
 : "";
 if (recipe.totalMacros) {
 document.getElementById("manual-total-kcal").value = recipe.totalMacros.kcal || "";
