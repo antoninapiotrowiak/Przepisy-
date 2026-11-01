@@ -978,6 +978,13 @@ color: #64748b;
 white-space: nowrap;
 }
 
+.planner-macro-empty {
+margin: 0;
+color: #64748b;
+font-size: 11px;
+line-height: 1.4;
+}
+
 .planner-macro-track {
 height: 6px;
 overflow: hidden;
@@ -1799,7 +1806,7 @@ grid-template-columns: repeat(2, minmax(0, 1fr));
 <div>
 <span class="planner-widget-label">PODSUMOWANIE DNIA</span>
 <span id="planner-widget-count" class="planner-widget-count">0</span>
-<span class="planner-meal-count-suffix">posiłków</span>
+<span id="planner-widget-count-suffix" class="planner-meal-count-suffix">posiłków</span>
 </div>
 <span id="planner-widget-kcal" class="planner-widget-kcal">0 kcal</span>
 </div>
@@ -3547,6 +3554,11 @@ meals.sort((first, second) => (first.time || "").localeCompare(second.time || ""
 heading.textContent = `Posiłki · ${dateTitle}`;
 header.textContent = dateTitle;
 widgetCount.textContent = String(meals.length);
+document.getElementById("planner-widget-count-suffix").textContent = meals.length === 1
+? "posiłek"
+: meals.length % 10 >= 2 && meals.length % 10 <= 4 && (meals.length % 100 < 12 || meals.length % 100 > 14)
+? "posiłki"
+: "posiłków";
 widgetKcal.classList.toggle("hidden", !kcalEnabled);
 const mealsWithKcal = meals.filter(meal => meal.kcalPerPortion !== null && Number.isFinite(Number(meal.kcalPerPortion)));
 const totalKcal = mealsWithKcal.reduce((total, meal) => total + Number(meal.kcalPerPortion) * (Number(meal.portions) || 1), 0);
