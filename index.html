@@ -1888,6 +1888,7 @@ const unitForms = {
 "garść": ["garść", "garście", "garści"],
 "plaster": ["plaster", "plastry", "plastrów"],
 "opakowanie": ["opakowanie", "opakowania", "opakowań"],
+"jajko": ["jajko", "jajka", "jajek"],
 "ml": ["ml", "ml", "ml"],
 "g": ["g", "g", "g"]
 };
@@ -1938,10 +1939,49 @@ const originalWeight = Number(ingredient.weight ?? ingredient.amount);
 const weightUnit = ingredient.weightUnit || "g";
 const scaledWeight = originalWeight > 0 ? Math.round(originalWeight * portionRatio) : 0;
 const householdMeasure = formatHouseholdMeasure(ingredient, portionRatio);
-const embeddedWeight = !householdMeasure && originalWeight > 0 && new RegExp(`${originalWeight}\\s*${weightUnit}\\b`, "i").test(ingredient.name);
-const name = embeddedWeight
-? ingredient.name.replace(new RegExp(`${originalWeight}\\s*${weightUnit}\\b`, "i"), `${scaledWeight}${weightUnit}`)
-: ingredient.name;
+const originalName = String(ingredient.name || "");
+let name = originalName;
+
+if (!householdMeasure) {
+name = name.replace(/(\d+\s*\/\s*\d+|\d+(?:[.,]\d+)?)\s+(?:(płaska|płaskie|płaskich|czubata|czubate|czubatych)\s+)?(łyżeczk(?:a|i|ę|ek)|łyżk(?:a|i|ę|ek)|szklank(?:a|i|ę|ek)|szt(?:uka|uki|ukę|uk|\.?)|jaj(?:ko|ka|ek)|garść|garście|plaster(?:ek|ki|y)?|opakowani(?:e|a|u|em))(?=\s|$|[,.;])/gi, (match, amountText, adjective, unitText) => {
+const normalizedAmount = amountText.replace(/\s/g, "").replace(",", ".");
+const amount = normalizedAmount.includes("/")
+? Number(normalizedAmount.split("/")[0]) / Number(normalizedAmount.split("/")[1])
+: Number(normalizedAmount);
+const scaledAmount = Math.round(amount * portionRatio * 4) / 4;
+const normalizedUnit = unitText.toLocaleLowerCase("pl-PL");
+const unit = /^łyżeczk/.test(normalizedUnit) ? "łyżeczka"
+: /^łyżk/.test(normalizedUnit) ? "łyżka"
+: /^szklank/.test(normalizedUnit) ? "szklanka"
+: /^szt/.test(normalizedUnit) ? "sztuka"
+: /^jaj/.test(normalizedUnit) ? "jajko"
+: /^garść|^garście/.test(normalizedUnit) ? "garść"
+: /^plaster/.test(normalizedUnit) ? "plaster"
+: "opakowanie";
+const amountTextFormatted = new Intl.NumberFormat("pl-PL", { maximumFractionDigits: 2 }).format(scaledAmount);
+const adjectiveForms = adjective?.toLocaleLowerCase("pl-PL").startsWith("płask")
+? ["płaska", "płaskie", "płaskich"]
+: ["czubata", "czubate", "czubatych"];
+const remainder100 = scaledAmount % 100;
+const adjectiveIndex = scaledAmount === 1 ? 0
+: Number.isInteger(scaledAmount) && scaledAmount % 10 >= 2 && scaledAmount % 10 <= 4 && (remainder100 < 12 || remainder100 > 14) ? 1
+: 2;
+const adjectiveText = adjective ? `${adjectiveForms[adjectiveIndex]} ` : "";
+return `${amountTextFormatted} ${adjectiveText}${formatHouseholdUnit(scaledAmount, unit)}`;
+});
+}
+
+const embeddedWeight = /(\d+\s*\/\s*\d+|\d+(?:[.,]\d+)?)\s*(kilogram(?:ów|y|a)?|kg|gram(?:ów|y|a)?|g|mililitr(?:ów|y|a)?|ml|litr(?:ów|y|a)?|l)(?=\s|$|[,.;)])/i.test(originalName);
+name = name.replace(/(\d+\s*\/\s*\d+|\d+(?:[.,]\d+)?)\s*(kilogram(?:ów|y|a)?|kg|gram(?:ów|y|a)?|g|mililitr(?:ów|y|a)?|ml|litr(?:ów|y|a)?|l)(?=\s|$|[,.;)])/gi, (match, amountText, unit) => {
+const normalizedAmount = amountText.replace(/\s/g, "").replace(",", ".");
+const amount = normalizedAmount.includes("/")
+? Number(normalizedAmount.split("/")[0]) / Number(normalizedAmount.split("/")[1])
+: Number(normalizedAmount);
+const scaledAmount = Number((amount * portionRatio).toFixed(2));
+const amountTextFormatted = new Intl.NumberFormat("pl-PL", { maximumFractionDigits: 2 }).format(scaledAmount);
+const separator = /\s/.test(match.slice(amountText.length, match.length - unit.length)) ? " " : "";
+return `${amountTextFormatted}${separator}${unit}`;
+});
 const quantity = [householdMeasure, scaledWeight > 0 && !embeddedWeight ? `${scaledWeight} ${weightUnit}` : ""].filter(Boolean).join(" · ");
 return { name, quantity, scaledWeight };
 }
