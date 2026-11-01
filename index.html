@@ -809,9 +809,9 @@ color: #be185d;
 
 .planner-calendar-layout {
 display: grid;
-grid-template-columns: minmax(0, 1.15fr) minmax(250px, 0.85fr);
+grid-template-columns: minmax(0, 1fr);
 align-items: start;
-gap: 18px;
+gap: 14px;
 }
 
 .planner-calendar,
@@ -848,36 +848,22 @@ font-size: 12px;
 .planner-month-grid {
 display: grid;
 grid-template-columns: repeat(7, minmax(0, 1fr));
-border-top: 1px solid #e2e8f0;
-border-left: 1px solid #e2e8f0;
-}
-
-.planner-weekday,
-.planner-day-button {
-min-width: 0;
-border-right: 1px solid #e2e8f0;
-border-bottom: 1px solid #e2e8f0;
-}
-
-.planner-weekday {
-padding: 7px 2px;
-background: #f8fafc;
-color: #64748b;
-font-size: 10px;
-font-weight: 700;
-text-align: center;
+gap: 7px;
 }
 
 .planner-day-button {
 display: flex;
-min-height: 62px;
+min-width: 0;
+min-height: 76px;
 flex-direction: column;
 align-items: center;
-justify-content: flex-start;
-gap: 4px;
-padding: 7px 2px;
-border-radius: 0;
-background: rgba(255, 255, 255, 0.8);
+justify-content: center;
+gap: 5px;
+margin: 0;
+padding: 8px 3px;
+border: 1px solid #e2e8f0;
+border-radius: 11px;
+background: rgba(255, 255, 255, 0.88);
 color: #334155;
 font-size: 12px;
 }
@@ -888,9 +874,23 @@ background: #fff1f7;
 box-shadow: none;
 }
 
-.planner-day-button.is-outside-month { color: #cbd5e1; }
-.planner-day-button.is-today { color: #be185d; font-weight: 800; }
-.planner-day-button[aria-pressed="true"] { background: #fce7f3; box-shadow: inset 0 0 0 1px #f9a8d4; }
+.planner-day-weekday {
+color: #64748b;
+font-size: 10px;
+font-weight: 700;
+text-transform: capitalize;
+}
+
+.planner-day-number {
+color: #334155;
+font-size: 17px;
+font-weight: 700;
+line-height: 1;
+}
+
+.planner-day-button.is-today .planner-day-weekday,
+.planner-day-button.is-today .planner-day-number { color: #be185d; }
+.planner-day-button[aria-pressed="true"] { border-color: #f9a8d4; background: #fff1f7; box-shadow: inset 0 0 0 1px #f9a8d4; }
 
 .planner-day-dots {
 display: flex;
@@ -906,37 +906,94 @@ background: #10b981;
 }
 
 .planner-today-widget {
-display: grid;
-grid-template-columns: minmax(0, 1fr) auto;
-align-items: center;
-gap: 12px;
+display: block;
 margin-bottom: 14px;
-padding: 13px;
-border: 1px solid #bfdbfe;
-border-radius: 11px;
-background: linear-gradient(120deg, #eff6ff, #f0fdf4);
+padding: 15px;
+border: 1px solid #e2e8f0;
+border-radius: 12px;
+background: rgba(255, 255, 255, 0.9);
+box-shadow: 0 5px 16px rgba(51, 65, 85, 0.05);
+}
+
+.planner-summary-header {
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 12px;
+margin-bottom: 12px;
 }
 
 .planner-widget-label {
 display: block;
 margin-bottom: 3px;
 color: #475569;
-font-size: 10px;
+font-size: 11px;
 font-weight: 700;
 }
 
 .planner-widget-count {
-color: #0f766e;
-font-size: 20px;
+color: #334155;
+font-size: 15px;
 font-weight: 800;
 }
 
 .planner-widget-kcal {
-color: #1d4ed8;
-font-size: 13px;
+color: #9d174d;
+font-size: 22px;
 font-weight: 800;
 white-space: nowrap;
 }
+
+.planner-meal-count-suffix {
+color: #64748b;
+font-size: 12px;
+}
+
+.planner-macro-summary {
+display: grid;
+gap: 10px;
+padding-top: 12px;
+border-top: 1px solid #f1f5f9;
+}
+
+.planner-macro-row {
+display: grid;
+gap: 5px;
+}
+
+.planner-macro-label {
+display: flex;
+justify-content: space-between;
+gap: 8px;
+color: #475569;
+font-size: 11px;
+}
+
+.planner-macro-label strong {
+font-weight: 700;
+}
+
+.planner-macro-label span {
+color: #64748b;
+white-space: nowrap;
+}
+
+.planner-macro-track {
+height: 6px;
+overflow: hidden;
+border-radius: 999px;
+background: #f1f5f9;
+}
+
+.planner-macro-track span {
+display: block;
+height: 100%;
+border-radius: inherit;
+}
+
+.planner-macro-row.is-protein .planner-macro-track span { background: #7c5c4d; }
+.planner-macro-row.is-fat .planner-macro-track span { background: #d47d6c; }
+.planner-macro-row.is-carbs .planner-macro-track span { background: #8b9140; }
 
 .planner-kcal-toggle {
 display: flex;
@@ -1078,7 +1135,10 @@ font-size: 12px;
 .planner-header { align-items: flex-start; }
 .planner-title { font-size: 18px; }
 .planner-shopping-shortcut { padding: 8px; font-size: 11px; }
-.planner-day-button { min-height: 48px; padding: 6px 1px; }
+.planner-month-grid { gap: 4px; }
+.planner-day-button { min-height: 64px; padding: 7px 1px; border-radius: 9px; }
+.planner-day-weekday { font-size: 9px; }
+.planner-day-number { font-size: 15px; }
 .planner-form-grid { grid-template-columns: minmax(0, 1fr); }
 .planner-form-grid .planner-form-wide { grid-column: auto; }
 }
@@ -1726,23 +1786,24 @@ grid-template-columns: repeat(2, minmax(0, 1fr));
 <div class="planner-month-toolbar">
 <h4 id="planner-month-label"></h4>
 <div class="planner-month-controls">
-<button type="button" aria-label="Poprzedni miesiąc" onclick="changePlannerMonth(-1)">‹</button>
+<button type="button" aria-label="Poprzedni tydzień" onclick="changePlannerWeek(-1)">‹</button>
 <button type="button" onclick="goToPlannerToday()">Dziś</button>
-<button type="button" aria-label="Następny miesiąc" onclick="changePlannerMonth(1)">›</button>
+<button type="button" aria-label="Następny tydzień" onclick="changePlannerWeek(1)">›</button>
 </div>
 </div>
-<div class="planner-month-grid" aria-hidden="true">
-<span class="planner-weekday">Pn</span><span class="planner-weekday">Wt</span><span class="planner-weekday">Śr</span><span class="planner-weekday">Cz</span><span class="planner-weekday">Pt</span><span class="planner-weekday">So</span><span class="planner-weekday">Nd</span>
-</div>
-<div id="planner-month-grid" class="planner-month-grid" role="grid" aria-label="Dni miesiąca"></div>
+<div id="planner-month-grid" class="planner-month-grid" role="grid" aria-label="Dni wybranego tygodnia"></div>
 </section>
 <aside class="planner-day-panel">
 <section class="planner-today-widget" aria-label="Podsumowanie dnia">
+<div class="planner-summary-header">
 <div>
-<span class="planner-widget-label">POSIŁKI W PLANIE</span>
+<span class="planner-widget-label">PODSUMOWANIE DNIA</span>
 <span id="planner-widget-count" class="planner-widget-count">0</span>
+<span class="planner-meal-count-suffix">posiłków</span>
 </div>
 <span id="planner-widget-kcal" class="planner-widget-kcal">0 kcal</span>
+</div>
+<div id="planner-macro-summary" class="planner-macro-summary" aria-live="polite"></div>
 </section>
 <label class="planner-kcal-toggle"><input id="planner-kcal-toggle" type="checkbox" checked> Licz kcal dla dnia</label>
 <div class="planner-meals-heading">
@@ -1767,7 +1828,7 @@ grid-template-columns: repeat(2, minmax(0, 1fr));
 </select>
 </label>
 <label>Godzina
-<input type="time" id="planner-meal-time">
+<select id="planner-meal-time" aria-label="Wybierz godzinę posiłku"></select>
 </label>
 <label>Data
 <input type="date" id="planner-meal-date" required>
@@ -2101,7 +2162,6 @@ let currentDietFilter = "all";
 let currentExcludedAllergen = "all";
 let selectedImageCompressionPromise = null;
 let selectedPlannerDate = getLocalDateKey(new Date());
-let visiblePlannerMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 
 const dietLabels = {
 wegetarianskie: "Wegetariańskie",
@@ -3410,44 +3470,72 @@ return Number(recipe.totalMacros.kcal) / portions;
 return null;
 }
 
+function getRecipeMacrosPerPortion(recipe) {
+const portions = Number(recipe.portions) || 1;
+const source = recipe.perPortionMacros || recipe.totalMacros;
+if (!source) return null;
+const divisor = recipe.perPortionMacros ? 1 : portions;
+const macros = {};
+["kcal", "protein", "fat", "carbs"].forEach(key => {
+const value = Number(source[key]);
+macros[key] = Number.isFinite(value) ? value / divisor : null;
+});
+return Object.values(macros).some(value => value !== null) ? macros : null;
+}
+
 function renderPlannerCalendar() {
 const monthLabel = document.getElementById("planner-month-label");
 const grid = document.getElementById("planner-month-grid");
 if (!monthLabel || !grid) return;
 
-monthLabel.textContent = new Intl.DateTimeFormat("pl-PL", { month: "long", year: "numeric" }).format(visiblePlannerMonth);
-const firstOfMonth = new Date(visiblePlannerMonth.getFullYear(), visiblePlannerMonth.getMonth(), 1);
-const gridStart = new Date(firstOfMonth);
-gridStart.setDate(firstOfMonth.getDate() - ((firstOfMonth.getDay() + 6) % 7));
+const selectedDate = parsePlannerDate(selectedPlannerDate);
+const gridStart = new Date(selectedDate);
+gridStart.setDate(selectedDate.getDate() - ((selectedDate.getDay() + 6) % 7));
+const gridEnd = new Date(gridStart);
+gridEnd.setDate(gridStart.getDate() + 6);
+const formatRangeDate = new Intl.DateTimeFormat("pl-PL", { day: "numeric", month: "long" });
+monthLabel.textContent = `${formatRangeDate.format(gridStart)} – ${formatRangeDate.format(gridEnd)} ${gridEnd.getFullYear()}`;
 const todayKey = getLocalDateKey(new Date());
 const meals = readUserList("planner");
 const dayButtons = [];
 
-for (let index = 0; index < 42; index++) {
+for (let index = 0; index < 7; index++) {
 const date = new Date(gridStart);
 date.setDate(gridStart.getDate() + index);
 const dateKey = getLocalDateKey(date);
 const dayMeals = meals.filter(meal => meal.date === dateKey);
 const dots = dayMeals.slice(0, 3).map(() => "<span></span>").join("");
-const dateLabel = new Intl.DateTimeFormat("pl-PL", { day: "numeric", month: "long" }).format(date);
+const weekdayLabel = new Intl.DateTimeFormat("pl-PL", { weekday: "short" }).format(date).replace(/\.$/, "");
+const dateLabel = new Intl.DateTimeFormat("pl-PL", { day: "numeric", month: "long", year: "numeric" }).format(date);
 const classes = [
 "planner-day-button",
-date.getMonth() !== visiblePlannerMonth.getMonth() ? "is-outside-month" : "",
 dateKey === todayKey ? "is-today" : ""
 ].filter(Boolean).join(" ");
-dayButtons.push(`<button type="button" class="${classes}" role="gridcell" aria-label="${dateLabel}, ${dayMeals.length} posiłków" aria-pressed="${dateKey === selectedPlannerDate}" onclick="selectPlannerDate('${dateKey}')"><span>${date.getDate()}</span><span class="planner-day-dots" aria-hidden="true">${dots}</span></button>`);
+dayButtons.push(`<button type="button" class="${classes}" role="gridcell" aria-label="${dateLabel}, ${dayMeals.length} posiłków" aria-pressed="${dateKey === selectedPlannerDate}" onclick="selectPlannerDate('${dateKey}')"><span class="planner-day-weekday">${weekdayLabel}</span><span class="planner-day-number">${date.getDate()}</span><span class="planner-day-dots" aria-hidden="true">${dots}</span></button>`);
 }
 
 grid.innerHTML = dayButtons.join("");
 }
 
 function renderPlannerMeals() {
-const meals = readUserList("planner").filter(meal => meal.date === selectedPlannerDate);
+const recipes = getPlannerRecipeRecords();
+const meals = readUserList("planner")
+.filter(meal => meal.date === selectedPlannerDate)
+.map(meal => {
+const recipe = recipes.find(item => item.id === meal.recipeId)?.data;
+const macrosPerPortion = meal.macrosPerPortion || (recipe ? getRecipeMacrosPerPortion(recipe) : null);
+const storedKcal = Number(meal.kcalPerPortion);
+const kcalPerPortion = meal.kcalPerPortion !== null && meal.kcalPerPortion !== undefined && Number.isFinite(storedKcal)
+? storedKcal
+: macrosPerPortion?.kcal ?? (recipe ? getRecipeKcalPerPortion(recipe) : null);
+return { ...meal, macrosPerPortion, kcalPerPortion };
+});
 const mealList = document.getElementById("planner-meal-list");
 const heading = document.getElementById("planner-day-title");
 const header = document.getElementById("planner-day-heading");
 const widgetCount = document.getElementById("planner-widget-count");
 const widgetKcal = document.getElementById("planner-widget-kcal");
+const macroSummary = document.getElementById("planner-macro-summary");
 const kcalEnabled = readPlannerKcalSetting();
 const selectedDate = parsePlannerDate(selectedPlannerDate);
 const formattedDate = new Intl.DateTimeFormat("pl-PL", { weekday: "long", day: "numeric", month: "long" }).format(selectedDate);
@@ -3463,6 +3551,34 @@ widgetKcal.classList.toggle("hidden", !kcalEnabled);
 const mealsWithKcal = meals.filter(meal => meal.kcalPerPortion !== null && Number.isFinite(Number(meal.kcalPerPortion)));
 const totalKcal = mealsWithKcal.reduce((total, meal) => total + Number(meal.kcalPerPortion) * (Number(meal.portions) || 1), 0);
 widgetKcal.textContent = meals.length === 0 ? "0 kcal" : mealsWithKcal.length === 0 ? "Brak danych kcal" : `${Math.round(totalKcal)} kcal`;
+
+const macroTotals = { protein: 0, fat: 0, carbs: 0 };
+let mealsWithMacroData = 0;
+meals.forEach(meal => {
+const portions = Number(meal.portions) || 1;
+const macros = meal.macrosPerPortion;
+if (!macros) return;
+let hasValues = false;
+Object.keys(macroTotals).forEach(key => {
+if (macros[key] === null || !Number.isFinite(Number(macros[key]))) return;
+macroTotals[key] += Number(macros[key]) * portions;
+hasValues = true;
+});
+if (hasValues) mealsWithMacroData++;
+});
+const macroEnergy = macroTotals.protein * 4 + macroTotals.fat * 9 + macroTotals.carbs * 4;
+const formatMacro = value => new Intl.NumberFormat("pl-PL", { maximumFractionDigits: 1 }).format(value);
+const macroRows = [
+{ key: "protein", label: "Białko", energy: macroTotals.protein * 4, className: "is-protein" },
+{ key: "fat", label: "Tłuszcz", energy: macroTotals.fat * 9, className: "is-fat" },
+{ key: "carbs", label: "Węglowodany", energy: macroTotals.carbs * 4, className: "is-carbs" }
+];
+macroSummary.innerHTML = mealsWithMacroData === 0
+? "<p class='planner-macro-empty'>Brak danych makro dla zaplanowanych posiłków.</p>"
+: `${macroRows.map(item => {
+const percentage = macroEnergy > 0 ? Math.round(item.energy / macroEnergy * 100) : 0;
+return `<div class="planner-macro-row ${item.className}"><div class="planner-macro-label"><strong>${item.label}</strong><span>${formatMacro(macroTotals[item.key])} g · ${percentage}% energii z makro</span></div><div class="planner-macro-track" aria-label="${item.label}: ${percentage}%"><span style="width: ${percentage}%"></span></div></div>`;
+}).join("")}${mealsWithMacroData < meals.length ? `<p class="planner-macro-empty">Makra dostępne dla ${mealsWithMacroData} z ${meals.length} posiłków.</p>` : ""}`;
 
 if (meals.length === 0) {
 mealList.innerHTML = "<p class='ingredient-helper-text'>Brak zaplanowanych posiłków. Dodaj przepis do wybranego dnia.</p>";
@@ -3501,25 +3617,35 @@ document.getElementById("planner-no-recipes").classList.toggle("hidden", recipes
 select.disabled = recipes.length === 0 && !selectedId;
 }
 
+function populatePlannerTimeOptions(selectedTime = "") {
+const select = document.getElementById("planner-meal-time");
+select.replaceChildren(new Option("Bez określonej godziny", ""));
+for (let minutes = 6 * 60; minutes <= 22 * 60; minutes += 30) {
+const hours = String(Math.floor(minutes / 60)).padStart(2, "0");
+const minutePart = String(minutes % 60).padStart(2, "0");
+const time = `${hours}:${minutePart}`;
+select.add(new Option(time, time));
+}
+if (selectedTime && ![...select.options].some(option => option.value === selectedTime)) {
+select.add(new Option(`${selectedTime} (zapisana godzina)`, selectedTime));
+}
+select.value = selectedTime;
+}
+
 window.selectPlannerDate = function(dateKey) {
 selectedPlannerDate = dateKey;
-const date = parsePlannerDate(dateKey);
-visiblePlannerMonth = new Date(date.getFullYear(), date.getMonth(), 1);
 renderPlanner();
 };
 
-window.changePlannerMonth = function(offset) {
+window.changePlannerWeek = function(offset) {
 const selectedDate = parsePlannerDate(selectedPlannerDate);
-visiblePlannerMonth = new Date(visiblePlannerMonth.getFullYear(), visiblePlannerMonth.getMonth() + offset, 1);
-const lastDay = new Date(visiblePlannerMonth.getFullYear(), visiblePlannerMonth.getMonth() + 1, 0).getDate();
-selectedPlannerDate = getLocalDateKey(new Date(visiblePlannerMonth.getFullYear(), visiblePlannerMonth.getMonth(), Math.min(selectedDate.getDate(), lastDay)));
+selectedDate.setDate(selectedDate.getDate() + offset * 7);
+selectedPlannerDate = getLocalDateKey(selectedDate);
 renderPlanner();
 };
 
 window.goToPlannerToday = function() {
 selectedPlannerDate = getLocalDateKey(new Date());
-const today = new Date();
-visiblePlannerMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 renderPlanner();
 };
 
@@ -3540,10 +3666,12 @@ const form = document.getElementById("planner-meal-form");
 document.getElementById("planner-edit-id").value = "";
 document.getElementById("planner-form-title").textContent = "Zaplanuj posiłek";
 document.getElementById("planner-meal-date").value = selectedPlannerDate;
-document.getElementById("planner-meal-time").value = "";
 document.getElementById("planner-meal-portions").value = "1";
 const hour = new Date().getHours();
-document.getElementById("planner-meal-type").value = hour < 10 ? "sniadanie" : hour < 15 ? "obiad" : "kolacja";
+const mealType = hour < 10 ? "sniadanie" : hour < 12 ? "drugie-sniadanie" : hour < 15 ? "obiad" : hour < 18 ? "podwieczorek" : "kolacja";
+document.getElementById("planner-meal-type").value = mealType;
+const defaultTimes = { "sniadanie": "08:00", "drugie-sniadanie": "10:30", "obiad": "13:00", "podwieczorek": "16:00", "kolacja": "19:00" };
+populatePlannerTimeOptions(defaultTimes[mealType]);
 refreshPlannerRecipeOptions(recipeId);
 form.classList.remove("hidden");
 };
@@ -3566,7 +3694,7 @@ if (!meal) return;
 document.getElementById("planner-edit-id").value = meal.id;
 document.getElementById("planner-form-title").textContent = "Edytuj zaplanowany posiłek";
 document.getElementById("planner-meal-date").value = meal.date;
-document.getElementById("planner-meal-time").value = meal.time || "";
+populatePlannerTimeOptions(meal.time || "");
 document.getElementById("planner-meal-type").value = meal.mealType || "obiad";
 document.getElementById("planner-meal-portions").value = Number(meal.portions) || 1;
 refreshPlannerRecipeOptions(meal.recipeId, meal.recipeTitle);
@@ -3618,6 +3746,7 @@ portions,
 recipeId: recipeId || previous?.recipeId || "",
 recipeTitle: recipe?.title || previous?.recipeTitle || "Przepis",
 kcalPerPortion: recipe ? getRecipeKcalPerPortion(recipe) : previous?.kcalPerPortion ?? null,
+macrosPerPortion: recipe ? getRecipeMacrosPerPortion(recipe) : previous?.macrosPerPortion || null,
 ingredients: recipe?.ingredients || previous?.ingredients || []
 };
 const existingIndex = meals.findIndex(meal => meal.id === id);
@@ -3628,8 +3757,6 @@ alert("Nie udało się zapisać planu w tej przeglądarce.");
 return;
 }
 selectedPlannerDate = date;
-const savedDate = parsePlannerDate(date);
-visiblePlannerMonth = new Date(savedDate.getFullYear(), savedDate.getMonth(), 1);
 closePlannerMealForm();
 renderPlanner();
 });
